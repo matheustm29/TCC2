@@ -1,0 +1,11 @@
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ipynb_checkpoints/
+.venv/
+venv/
+
+# Dados brutos: baixados por scripts/executar_analise.py e verificados pelo
+# manifesto, que é versionado. Manter os CSVs fora do repositório.
+data/raw/*.csv
+data/processed/
