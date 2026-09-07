@@ -71,8 +71,17 @@ def _classificar_publico(datas: pd.Series) -> pd.Series:
     return rotulo
 
 
-def preparar(bruto: pd.DataFrame) -> pd.DataFrame:
+def preparar(
+    bruto: pd.DataFrame, colunas_extras: tuple[str, ...] = ()
+) -> pd.DataFrame:
     """Devolve o dataset limpo com as variáveis derivadas do estudo.
+
+    Args:
+        bruto: consolidado de `coleta.carregar_bruto`.
+        colunas_extras: colunas adicionais a preservar quando existirem no bruto,
+            como as odds de mercado (`config.COLUNAS_ODDS`). Colunas pedidas mas
+            ausentes na fonte são ignoradas em silêncio, porque a disponibilidade
+            depende da fonte usada e o pipeline precisa rodar com as duas.
 
     Colunas acrescentadas:
         pts_mandante, pts_visitante  Pontos pela regra oficial (3/1/0).
@@ -86,7 +95,8 @@ def preparar(bruto: pd.DataFrame) -> pd.DataFrame:
     if faltantes:
         raise ErroDePreparacao(f"Colunas ausentes no dataset bruto: {faltantes}")
 
-    df = bruto[COLUNAS_INTERESSE].copy()
+    disponiveis = [c for c in colunas_extras if c in bruto.columns]
+    df = bruto[COLUNAS_INTERESSE + disponiveis].copy()
     df["Date"] = _converter_datas(df["Date"])
 
     if df["Date"].isna().any():

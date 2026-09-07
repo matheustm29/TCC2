@@ -80,6 +80,12 @@ FAIXAS_POSICAO = {
 # de 11 temporadas.
 MIN_TEMPORADAS_RANKING = 3
 
+# ── Odds de mercado ───────────────────────────────────────────────────────────
+# Existem apenas na fonte primária (football-data.co.uk). São o baseline mais
+# honesto do modelo preditivo: embutem escalações, lesões e o agregado do
+# mercado, informação que nenhuma feature construída aqui alcança.
+COLUNAS_ODDS = ("B365H", "B365D", "B365A")
+
 # ── Estatística ───────────────────────────────────────────────────────────────
 ALFA = 0.05
 N_BOOTSTRAP = 10_000

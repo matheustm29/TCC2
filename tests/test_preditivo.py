@@ -369,3 +369,30 @@ def test_preditor_dixon_coles_cobre_time_sem_parametro(features_sinteticas):
     assert saida.shape == (len(bloco), 3)
     assert not np.isnan(saida).any()
     assert saida.sum(axis=1) == pytest.approx(np.ones(len(bloco)), abs=1e-6)
+
+
+def test_diagnostico_odds_explica_a_ausencia(features_sinteticas):
+    """A ausência do baseline mais importante não pode passar despercebida."""
+    diagnostico = preditivo.diagnostico_odds(features_sinteticas)
+
+    assert diagnostico["disponivel"] is False
+    assert "colunas ausentes" in diagnostico["motivo"]
+    assert diagnostico["n_com_odds"] == 0
+
+
+def test_diagnostico_odds_conta_partidas_incompletas():
+    df = pd.DataFrame({
+        "B365H": [2.0, np.nan, 1.8],
+        "B365D": [3.5, 3.4, 3.6],
+        "B365A": [4.0, 4.2, 4.4],
+    })
+    diagnostico = preditivo.diagnostico_odds(df)
+
+    assert diagnostico["disponivel"] is False
+    assert diagnostico["n_com_odds"] == 2
+    assert "1 de 3" in diagnostico["motivo"]
+
+
+def test_diagnostico_odds_aprova_fonte_completa():
+    df = pd.DataFrame({"B365H": [2.0], "B365D": [3.5], "B365A": [4.0]})
+    assert preditivo.diagnostico_odds(df)["disponivel"] is True

@@ -235,7 +235,7 @@ class Previsao:
     detalhes: dict = field(default_factory=dict)
 
 
-def baseline_odds(teste: pd.DataFrame, colunas=("B365H", "B365D", "B365A")) -> np.ndarray | None:
+def baseline_odds(teste: pd.DataFrame, colunas=config.COLUNAS_ODDS) -> np.ndarray | None:
     """Converte odds de mercado em probabilidades, removendo a margem da casa.
 
     Este é o baseline difícil e o mais honesto do trabalho: as odds embutem
@@ -254,6 +254,35 @@ def baseline_odds(teste: pd.DataFrame, colunas=("B365H", "B365D", "B365A")) -> n
         return None
     implicitas = 1.0 / odds
     return implicitas / implicitas.sum(axis=1, keepdims=True)
+
+
+def diagnostico_odds(df: pd.DataFrame, colunas=config.COLUNAS_ODDS) -> dict:
+    """Relata a disponibilidade das odds, para que a ausência nunca seja silenciosa.
+
+    `baseline_odds` devolve None quando não pode operar. Sem este diagnóstico, o
+    baseline mais importante do trabalho poderia sumir do quadro comparativo sem
+    que ninguém percebesse o motivo.
+    """
+    faltando = [c for c in colunas if c not in df.columns]
+    if faltando:
+        return {
+            "disponivel": False,
+            "motivo": f"colunas ausentes na fonte: {faltando}",
+            "n_partidas": len(df),
+            "n_com_odds": 0,
+        }
+
+    completas = df[list(colunas)].notna().all(axis=1)
+    n_com_odds = int(completas.sum())
+    return {
+        "disponivel": n_com_odds == len(df),
+        "motivo": (
+            "ok" if n_com_odds == len(df)
+            else f"{len(df) - n_com_odds} de {len(df)} partidas sem odds"
+        ),
+        "n_partidas": len(df),
+        "n_com_odds": n_com_odds,
+    }
 
 
 def _prever_em_blocos(

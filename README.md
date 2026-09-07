@@ -6,6 +6,15 @@ de Matheus Ferreira Alphonse dos Anjos.
 Recorte: 11 temporadas da Premier League (2015/16 a 2025/26), 4.180 partidas,
 a partir do portal `football-data.co.uk`.
 
+## Notebook de apresentação
+
+[![Abrir no Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/matheustm29/TCC2/blob/claude/tcc2-football-data-review-dgaeaw/notebooks/TCC2_Analise_Fator_Casa.ipynb)
+
+`notebooks/TCC2_Analise_Fator_Casa.ipynb` percorre o trabalho na estrutura
+CRISP-DM, mapeia cada anotação da banca ao ponto onde ela é tratada e mostra os
+números antigos e os novos lado a lado nas conclusões que mudaram. A lógica vive
+em `src/tcc/`; o notebook é a narrativa que a chama.
+
 ## Como rodar
 
 ```bash

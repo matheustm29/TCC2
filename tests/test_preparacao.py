@@ -97,3 +97,24 @@ def test_preparacao_rejeita_resultado_invalido(liga_sintetica):
     corrompido.loc[0, "FTR"] = "X"
     with pytest.raises(preparacao.ErroDePreparacao, match="FTR"):
         preparacao.preparar(corrompido)
+
+
+def test_colunas_extras_sao_preservadas_quando_existem(liga_sintetica):
+    """As odds só existem na fonte primária e precisam sobreviver à preparação."""
+    com_odds = liga_sintetica.copy()
+    com_odds["B365H"] = 2.0
+    com_odds["B365D"] = 3.4
+    com_odds["B365A"] = 3.8
+
+    df = preparacao.preparar(com_odds, colunas_extras=("B365H", "B365D", "B365A"))
+
+    assert {"B365H", "B365D", "B365A"} <= set(df.columns)
+    assert (df["B365H"] == 2.0).all()
+
+
+def test_colunas_extras_ausentes_nao_quebram(liga_sintetica):
+    """O espelho do GitHub não traz odds; o pipeline roda com as duas fontes."""
+    df = preparacao.preparar(liga_sintetica, colunas_extras=("B365H", "B365D"))
+
+    assert "B365H" not in df.columns
+    assert len(df) == len(liga_sintetica)
