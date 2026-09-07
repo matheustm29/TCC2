@@ -10,8 +10,9 @@ a partir do portal `football-data.co.uk`.
 
 ```bash
 pip install -r requirements.txt
-python scripts/executar_analise.py   # gera tabelas/ e figuras/
-pytest tests/ -q                     # 27 testes
+python scripts/executar_analise.py     # análise descritiva e inferencial
+python scripts/executar_modelagem.py   # Dixon-Coles e modelos preditivos (lento)
+pytest tests/ -q
 ```
 
 O script baixa os dados uma vez para `data/raw/`, registra o SHA-256 de cada arquivo
@@ -41,6 +42,7 @@ para a fonte primária.
 |---------|-----------|
 | `REVISAO_TCC1.md` | Revisão técnica do TCC1: bugs, problemas metodológicos e proposta para o TCC2 |
 | `RESULTADOS.md` | O que mudou nos números depois das correções |
+| `MODELAGEM.md` | Dixon-Coles com termo de mando e modelagem preditiva |
 | `tcc1/` | Material original do TCC1 (notebook e correções da banca), preservado como baseline |
 
 ## Estrutura
@@ -52,15 +54,21 @@ src/tcc/
   preparacao.py    Limpeza, variáveis derivadas e tabela de classificação
   estatistica.py   Testes de hipótese, intervalos de confiança e tamanhos de efeito
   analise.py       Fator casa por time, faixa, temporada e regime de público
+  modelos.py       Poisson bivariado (Dixon-Coles) com termo de mando de campo
+  preditivo.py     Features pré-jogo, baselines e validação temporal
   visualizacao.py  Tema único de figuras e exportação em PDF vetorial
 scripts/           Execução da análise ponta a ponta
-tests/             27 testes, incluindo travas para cada bug corrigido do TCC1
+tests/             Travas para cada bug corrigido do TCC1 e para vazamento de dados
 tabelas/           Saída em CSV, pronta para booktabs
 figuras/           Saída em PDF vetorial e PNG 300 dpi, pronta para \includegraphics
 ```
 
 ## Estado
 
-Correções P0 do `REVISAO_TCC1.md` aplicadas e verificadas com os dados reais.
-Pendente para o TCC2: modelo Poisson/Dixon–Coles com termo de mando e modelo
-preditivo com validação temporal (ver `RESULTADOS.md`, seção 5).
+Correções do `REVISAO_TCC1.md` aplicadas e verificadas com os dados reais, e a
+modelagem do TCC2 implementada: Dixon-Coles com termo de mando e modelos
+preditivos com validação temporal.
+
+Pendente: o baseline com odds de mercado, que exige acesso ao portal
+`football-data.co.uk` (ver a seção *Fontes de dados* acima), e as correções de
+redação e referências apontadas pela banca.

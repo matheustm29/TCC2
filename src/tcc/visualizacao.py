@@ -288,3 +288,91 @@ def contraste_publico(contraste) -> plt.Figure:
     ax.invert_yaxis()
     ax.margins(x=0.22)
     return fig
+
+
+def mando_ajustado_por_temporada(por_temporada) -> plt.Figure:
+    """Parâmetro de mando do Dixon-Coles por temporada, com IC 95%.
+
+    Diferente do diferencial bruto de pontos, `gamma` já está ajustado pela força
+    dos times e pelo calendário, e vem com incerteza — o que deixa claro quando
+    uma oscilação entre temporadas é ruído.
+    """
+    fig, ax = plt.subplots(figsize=(9, 4.6))
+    rotulos = [_rotular_temporada(s) for s in por_temporada["Season"]]
+
+    ax.errorbar(
+        rotulos, por_temporada["gamma"],
+        yerr=[
+            por_temporada["gamma"] - por_temporada["ic95_inf"],
+            por_temporada["ic95_sup"] - por_temporada["gamma"],
+        ],
+        fmt="o-", color=AZUL, ecolor=EIXO, elinewidth=1.5, capsize=4,
+        markeredgecolor=SUPERFICIE, markeredgewidth=1.5,
+    )
+    ax.axhline(0, color=VERMELHO, linewidth=1.2, linestyle="--",
+               label="Ausência de vantagem")
+
+    ax.set_title("Vantagem do mandante ajustada por força do adversário (γ)")
+    ax.set_xlabel("Temporada")
+    ax.set_ylabel("γ — log da razão de gols")
+    ax.legend(loc="lower left")
+    ax.grid(axis="x", visible=False)
+    return fig
+
+
+def desempenho_preditivo(resumo) -> plt.Figure:
+    """Log-loss dos modelos, do melhor para o pior.
+
+    Log-loss é a métrica principal porque o problema é probabilístico: acurácia
+    sozinha não distingue um modelo bem calibrado de um confiante e errado.
+    """
+    fig, ax = plt.subplots(figsize=(8, 4.4))
+    ordenado = resumo.sort_values("log_loss", ascending=False)
+
+    cores = [AQUA if nome in ("frequencia_base", "sempre_casa", "odds_mercado")
+             else AZUL for nome in ordenado.index]
+    barras = ax.barh(list(ordenado.index), ordenado["log_loss"], color=cores, height=0.6)
+
+    for barra, (valor, acuracia) in zip(
+        barras, zip(ordenado["log_loss"], ordenado["acuracia"])
+    ):
+        ax.text(
+            valor + 0.004, barra.get_y() + barra.get_height() / 2,
+            f"{valor:.4f}  (acurácia {acuracia:.1%})",
+            va="center", fontsize=9, color=TINTA_SECUNDARIA,
+        )
+
+    ax.set_title("Desempenho preditivo — validação temporal")
+    ax.set_xlabel("Log-loss (menor é melhor)")
+    ax.grid(axis="y", visible=False)
+    ax.margins(x=0.30)
+    return fig
+
+
+def calibracao(curvas) -> plt.Figure:
+    """Frequência observada contra probabilidade prevista, por modelo."""
+    fig, ax = plt.subplots(figsize=(6.5, 6))
+
+    ax.plot([0, 1], [0, 1], linestyle=":", color=TINTA_SUAVE, linewidth=1.5,
+            label="Calibração perfeita", zorder=1)
+
+    interessantes = [m for m in curvas["modelo"].unique()
+                     if m not in ("frequencia_base", "sempre_casa")]
+    cores = [AZUL, LARANJA, AQUA]
+    marcadores = ["o", "s", "^"]
+
+    for i, nome in enumerate(interessantes[:3]):
+        recorte = curvas[curvas["modelo"] == nome]
+        ax.plot(
+            recorte["prob_prevista"], recorte["freq_observada"],
+            marker=marcadores[i], color=cores[i], label=nome.replace("_", " "),
+            markeredgecolor=SUPERFICIE, markeredgewidth=1.2, zorder=3,
+        )
+
+    ax.set_title("Calibração — vitória do mandante")
+    ax.set_xlabel("Probabilidade prevista")
+    ax.set_ylabel("Frequência observada")
+    ax.legend(loc="upper left")
+    ax.set_xlim(0, 1)
+    ax.set_ylim(0, 1)
+    return fig

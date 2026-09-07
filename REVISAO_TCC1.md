@@ -3,6 +3,12 @@
 Revisão do notebook `tcc1/TCC1_Analise_Fator_Casa_EPL.ipynb` (43 células) cruzada com as
 anotações do Prof. Cleber Gimenez Corrêa em `tcc1/TCC1_Sugestoes_Prof_Cleber_Gimenez_Correa.pdf`.
 
+> **Estado.** Este documento é o diagnóstico, mantido como registro do que estava errado
+> e por quê. As correções já foram aplicadas: os números novos estão em `RESULTADOS.md` e a
+> modelagem em `MODELAGEM.md`. Cada bug listado aqui tem um teste que o trava em `tests/`.
+> Continua pendente apenas o que depende de redação (seção 5) e o baseline com odds de
+> mercado, que exige acesso ao portal `football-data.co.uk` (ver `MODELAGEM.md`, seção 6).
+
 **Diagnóstico geral:** a espinha dorsal está correta e a estrutura CRISP-DM é adequada. O
 problema não é falta de trabalho — é que parte das conclusões escritas **não é sustentada
 pelos números que o próprio notebook produz**. Há um erro de agregação que inverte um
