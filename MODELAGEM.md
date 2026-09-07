@@ -172,7 +172,83 @@ probabilístico. Acurácia entra como secundária: ela não distingue um modelo 
 calibrado de um confiante e errado, e num problema com 44% de vitórias do mandante
 ela é enganosamente fácil de parecer boa.
 
-<!-- RESULTADOS_PREDITIVOS -->
+### 5.4. Resultados
+
+Agregado das 8 temporadas de teste (3.040 partidas), ponderado por partidas:
+
+| Modelo | Log-loss | Brier | Acurácia |
+|---|---|---|---|
+| **dixon_coles** | **0,9762** | **0,5785** | 0,5359 |
+| regressao_logistica | 0,9880 | 0,5834 | **0,5362** |
+| frequencia_base | 1,0669 | 0,6457 | 0,4395 |
+| sempre_casa | 1,0747 | 0,6500 | 0,4395 |
+| gradient_boosting | 1,0807 | 0,6257 | 0,5066 |
+
+Três leituras.
+
+**O modelo estatístico venceu os de aprendizado de máquina.** O Dixon-Coles tem o
+melhor log-loss e o melhor Brier, com a regressão logística logo atrás — a
+diferença entre os dois é pequena e elas se alternam entre temporadas (o
+Dixon-Coles lidera em 6 das 8). Isso não é um acidente: o Dixon-Coles incorpora a
+estrutura do problema (gols são contagens, cada clube tem ataque e defesa, o mando
+desloca a média) em vez de tentar aprendê-la de 15 features.
+
+**O gradient boosting perdeu para a frequência base.** Log-loss de 1,0807 contra
+1,0669 do modelo que apenas repete as frequências históricas. Ao mesmo tempo, sua
+acurácia (0,5066) é bem melhor que a do baseline (0,4395). Essa combinação —
+acurácia boa, log-loss ruim — é a assinatura de um modelo **mal calibrado**, e é
+exatamente o motivo de a acurácia não servir como métrica principal.
+
+**Todos os modelos batem o "sempre o mandante".** A heurística do senso comum
+entrega 43,95% de acerto; o Dixon-Coles chega a 53,59%. O ganho é real, mas
+modesto: o futebol tem um teto de previsibilidade baixo, e nenhum modelo se
+aproxima de "resolver" o problema.
+
+#### Desempenho por temporada (log-loss, menor é melhor)
+
+| Temporada | dixon_coles | reg. logística | grad. boosting | freq. base | sempre casa |
+|---|---|---|---|---|---|
+| 18/19 | **0,8993** | 0,9056 | 1,0656 | 1,0444 | 1,0562 |
+| 19/20 | **0,9763** | 1,0514 | 1,1321 | 1,0650 | 1,0684 |
+| 20/21 | **1,0207** | 1,0428 | 1,1718 | 1,0856 | 1,1048 |
+| 21/22 | 0,9615 | **0,9603** | 1,0322 | 1,0698 | 1,0795 |
+| 22/23 | 1,0042 | **0,9763** | 1,0940 | 1,0509 | 1,0534 |
+| 23/24 | **0,9293** | 0,9374 | 1,0052 | 1,0543 | 1,0644 |
+| 24/25 | **0,9792** | 0,9971 | 1,0564 | 1,0811 | 1,0898 |
+| 25/26 | 1,0391 | **1,0333** | 1,0883 | 1,0836 | 1,0807 |
+
+Note 2020/21: **todos** os modelos pioram naquela temporada. É a mesma anomalia
+que aparece no γ — sem a vantagem do mandante, o sinal mais forte do problema
+desaparece e a previsão fica mais difícil para todo mundo.
+
+#### Calibração
+
+A tabela abaixo responde à pergunta que a acurácia não alcança: entre as partidas
+em que o modelo diz "70% de chance de vitória do mandante", o mandante vence de
+fato cerca de 70% das vezes?
+
+| Prob. prevista | Dixon-Coles observado | Grad. boosting observado |
+|---|---|---|
+| 0,06 | 0,076 | **0,160** |
+| 0,15 | 0,185 | **0,228** |
+| 0,25 | 0,268 | 0,295 |
+| 0,35 | 0,393 | 0,402 |
+| 0,45 | 0,429 | 0,431 |
+| 0,55 | 0,550 | 0,480 |
+| 0,65 | 0,641 | **0,523** |
+| 0,75 | 0,711 | **0,581** |
+| 0,85 | 0,873 | **0,682** |
+| 0,93 | 0,926 | **0,806** |
+
+O Dixon-Coles fica praticamente sobre a diagonal. O gradient boosting é
+**sistematicamente exagerado nos dois extremos**: quando diz 94%, acerta 81%;
+quando diz 6%, o evento ocorre 16% das vezes. Ele empurra as probabilidades para
+as pontas, o que melhora a acurácia (a classe mais provável costuma estar certa)
+e destrói o log-loss (as previsões confiantes e erradas custam caro).
+
+**Para a monografia**, este é provavelmente o resultado mais didático do trabalho:
+um modelo mais complexo, com mais capacidade, perdendo para um modelo estatístico
+simples — e a razão sendo visível na curva de calibração, não na acurácia.
 
 ---
 
