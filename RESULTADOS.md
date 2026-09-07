@@ -202,12 +202,27 @@ O script escreve `tabelas/*.csv` e `figuras/*.pdf`. Nenhum número da monografia
 ser copiado à mão de uma saída de célula: quando os dados mudarem, tudo se atualiza
 junto.
 
-## 5. O que ainda falta para o TCC2
+## 5. Estado do trabalho
 
-1. Modelo Poisson/Dixon–Coles com termo de mando, para estimar o fator casa
-   controlando por força do adversário — resolve a última lacuna metodológica e
-   atende ao "Utilizará Aprendizado de Máquina?" da p.10.
-2. Modelo preditivo com validação temporal e os três baselines (sempre-casa,
-   histórico, odds do Bet365). Ver `REVISAO_TCC1.md`, seção 6.2, sobre vazamento de
-   dados — é o erro mais fácil de cometer aqui.
-3. Correções de redação e referências apontadas no PDF da banca.
+A modelagem que esta seção listava como pendente está concluída e documentada em
+`MODELAGEM.md`:
+
+* **Dixon-Coles com termo de mando** — γ = 0,1967, IC 95% [0,1605; 0,2329], ou
+  seja +21,7% de gols em casa já descontada a força do adversário. Resolve a
+  falta de controle por adversário apontada na seção 3.3.
+* **Efeito do público estimado dentro de uma mesma temporada** — em 2019/20,
+  δ = +0,040, IC 95% [−0,151; +0,231], p = 0,68. Sem efeito detectável.
+* **Modelos preditivos com validação temporal** — o Dixon-Coles tem o melhor
+  log-loss (0,9762), à frente da regressão logística (0,9880). O gradient
+  boosting perde para a frequência base (1,0807 contra 1,0669) apesar de ter
+  acurácia melhor, por má calibração.
+
+Continua pendente:
+
+1. As correções de redação e de referências apontadas no parecer (retirar as
+   citações do resumo, substituir a referência da Wikipédia, ajustes
+   gramaticais).
+2. O baseline com odds de mercado, comparativo externo opcional que exige acesso
+   ao portal `football-data.co.uk` (ver `MODELAGEM.md`, seção 6).
+3. A escrita da monografia em LaTeX, para a qual todas as tabelas e figuras já
+   são geradas automaticamente por `scripts/`.
