@@ -41,11 +41,12 @@ def liga_sintetica():
         for fora in times:
             if casa == fora:
                 continue
+            data = dia.strftime("%Y-%m-%d")
             # Charlie x Delta em casa termina empatado; o resto o mandante vence.
             if casa == "Charlie" and fora == "Delta":
-                linhas.append(_partida(dia, casa, fora, 1, 1))
+                linhas.append(_partida(data, casa, fora, 1, 1))
             else:
-                linhas.append(_partida(dia, casa, fora, 2, 0))
+                linhas.append(_partida(data, casa, fora, 2, 0))
             dia += pd.Timedelta(days=3)
     return pd.DataFrame(linhas)
 

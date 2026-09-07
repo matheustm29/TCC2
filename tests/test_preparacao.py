@@ -118,3 +118,23 @@ def test_colunas_extras_ausentes_nao_quebram(liga_sintetica):
 
     assert "B365H" not in df.columns
     assert len(df) == len(liga_sintetica)
+
+
+def test_datas_em_texto_e_em_datetime_dao_o_mesmo_resultado(liga_sintetica):
+    """A fonte primária entrega texto; um DataFrame já convertido também deve passar."""
+    ja_convertida = liga_sintetica.copy()
+    ja_convertida["Date"] = pd.to_datetime(ja_convertida["Date"])
+
+    de_texto = preparacao.preparar(liga_sintetica)
+    de_datetime = preparacao.preparar(ja_convertida)
+
+    pd.testing.assert_series_equal(de_texto["Date"], de_datetime["Date"])
+
+
+def test_converter_datas_respeita_o_formato_de_cada_fonte():
+    """ISO do espelho e DD/MM/YYYY do portal primário."""
+    iso = preparacao.converter_datas(pd.Series(["2019-08-10", "2020-06-17"]))
+    assert iso.iloc[0] == pd.Timestamp("2019-08-10")
+
+    britanico = preparacao.converter_datas(pd.Series(["10/08/2019", "17/06/2020"]))
+    assert britanico.iloc[0] == pd.Timestamp("2019-08-10")

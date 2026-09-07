@@ -37,7 +37,7 @@ class ErroDePreparacao(RuntimeError):
     """Levantado quando os dados não passam nas validações de preparação."""
 
 
-def _converter_datas(datas: pd.Series) -> pd.Series:
+def converter_datas(datas: pd.Series) -> pd.Series:
     """Converte a coluna de data lidando com os dois formatos de fonte.
 
     O football-data.co.uk publica `DD/MM/YYYY`; o espelho no GitHub publica ISO
@@ -97,7 +97,7 @@ def preparar(
 
     disponiveis = [c for c in colunas_extras if c in bruto.columns]
     df = bruto[COLUNAS_INTERESSE + disponiveis].copy()
-    df["Date"] = _converter_datas(df["Date"])
+    df["Date"] = converter_datas(df["Date"])
 
     if df["Date"].isna().any():
         n = int(df["Date"].isna().sum())

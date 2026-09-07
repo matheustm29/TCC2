@@ -31,7 +31,7 @@ def _liga_longa(n_temporadas: int = 3, semente: int = 11) -> pd.DataFrame:
                 gols_fora = int(gerador.poisson(media_fora))
                 resultado = "H" if gols_casa > gols_fora else ("A" if gols_fora > gols_casa else "D")
                 linhas.append({
-                    "Date": dia, "HomeTeam": casa, "AwayTeam": fora,
+                    "Date": dia.strftime("%Y-%m-%d"), "HomeTeam": casa, "AwayTeam": fora,
                     "FTHG": gols_casa, "FTAG": gols_fora, "FTR": resultado,
                     "HTHG": 0, "HTAG": 0, "HTR": "D",
                     "HS": 12, "AS": 9, "HST": 5, "AST": 3,
@@ -77,13 +77,15 @@ def test_features_nao_usam_o_resultado_da_propria_partida():
 
     modificado = features_de(alterado)
 
+    # A base bruta traz a data como texto e a preparada como datetime; sem
+    # converter a chave, o cruzamento falha com "trying to merge on datetime64
+    # and object columns".
     chave = ["Date", "HomeTeam", "AwayTeam"]
-    alvo_original = original.merge(
-        alterado.loc[[posicao], chave], on=chave, how="inner"
-    )
-    alvo_modificado = modificado.merge(
-        alterado.loc[[posicao], chave], on=chave, how="inner"
-    )
+    alvo = alterado.loc[[posicao], chave].copy()
+    alvo["Date"] = preparacao.converter_datas(alvo["Date"])
+
+    alvo_original = original.merge(alvo, on=chave, how="inner")
+    alvo_modificado = modificado.merge(alvo, on=chave, how="inner")
 
     assert len(alvo_original) == 1 and len(alvo_modificado) == 1
 

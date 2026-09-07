@@ -49,7 +49,15 @@ MAX_GOLS = 12  # teto da grade de placares usada para derivar probabilidades
 # (n_parâmetros + 1) avaliações. Com 30 e poucos clubes o modelo passa de 60
 # parâmetros e o limite padrão do L-BFGS-B (15.000) é atingido antes da
 # convergência — o que fazia o ajuste falhar no meio da validação temporal.
+# Tolerância apertada para os ajustes de inferência, onde a curvatura da
+# verossimilhança perfilada precisa ser estável até a terceira casa.
 OPCOES_OTIMIZADOR = {"maxfun": 300_000, "maxiter": 50_000, "ftol": 1e-10}
+
+# Caminho de previsão: o erro padrão não é usado, então essa precisão toda só
+# custa tempo. Com o reajuste a cada bloco de partidas são centenas de ajustes
+# por execução, e a tolerância apertada levava a validação temporal de minutos a
+# mais de uma hora. As probabilidades previstas não mudam de forma perceptível.
+OPCOES_OTIMIZADOR_RAPIDO = {"maxfun": 100_000, "maxiter": 20_000, "ftol": 1e-7}
 
 
 class ErroDeAjuste(RuntimeError):
@@ -113,19 +121,19 @@ class ModeloPoisson:
         return tabela.sort_values("forca_liquida", ascending=False)
 
 
-def _minimizar(funcao, inicial, limites, tentativas: int = 3):
+def _minimizar(funcao, inicial, limites, tentativas: int = 3, opcoes=None):
     """Minimiza com reinício a partir do último ponto quando o limite é atingido.
 
     O L-BFGS-B pode parar por esgotar avaliações sem ter convergido. Reiniciar do
     ponto onde parou preserva o progresso e costuma fechar a otimização na
     segunda passada; falhar alto na terceira evita seguir com um ajuste ruim.
     """
+    opcoes = opcoes or OPCOES_OTIMIZADOR
     ponto = inicial
     resultado = None
     for _ in range(tentativas):
         resultado = optimize.minimize(
-            funcao, ponto, method="L-BFGS-B", bounds=limites,
-            options=OPCOES_OTIMIZADOR,
+            funcao, ponto, method="L-BFGS-B", bounds=limites, options=opcoes,
         )
         if resultado.success:
             return resultado
@@ -259,7 +267,10 @@ def ajustar_poisson(
         + [(-3, 3), (-1, 1), (-0.3, 0.3)]
     )
 
-    resultado = _minimizar(log_verossimilhanca_negativa, inicial, limites)
+    resultado = _minimizar(
+        log_verossimilhanca_negativa, inicial, limites,
+        opcoes=OPCOES_OTIMIZADOR if calcular_erro_padrao else OPCOES_OTIMIZADOR_RAPIDO,
+    )
     ataque, defesa, mu, gamma, rho = desempacotar(resultado.x)
     erro_padrao = (
         _erro_padrao_parametro(

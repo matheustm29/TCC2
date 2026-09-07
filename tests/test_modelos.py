@@ -33,7 +33,7 @@ def _liga_poisson(gamma_real=0.25, n_temporadas=4, semente=5, delta_publico=0.0)
                 gf = int(gerador.poisson(media_fora))
                 ftr = "H" if gc > gf else ("A" if gf > gc else "D")
                 linhas.append({
-                    "Date": dia, "HomeTeam": casa, "AwayTeam": fora,
+                    "Date": dia.strftime("%Y-%m-%d"), "HomeTeam": casa, "AwayTeam": fora,
                     "FTHG": gc, "FTAG": gf, "FTR": ftr,
                     "HTHG": 0, "HTAG": 0, "HTR": "D",
                     "HS": 12, "AS": 9, "HST": 5, "AST": 3,
@@ -175,3 +175,35 @@ def test_correcao_dixon_coles_melhora_a_verossimilhanca():
 
     assert com.log_verossimilhanca >= sem.log_verossimilhanca
     assert sem.rho == 0.0
+
+
+def test_caminho_rapido_nao_muda_as_probabilidades():
+    """O ajuste rápido do laço de previsão precisa ser equivalente ao apertado.
+
+    A tolerância apertada existe para estabilizar a curvatura da verossimilhança
+    perfilada, usada só na inferência. No laço de previsão o erro padrão não é
+    calculado, e a precisão extra levava a validação temporal de minutos a mais de
+    uma hora. Este teste garante que a troca não altera o que o modelo prevê.
+    """
+    bruto = _liga_poisson(n_temporadas=3)
+    df = preparacao.preparar(bruto.drop(columns="_sem_publico"))
+
+    apertado = modelos.ajustar_poisson(df, calcular_erro_padrao=True)
+    rapido = modelos.ajustar_poisson(df, calcular_erro_padrao=False)
+
+    assert rapido.gamma == pytest.approx(apertado.gamma, abs=5e-3)
+
+    previsto_apertado = modelos.prever_partidas(apertado, df)
+    previsto_rapido = modelos.prever_partidas(rapido, df)
+    diferenca = (previsto_apertado - previsto_rapido).abs().to_numpy().max()
+
+    assert diferenca < 5e-3, f"probabilidades divergiram em {diferenca:.2e}"
+
+
+def test_caminho_rapido_dispensa_o_erro_padrao():
+    bruto = _liga_poisson(n_temporadas=2)
+    df = preparacao.preparar(bruto.drop(columns="_sem_publico"))
+
+    rapido = modelos.ajustar_poisson(df, calcular_erro_padrao=False)
+
+    assert np.isnan(rapido.erro_padrao_gamma)
