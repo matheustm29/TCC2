@@ -29,6 +29,13 @@ COLUNAS_NUMERICAS = [
     "HC", "AC", "HF", "AF", "HY", "AY", "HR", "AR",
 ]
 
+# Aplicados na ordem, cada um às linhas que casam com o padrão.
+FORMATOS_DE_DATA = (
+    (r"\d{4}-\d{2}-\d{2}", "%Y-%m-%d"),
+    (r"\d{2}/\d{2}/\d{4}", "%d/%m/%Y"),
+    (r"\d{2}/\d{2}/\d{2}", "%d/%m/%y"),
+)
+
 PONTOS_MANDANTE = {"H": 3, "D": 1, "A": 0}
 PONTOS_VISITANTE = {"A": 3, "D": 1, "H": 0}
 
@@ -38,21 +45,45 @@ class ErroDePreparacao(RuntimeError):
 
 
 def converter_datas(datas: pd.Series) -> pd.Series:
-    """Converte a coluna de data lidando com os dois formatos de fonte.
+    """Converte a coluna de data lidando com os formatos das fontes.
 
-    O football-data.co.uk publica `DD/MM/YYYY`; o espelho no GitHub publica ISO
-    `YYYY-MM-DD`. Passar `dayfirst=True` indiscriminadamente corrompe o formato
-    ISO em silêncio — `2019-08-10` vira 8 de outubro —, o que deslocaria as
-    janelas de público sem gerar erro algum. Por isso o formato é detectado antes
-    da conversão.
+    Três formatos aparecem na prática:
+
+    * `YYYY-MM-DD` — espelho no GitHub;
+    * `DD/MM/YYYY` — arquivos recentes do football-data.co.uk;
+    * `DD/MM/YY` — arquivos antigos do football-data.co.uk.
+
+    Como as temporadas são concatenadas antes da conversão, a coluna pode conter
+    mais de um formato ao mesmo tempo. Deixar o pandas inferir sozinho não
+    resolve: ele deduz um único formato a partir dos primeiros valores e converte
+    todo o resto em `NaT`. Também não serve passar `dayfirst=True` para tudo,
+    porque isso corrompe o formato ISO em silêncio — `2019-08-10` viraria 8 de
+    outubro, deslocando as janelas de público sem gerar erro algum.
+
+    Por isso cada formato é aplicado explicitamente às linhas que casam com ele.
     """
     if datas.dtype.kind == "M":
         return datas
 
     texto = datas.astype(str).str.strip()
-    if texto.str.fullmatch(r"\d{4}-\d{2}-\d{2}").all():
-        return pd.to_datetime(texto, format="%Y-%m-%d", errors="coerce")
-    return pd.to_datetime(texto, dayfirst=True, errors="coerce")
+
+    # Cada formato é normalizado para ISO e só no fim há uma única conversão.
+    # Montar o resultado peça por peça faria o dtype depender de qual formato
+    # apareceu primeiro, e duas fontes equivalentes devolveriam séries com dtypes
+    # diferentes.
+    iso = pd.Series(pd.NA, index=datas.index, dtype="object")
+    pendentes = pd.Series(True, index=datas.index)
+
+    for padrao, formato in FORMATOS_DE_DATA:
+        alvo = pendentes & texto.str.fullmatch(padrao)
+        if alvo.any():
+            iso[alvo] = (
+                pd.to_datetime(texto[alvo], format=formato, errors="coerce")
+                .dt.strftime("%Y-%m-%d")
+            )
+            pendentes &= ~alvo
+
+    return pd.to_datetime(iso, format="%Y-%m-%d", errors="coerce")
 
 
 def _classificar_publico(datas: pd.Series) -> pd.Series:
@@ -100,8 +131,15 @@ def preparar(
     df["Date"] = converter_datas(df["Date"])
 
     if df["Date"].isna().any():
-        n = int(df["Date"].isna().sum())
-        raise ErroDePreparacao(f"{n} partidas com data inválida após a conversão.")
+        invalidas = bruto.loc[df["Date"].isna(), "Date"]
+        exemplos = invalidas.astype(str).str.strip().unique()[:5]
+        temporadas = sorted(bruto.loc[df["Date"].isna(), "Season"].unique())
+        raise ErroDePreparacao(
+            f"{len(invalidas)} partidas com data inválida após a conversão.\n"
+            f"  Temporadas afetadas: {temporadas}\n"
+            f"  Exemplos de valor: {list(exemplos)}\n"
+            f"  Formatos reconhecidos: {[f for _, f in FORMATOS_DE_DATA]}"
+        )
 
     # O TCC1 checava nulos em apenas 5 colunas. Médias sobre colunas com NaN são
     # calculadas em silêncio sobre um denominador menor.

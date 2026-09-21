@@ -138,3 +138,60 @@ def test_converter_datas_respeita_o_formato_de_cada_fonte():
 
     britanico = preparacao.converter_datas(pd.Series(["10/08/2019", "17/06/2020"]))
     assert britanico.iloc[0] == pd.Timestamp("2019-08-10")
+
+
+def test_converte_os_tres_formatos_de_data():
+    """As fontes usam três formatos, e eles se misturam na mesma coluna.
+
+    O football-data.co.uk publica DD/MM/YY nos arquivos antigos e DD/MM/YYYY nos
+    recentes; o espelho no GitHub publica ISO. Como as temporadas são
+    concatenadas antes da conversão, os formatos convivem.
+    """
+    datas = pd.Series([
+        "2019-08-10",   # ISO, espelho
+        "08/08/2015",   # DD/MM/YYYY, football-data recente
+        "12/09/20",     # DD/MM/YY, football-data antigo
+    ])
+
+    convertido = preparacao.converter_datas(datas)
+
+    assert convertido.isna().sum() == 0
+    assert convertido.iloc[0] == pd.Timestamp("2019-08-10")
+    assert convertido.iloc[1] == pd.Timestamp("2015-08-08")
+    assert convertido.iloc[2] == pd.Timestamp("2020-09-12")
+
+
+def test_formatos_misturados_nao_viram_nat():
+    """Regressão: o pandas infere um único formato e descarta o resto.
+
+    `pd.to_datetime(serie, dayfirst=True)` deduzia %d/%m/%Y dos primeiros valores
+    e convertia toda uma temporada em NaT, derrubando a preparação com "380
+    partidas com data inválida".
+    """
+    datas = pd.Series(["08/08/2015"] * 380 + ["12/09/20"] * 380)
+
+    convertido = preparacao.converter_datas(datas)
+
+    assert convertido.isna().sum() == 0
+    assert convertido.max() == pd.Timestamp("2020-09-12")
+
+
+def test_data_ambigua_respeita_dia_primeiro():
+    """05/03/2020 é 5 de março, não 3 de maio — as fontes são britânicas."""
+    convertido = preparacao.converter_datas(pd.Series(["05/03/2020", "05/03/20"]))
+
+    assert convertido.iloc[0] == pd.Timestamp("2020-03-05")
+    assert convertido.iloc[1] == pd.Timestamp("2020-03-05")
+
+
+def test_erro_de_data_diz_qual_temporada_e_quais_valores(liga_sintetica):
+    """A mensagem antiga só dizia quantas falharam, o que não ajuda a depurar."""
+    corrompido = liga_sintetica.copy()
+    corrompido.loc[0, "Date"] = "data-invalida"
+
+    with pytest.raises(preparacao.ErroDePreparacao) as erro:
+        preparacao.preparar(corrompido)
+
+    mensagem = str(erro.value)
+    assert "data-invalida" in mensagem
+    assert "Temporadas afetadas" in mensagem
