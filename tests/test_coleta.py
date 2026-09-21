@@ -83,3 +83,61 @@ def test_coluna_obrigatoria_ausente_falha_alto(tmp_path):
 
     with pytest.raises(coleta.ErroDeColeta, match="colunas obrigatórias"):
         coleta.carregar_bruto(("1415",), dir_raw=tmp_path)
+
+
+def test_arquivo_sem_registro_no_manifesto_e_registrado(tmp_path):
+    """O manifesto pode se perder sem que os CSVs se percam junto.
+
+    Acontece quando o ambiente restaura o repositório por cima da área de
+    trabalho: os dados baixados são ignorados pelo Git e sobrevivem, o manifesto
+    não. Rebaixar descartaria arquivos válidos; seguir sem registro desligaria a
+    verificação de integridade em silêncio.
+    """
+    _csv_de_temporada(tmp_path / "E0_1415.csv")
+    assert not (tmp_path / coleta.NOME_MANIFESTO).exists()
+
+    manifesto = coleta.baixar_temporadas(("1415",), dir_raw=tmp_path)
+
+    assert "1415" in manifesto
+    assert manifesto["1415"]["url"] == coleta.ORIGEM_DESCONHECIDA
+    assert manifesto["1415"]["sha256"]
+
+
+def test_integridade_volta_a_proteger_apos_reconstruir_o_manifesto(tmp_path):
+    """Depois de reconstruído, o manifesto precisa denunciar uma alteração."""
+    _csv_de_temporada(tmp_path / "E0_1415.csv")
+    coleta.baixar_temporadas(("1415",), dir_raw=tmp_path)
+
+    alvo = tmp_path / "E0_1415.csv"
+    alvo.write_text(alvo.read_text() + "\n")
+
+    with pytest.raises(coleta.ErroDeColeta, match="não confere com o manifesto"):
+        coleta.carregar_bruto(("1415",), dir_raw=tmp_path)
+
+
+def test_erro_de_integridade_diz_a_procedencia_registrada(tmp_path):
+    """A mensagem precisa permitir distinguir fonte trocada de arquivo alterado."""
+    _csv_de_temporada(tmp_path / "E0_1415.csv")
+    coleta.baixar_temporadas(("1415",), dir_raw=tmp_path)
+
+    alvo = tmp_path / "E0_1415.csv"
+    alvo.write_text(alvo.read_text() + "\n")
+
+    with pytest.raises(coleta.ErroDeColeta) as erro:
+        coleta.carregar_bruto(("1415",), dir_raw=tmp_path)
+
+    mensagem = str(erro.value)
+    assert "Manifesto registra" in mensagem
+    assert "Acessado em" in mensagem
+
+
+def test_manifesto_existente_nao_e_sobrescrito(tmp_path):
+    """Um registro legítimo de procedência não pode virar 'desconhecida'."""
+    _csv_de_temporada(tmp_path / "E0_1415.csv")
+    coleta.baixar_temporadas(("1415",), dir_raw=tmp_path)
+
+    manifesto = coleta.baixar_temporadas(("1415",), dir_raw=tmp_path)
+
+    assert manifesto["1415"]["url"] == coleta.ORIGEM_DESCONHECIDA
+    primeiro_hash = manifesto["1415"]["sha256"]
+    assert coleta.baixar_temporadas(("1415",), dir_raw=tmp_path)["1415"]["sha256"] == primeiro_hash
