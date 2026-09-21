@@ -1,0 +1,104 @@
+{
+  "0910": {
+    "acessado_em": "2026-09-07",
+    "bytes": 29349,
+    "sha256": "5389973ea38564d42c8c24b0d32f54c2c2c4a5f48746c108e6f5770ae02565ca",
+    "url": "https://raw.githubusercontent.com/datasets/football-datasets/master/datasets/premier-league/season-0910.csv"
+  },
+  "1011": {
+    "acessado_em": "2026-09-07",
+    "bytes": 29485,
+    "sha256": "bb0d7f764f3bfe40df111d0b5147e60c0a47971cd74153e2c402055b5d87fe85",
+    "url": "https://raw.githubusercontent.com/datasets/football-datasets/master/datasets/premier-league/season-1011.csv"
+  },
+  "1112": {
+    "acessado_em": "2026-09-07",
+    "bytes": 29053,
+    "sha256": "4f35683bb672c0e4b00478e05474b10601693d1791490c7ada7d2cc266efd644",
+    "url": "https://raw.githubusercontent.com/datasets/football-datasets/master/datasets/premier-league/season-1112.csv"
+  },
+  "1213": {
+    "acessado_em": "2026-09-07",
+    "bytes": 29212,
+    "sha256": "79cc32ff3a8baa38d3554f19f0ef871d9095aa96f6b1e9bd689191bc0618a0d2",
+    "url": "https://raw.githubusercontent.com/datasets/football-datasets/master/datasets/premier-league/season-1213.csv"
+  },
+  "1314": {
+    "acessado_em": "2026-09-07",
+    "bytes": 29553,
+    "sha256": "ca968765e0af6b54cf2a45db7314f953552c64b760eb9b9a096ed2d856caa518",
+    "url": "https://raw.githubusercontent.com/datasets/football-datasets/master/datasets/premier-league/season-1314.csv"
+  },
+  "1415": {
+    "acessado_em": "2026-09-07",
+    "bytes": 29548,
+    "sha256": "753d29740e76aa0ccd14bd9e1f55b716eb2887af05035b5764991d218d062fbc",
+    "url": "https://raw.githubusercontent.com/datasets/football-datasets/master/datasets/premier-league/season-1415.csv"
+  },
+  "1516": {
+    "acessado_em": "2026-09-07",
+    "bytes": 30009,
+    "sha256": "f8af30050e1856844dbd7dda92bd5cf67576a38d181d552efbf729b49e773ac5",
+    "url": "https://raw.githubusercontent.com/datasets/football-datasets/master/datasets/premier-league/season-1516.csv"
+  },
+  "1617": {
+    "acessado_em": "2026-09-07",
+    "bytes": 29951,
+    "sha256": "a56a505526a155fe4fc847e7bbcdfb0eea55b540037b8365938ea8bec2c973a0",
+    "url": "https://raw.githubusercontent.com/datasets/football-datasets/master/datasets/premier-league/season-1617.csv"
+  },
+  "1718": {
+    "acessado_em": "2026-09-07",
+    "bytes": 29834,
+    "sha256": "9f31132a858450c276605306e207384a9e20d1b5b9ccd73c34998ad3309a6823",
+    "url": "https://raw.githubusercontent.com/datasets/football-datasets/master/datasets/premier-league/season-1718.csv"
+  },
+  "1819": {
+    "acessado_em": "2026-09-07",
+    "bytes": 29776,
+    "sha256": "3b3505f2b99e70ea064834a327349a9fb555bfa269414f1c943805653af806ce",
+    "url": "https://raw.githubusercontent.com/datasets/football-datasets/master/datasets/premier-league/season-1819.csv"
+  },
+  "1920": {
+    "acessado_em": "2026-09-07",
+    "bytes": 30162,
+    "sha256": "385cfe508f2977dd57cead1cd53b6ca6e9c4fcdbfc2673926d018624682216fa",
+    "url": "https://raw.githubusercontent.com/datasets/football-datasets/master/datasets/premier-league/season-1920.csv"
+  },
+  "2021": {
+    "acessado_em": "2026-09-07",
+    "bytes": 29950,
+    "sha256": "336e0266ee200ac7c7e3ff3e0501e38c23b53bb43d2b7b4cfa8ed1b5efefbbdb",
+    "url": "https://raw.githubusercontent.com/datasets/football-datasets/master/datasets/premier-league/season-2021.csv"
+  },
+  "2122": {
+    "acessado_em": "2026-09-07",
+    "bytes": 29612,
+    "sha256": "7ad72ed0b473a7a4c595ab5fad1c352c55b24890d860f052fd5af15176c5caa6",
+    "url": "https://raw.githubusercontent.com/datasets/football-datasets/master/datasets/premier-league/season-2122.csv"
+  },
+  "2223": {
+    "acessado_em": "2026-09-07",
+    "bytes": 30104,
+    "sha256": "58beefdfc6a95fb3a0ee0d7b86cde03b0cd3bc4acebe453f19cb54ead92f4dc8",
+    "url": "https://raw.githubusercontent.com/datasets/football-datasets/master/datasets/premier-league/season-2223.csv"
+  },
+  "2324": {
+    "acessado_em": "2026-09-07",
+    "bytes": 30383,
+    "sha256": "f64a0999d037a8d1bcd0346f5d7532bbc3d2ec3434f9a46591713ea23c47aa15",
+    "url": "https://raw.githubusercontent.com/datasets/football-datasets/master/datasets/premier-league/season-2324.csv"
+  },
+  "2425": {
+    "acessado_em": "2026-09-07",
+    "bytes": 30316,
+    "sha256": "386369240ce88153da2ba231c6f356003eca395845b754e216b46bed62f69076",
+    "url": "https://raw.githubusercontent.com/datasets/football-datasets/master/datasets/premier-league/season-2425.csv"
+  },
+  "2526": {
+    "acessado_em": "2026-09-07",
+    "bytes": 30115,
+    "sha256": "06efa0bfb5309a0b8132731a1d97fe6f4f1db25138a486db3e62d376f0f9805e",
+    "url": "https://raw.githubusercontent.com/datasets/football-datasets/master/datasets/premier-league/season-2526.csv"
+  }
+}
