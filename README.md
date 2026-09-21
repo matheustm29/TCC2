@@ -8,7 +8,7 @@ a partir do portal `football-data.co.uk`.
 
 ## Notebook de apresentação
 
-[![Abrir no Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/matheustm29/TCC2/blob/claude/tcc2-football-data-review-dgaeaw/notebooks/TCC2_Analise_Fator_Casa.ipynb)
+[![Abrir no Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/matheustm29/TCC2/blob/main/notebooks/TCC2_Analise_Fator_Casa.ipynb)
 
 `notebooks/TCC2_Analise_Fator_Casa.ipynb` percorre o trabalho na estrutura
 CRISP-DM, mapeia cada anotação da banca ao ponto onde ela é tratada e mostra os
@@ -49,7 +49,7 @@ para a fonte primária.
 
 | Caminho | Descrição |
 |---------|-----------|
-| `REVISAO_TCC1.md` | Revisão técnica do TCC1: bugs, problemas metodológicos e proposta para o TCC2 |
+| `REVISAO_TCC1.md` | Auditoria do código do TCC1: erros encontrados, problemas metodológicos e plano para o TCC2 |
 | `RESULTADOS.md` | O que mudou nos números depois das correções |
 | `MODELAGEM.md` | Dixon-Coles com termo de mando e modelagem preditiva |
 | `tcc1/` | Material original do TCC1 (notebook e correções da banca), preservado como baseline |
@@ -74,7 +74,7 @@ figuras/           Saída em PDF vetorial e PNG 300 dpi, pronta para \includegra
 
 ## Estado
 
-Correções do `REVISAO_TCC1.md` aplicadas e verificadas com os dados reais, e a
+Correções listadas em `REVISAO_TCC1.md` aplicadas e verificadas com os dados reais, e a
 modelagem do TCC2 implementada: Dixon-Coles com termo de mando e modelos
 preditivos com validação temporal.
 
