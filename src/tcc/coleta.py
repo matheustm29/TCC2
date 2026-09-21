@@ -35,6 +35,10 @@ URL_ESPELHO = (
 
 NOME_MANIFESTO = "manifesto.json"
 
+# Registrado quando um arquivo é encontrado em disco sem entrada no manifesto:
+# dá para atestar o conteúdo pelo hash, mas não de onde ele veio.
+ORIGEM_DESCONHECIDA = "(já presente em disco; procedência não registrada)"
+
 # Uma linha só é partida se tiver todas estas preenchidas. Os arquivos do
 # football-data.co.uk às vezes terminam com linhas de preenchimento, resultado de
 # vírgulas sobrando no fim do CSV, que o pandas lê como uma linha inteira de NaN.
@@ -106,8 +110,24 @@ def baixar_temporadas(
 
     for temporada in temporadas:
         destino = dir_raw / f"E0_{temporada}.csv"
+
         if destino.exists() and not forcar:
+            if temporada in manifesto:
+                continue
+            # Arquivo em disco sem registro no manifesto. Acontece quando o
+            # manifesto se perde — por exemplo, num ambiente que restaura o
+            # repositório por cima da área de trabalho. Rebaixar descartaria um
+            # arquivo válido; deixar sem registro desligaria a verificação de
+            # integridade em silêncio. Então registra-se o que se sabe: o hash do
+            # que está ali, declarando a procedência como desconhecida.
+            manifesto[temporada] = {
+                "url": ORIGEM_DESCONHECIDA,
+                "acessado_em": datetime.now(timezone.utc).strftime("%Y-%m-%d"),
+                "sha256": _sha256(destino),
+                "bytes": destino.stat().st_size,
+            }
             continue
+
         url = _baixar(temporada, destino)
         manifesto[temporada] = {
             "url": url,
@@ -163,9 +183,14 @@ def _verificar_integridade(dir_raw: Path, temporadas: tuple[str, ...]) -> None:
             continue
         if _sha256(caminho) != registro["sha256"]:
             raise ErroDeColeta(
-                f"O arquivo da temporada {temporada} mudou desde a coleta "
-                f"(SHA-256 não confere com o manifesto). Rode com forcar=True e "
-                f"reprocesse a análise, ciente de que os números vão mudar."
+                f"O arquivo da temporada {temporada} não confere com o manifesto.\n"
+                f"  Manifesto registra: {registro['url']}\n"
+                f"  Acessado em       : {registro['acessado_em']}\n"
+                f"Se os dados vieram de outra fonte que não essa, apague "
+                f"{caminho.parent}/ e rode novamente para baixar e registrar tudo "
+                f"de uma vez só. Se a fonte é a mesma, o arquivo mudou na origem: "
+                f"use `baixar_temporadas(forcar=True)` e reprocesse a análise, "
+                f"ciente de que os números podem mudar."
             )
 
 

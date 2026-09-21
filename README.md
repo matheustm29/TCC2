@@ -24,10 +24,15 @@ python scripts/executar_modelagem.py   # Dixon-Coles e modelos preditivos (lento
 pytest tests/ -q
 ```
 
-O script baixa os dados uma vez para `data/raw/`, registra o SHA-256 de cada arquivo
-em `data/raw/manifesto.json` e interrompe a execução se algum arquivo mudar depois
-disso. Tudo que vai para o LaTeX sai daqui: nenhum número deve ser copiado à mão de
-uma saída de célula.
+O script baixa os dados uma vez para `data/raw/`, registra a procedência e o
+SHA-256 de cada arquivo em `data/raw/manifesto.json` e interrompe a execução se
+algum arquivo mudar depois disso. Esse manifesto é um artefato local: seu conteúdo
+depende de qual fonte estava acessível no momento do download, por isso ele não é
+versionado. A procedência dos dados que geraram as tabelas e figuras deste
+repositório está em `data/manifesto_referencia.json`.
+
+Tudo que vai para o LaTeX sai daqui: nenhum número deve ser copiado à mão de uma
+saída de célula.
 
 ## Fontes de dados
 
