@@ -35,6 +35,11 @@ URL_ESPELHO = (
 
 NOME_MANIFESTO = "manifesto.json"
 
+# Uma linha só é partida se tiver todas estas preenchidas. Os arquivos do
+# football-data.co.uk às vezes terminam com linhas de preenchimento, resultado de
+# vírgulas sobrando no fim do CSV, que o pandas lê como uma linha inteira de NaN.
+COLUNAS_DE_IDENTIDADE = ("Date", "HomeTeam", "AwayTeam", "FTHG", "FTAG", "FTR")
+
 COLUNAS_OBRIGATORIAS = (
     "Date", "HomeTeam", "AwayTeam", "FTHG", "FTAG", "FTR",
     "HS", "AS", "HST", "AST", "HC", "AC", "HF", "AF", "HY", "AY", "HR", "AR",
@@ -118,6 +123,33 @@ def baixar_temporadas(
     return manifesto
 
 
+def _descartar_preenchimento(quadro: pd.DataFrame, temporada: str) -> pd.DataFrame:
+    """Remove linhas de preenchimento do fim do arquivo.
+
+    Alguns arquivos do football-data.co.uk terminam com vírgulas sobrando, e o
+    pandas as lê como uma linha inteira de NaN. O arquivo de 2014/15, por
+    exemplo, chega com 381 linhas para 380 partidas.
+
+    Só descarta o que é inequivocamente lixo: linhas em que **todas** as colunas
+    de identidade estão vazias. Uma linha parcialmente preenchida indica dado
+    corrompido de verdade e interrompe a execução, em vez de ser varrida para
+    debaixo do tapete.
+    """
+    identidade = quadro[list(COLUNAS_DE_IDENTIDADE)]
+    vazias = identidade.isna().all(axis=1)
+    incompletas = identidade.isna().any(axis=1) & ~vazias
+
+    if incompletas.any():
+        exemplos = quadro.loc[incompletas, list(COLUNAS_DE_IDENTIDADE)].head(3)
+        raise ErroDeColeta(
+            f"Temporada {temporada}: {int(incompletas.sum())} linha(s) com dados "
+            f"de identidade incompletos. Não é lixo de fim de arquivo — verifique "
+            f"a fonte.\n{exemplos.to_string()}"
+        )
+
+    return quadro.loc[~vazias].reset_index(drop=True)
+
+
 def _verificar_integridade(dir_raw: Path, temporadas: tuple[str, ...]) -> None:
     """Compara os arquivos em disco com os hashes do manifesto."""
     caminho_manifesto = dir_raw / NOME_MANIFESTO
@@ -163,18 +195,20 @@ def carregar_bruto(
             raise ErroDeColeta(
                 f"Temporada {temporada} sem as colunas obrigatórias: {faltantes}"
             )
+        quadro = _descartar_preenchimento(quadro, temporada)
         quadro["Season"] = temporada
         quadros.append(quadro)
 
     bruto = pd.concat(quadros, ignore_index=True)
 
-    esperado = config.JOGOS_POR_TEMPORADA * len(temporadas)
-    if len(bruto) != esperado:
-        contagem = bruto.groupby("Season").size().to_dict()
+    contagem = bruto.groupby("Season").size()
+    fora_do_padrao = contagem[contagem != config.JOGOS_POR_TEMPORADA]
+    if not fora_do_padrao.empty:
         raise ErroDeColeta(
-            f"Esperava {esperado} partidas ({len(temporadas)} temporadas x "
-            f"{config.JOGOS_POR_TEMPORADA}), encontrei {len(bruto)}. "
-            f"Partidas por temporada: {contagem}"
+            f"Cada temporada deveria ter {config.JOGOS_POR_TEMPORADA} partidas "
+            f"(20 equipes em turno e returno). Fora do padrão:\n"
+            f"{fora_do_padrao.to_string()}\n"
+            f"Total: {len(bruto)} de {config.JOGOS_POR_TEMPORADA * len(temporadas)} esperadas."
         )
 
     return bruto
