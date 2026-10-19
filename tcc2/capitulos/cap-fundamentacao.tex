@@ -1,0 +1,197 @@
+%%%% CAPÍTULO 2 - FUNDAMENTAÇÃO TEÓRICA
+
+\chapter{Fundamentação Teórica}\label{cap:fundamentacao}
+
+Este capítulo apresenta a base teórica necessária para a compreensão dos
+conceitos discutidos ao longo do trabalho. Inicialmente, aborda-se o fenômeno do
+Fator Casa no contexto esportivo e suas variáveis determinantes. Em seguida,
+detalha-se a metodologia CRISP-DM, utilizada como guia estrutural da pesquisa.
+Por fim, apresentam-se os modelos estatísticos aplicados a resultados de futebol
+e os critérios de avaliação de previsões probabilísticas.
+
+\section{O Fenômeno do Fator Casa}\label{sec:fator-casa}
+
+O conceito de Fator Casa (\textit{home advantage}) é amplamente documentado na
+literatura da ciência do esporte e refere-se à vantagem estatística consistente
+que os times mandantes possuem sobre os visitantes. Segundo estudos clássicos
+estruturados por \citeonline{Courneya1992} e \citeonline{Pollard2006}, essa
+vantagem pode ser quantificada pela porcentagem de vitórias ou pontos
+conquistados em casa, que historicamente supera a marca de 50\% em diversas
+modalidades de esportes coletivos.
+
+\citeonline{Nevill1999} realizaram uma ampla revisão da literatura e apontaram
+que o Fator Casa é um fenômeno multifatorial. As principais variáveis que
+sustentam esse comportamento incluem:
+
+\begin{itemize}
+  \item \textbf{Apoio da torcida:} a presença do público local atua como um
+    forte motivador psicológico para os jogadores mandantes, além de criar um
+    ambiente de pressão sobre os adversários;
+  \item \textbf{Familiaridade com o ambiente:} o conhecimento detalhado das
+    dimensões do campo, das condições do gramado e até mesmo do clima local
+    confere uma vantagem tática sutil, mas real;
+  \item \textbf{Logística e cansaço de viagem:} equipes visitantes enfrentam o
+    desgaste físico e mental decorrente de deslocamentos, alterações de rotina e
+    hospedagens, fatores que podem impactar o rendimento atlético;
+  \item \textbf{Viés de arbitragem:} estudos apontam que a pressão exercida pela
+    torcida local pode influenciar, de forma subconsciente, as decisões da
+    equipe de arbitragem em lances cruciais, como cartões e penalidades.
+\end{itemize}
+
+Essa distinção entre mecanismos é relevante para o presente trabalho. Os quatro
+fatores produzem assinaturas empíricas distintas: o viés de arbitragem deve
+manifestar-se em cartões e faltas, ao passo que a familiaridade com o ambiente e
+a logística afetam diretamente o volume de ações ofensivas. A análise conjunta
+dessas métricas permite, portanto, discriminar parcialmente entre os mecanismos,
+em vez de tratá-los como um bloco indiviso.
+
+\subsection{O Impacto da Pandemia e os Jogos com Portões Fechados}\label{sec:covid}
+
+Um dos momentos mais singulares para o estudo do Fator Casa ocorreu durante a
+pandemia de COVID-19. As restrições sanitárias forçaram a realização de partidas
+com portões fechados, conhecidos na Europa como \textit{ghost games}.
+
+Pesquisas como a de \citeonline{Fischer2021} aproveitaram esse cenário de
+isolamento para testar empiricamente o peso real da torcida. Isolar essa variável
+permitiu comparar o desempenho das equipes em condições anteriormente
+impossíveis de observar, o que levou parte da literatura a tratar o episódio como
+um experimento natural.
+
+Cabe, entretanto, uma ressalva metodológica que orienta a análise conduzida neste
+trabalho. A temporada 2020/21 não se diferenciou das anteriores apenas pela
+ausência de público: houve também encurtamento da pré-temporada, congestionamento
+de calendário e alteração no número de substituições permitidas por partida.
+Comparações entre temporadas, portanto, confundem o efeito da torcida com o
+efeito de todas as demais mudanças ocorridas simultaneamente. Contrastes
+construídos \textit{dentro} de uma mesma temporada, quando disponíveis, oferecem
+evidência mais limpa a respeito do papel específico do público.
+
+\section{A Metodologia CRISP-DM}\label{sec:crisp-dm}
+
+O \textit{Cross Industry Standard Process for Data Mining} (CRISP-DM) é um modelo
+de processo que descreve as fases de um projeto de mineração de dados de forma
+independente de domínio e de ferramenta~\cite{Wirth2000}. Sua documentação de
+referência~\cite{Chapman2000} organiza o trabalho em seis fases:
+
+\begin{enumerate}
+  \item \textbf{Entendimento do negócio} (\textit{business understanding}): fase
+    inicial focada em compreender os objetivos do projeto sob a perspectiva de
+    regras de negócio, transformando esse conhecimento na definição de um
+    problema de ciência de dados;
+  \item \textbf{Entendimento dos dados} (\textit{data understanding}): envolve a
+    coleta inicial dos dados, a identificação de problemas de qualidade e a
+    primeira exploração das propriedades do conjunto;
+  \item \textbf{Preparação dos dados} (\textit{data preparation}): fase de
+    tratamento em que os dados brutos são limpos, transformados, filtrados e
+    modelados em conjuntos finais prontos para análise;
+  \item \textbf{Modelagem} (\textit{modeling}): seleção e aplicação de técnicas
+    estatísticas e algoritmos de aprendizado de máquina, com o ajuste de seus
+    parâmetros;
+  \item \textbf{Avaliação} (\textit{evaluation}): revisão técnica dos resultados
+    obtidos para garantir que as descobertas realmente resolvem o problema
+    inicial;
+  \item \textbf{Implantação} (\textit{deployment}): organização dos resultados em
+    relatórios finais, códigos reaproveitáveis ou \textit{dashboards}.
+\end{enumerate}
+
+Uma característica central do CRISP-DM é seu caráter iterativo: as fases não
+constituem uma sequência linear, e descobertas feitas em etapas avançadas
+frequentemente exigem o retorno a etapas anteriores. Esse aspecto é
+particularmente relevante neste trabalho, no qual a fase de modelagem revelou
+limitações na preparação dos dados que exigiram revisão retroativa, conforme
+descrito no Capítulo~\ref{cap:metodologia}.
+
+\section{Modelos Estatísticos para Resultados de Futebol}\label{sec:modelos-futebol}
+
+Análises descritivas do mando de campo baseiam-se em médias condicionais, como a
+média de pontos conquistados em casa e fora. Essa abordagem possui uma limitação
+estrutural: ela não controla pela identidade dos adversários enfrentados em cada
+condição. O diferencial observado para um clube mistura, de forma
+indistinguível, a vantagem efetivamente atribuível ao mando e as características
+do calendário que lhe coube.
+
+A literatura estatística do futebol trata esse problema por meio de modelos que
+estimam simultaneamente a força de cada equipe e um parâmetro comum de mando.
+\citeonline{Maher1982} propôs modelar os gols marcados por cada lado como
+variáveis aleatórias de Poisson independentes, com médias determinadas por
+parâmetros de ataque e defesa específicos de cada clube.
+\citeonline{DixonColes1997} estenderam essa formulação em dois aspectos que se
+tornaram referência na área: a introdução de um fator de correção para a
+dependência observada nos placares de baixa pontuação, nos quais o modelo de
+Poisson independente subestima a frequência de empates, e a ponderação temporal
+das observações, de modo que partidas mais recentes influenciem mais a estimativa
+da força atual de cada equipe.
+
+Na formulação de Dixon e Coles, para uma partida entre o mandante~$i$ e o
+visitante~$j$, os gols são modelados como variáveis de Poisson com médias:
+
+\begin{equation}\label{eq:dixon-coles}
+  \lambda_{\text{casa}} = \exp(\mu + \alpha_i - \beta_j + \gamma),
+  \qquad
+  \lambda_{\text{fora}} = \exp(\mu + \alpha_j - \beta_i),
+\end{equation}
+
+\noindent em que $\alpha$ e $\beta$ representam, respectivamente, as forças de
+ataque e de defesa de cada clube, $\mu$ é um termo comum de escala e $\gamma$ é o
+parâmetro de mando de campo. Como $\gamma$ é estimado conjuntamente com as forças
+de todas as equipes, ele mede a vantagem do mandante já descontada a qualidade de
+quem enfrentou quem. A quantidade $e^{\gamma} - 1$ expressa o acréscimo
+percentual esperado de gols atribuível ao mando.
+
+\section{Avaliação de Modelos Probabilísticos}\label{sec:avaliacao}
+
+A previsão de resultados de futebol é, por natureza, um problema probabilístico:
+o interesse não está em afirmar categoricamente qual equipe vencerá, mas em
+atribuir probabilidades às três possibilidades de resultado. Essa característica
+tem consequências diretas sobre a escolha das métricas de avaliação.
+
+A acurácia, métrica mais intuitiva, é insuficiente nesse contexto por duas
+razões. Primeiro, ela ignora a confiança associada a cada previsão, tratando
+igualmente um acerto obtido com 51\% de probabilidade e outro obtido com 95\%.
+Segundo, em um problema no qual uma das classes é majoritária, a acurácia pode
+ser elevada sem que o modelo agregue informação útil.
+
+Por esse motivo, adotam-se regras de pontuação próprias (\textit{strictly proper
+scoring rules}), que são minimizadas quando o modelo reporta suas probabilidades
+verdadeiras~\cite{GneitingRaftery2007}. As duas mais usuais são o \textit{logarithmic
+loss}, definido como a média do logaritmo negativo da probabilidade atribuída ao
+resultado observado, e o escore de \citeonline{Brier1950}, definido como o erro
+quadrático médio entre as probabilidades previstas e o vetor indicador do
+resultado.
+
+Complementarmente, a \textbf{calibração} de um modelo pode ser avaliada
+agrupando-se as previsões em faixas de probabilidade e comparando, em cada faixa,
+a probabilidade média prevista com a frequência observada do evento. Um modelo
+bem calibrado produz pontos próximos à diagonal: entre as partidas às quais
+atribui 70\% de chance de vitória do mandante, o mandante deve vencer
+aproximadamente 70\% das vezes.
+
+\subsection{Significância Estatística e Tamanho de Efeito}\label{sec:efeito}
+
+Em conjuntos de dados grandes, p-valores reduzidos são facilmente obtidos mesmo
+para diferenças de magnitude irrelevante, uma vez que a estatística de teste
+cresce com o tamanho da amostra. Por essa razão, recomenda-se que resultados
+inferenciais sejam reportados acompanhados de estimativas pontuais, intervalos de
+confiança e medidas de tamanho de efeito~\cite{Wasserstein2016}.
+
+Neste trabalho adota-se o $d$ de \citeonline{Cohen1988} como medida de tamanho de
+efeito para comparações de médias, interpretado segundo as faixas convencionais
+de efeito pequeno, médio e grande, e a razão de chances para comparações de
+proporções.
+
+\subsection{Vazamento de Dados e Validação Temporal}\label{sec:vazamento}
+
+Um risco central em problemas preditivos é o vazamento de dados (\textit{data
+leakage}), situação em que informação indisponível no momento da previsão é
+inadvertidamente incorporada às variáveis explicativas~\cite{Kaufman2012}. Em
+previsão de resultados esportivos, o caso mais comum consiste em utilizar
+estatísticas da própria partida — como finalizações, escanteios e faltas — que
+só passam a existir após o apito final. Modelos construídos dessa forma exibem
+desempenho artificialmente elevado e não possuem validade preditiva.
+
+Relacionado a esse risco está o procedimento de validação. Em dados com estrutura
+temporal, a partição aleatória entre treino e teste permite que o modelo seja
+treinado com observações posteriores às que serão previstas, o que também
+superestima o desempenho~\cite{Bergmeir2012}. A alternativa adequada é a
+validação temporal, na qual o conjunto de treino é sempre anterior ao conjunto de
+teste, reproduzindo as condições reais de aplicação do modelo.

@@ -1,0 +1,488 @@
+%%%% REFERÊNCIAS
+%%
+%% Conjunto padronizado de elementos descritivos retirados de um documento, que permite sua identificação individual.
+%%
+%% Cada entrada no arquivo BibTeX segue um formato padrão. Este formato muda ligeiramente baseado no tipo de entrada, mas a sintaxe
+%% continua a mesma.
+%%
+%% O rótulo de cada entrada não pode conter caracteres especiais, acentuados ou cedilha.
+%%
+%% A formatação do texto no campo "AUTHOR" deve obedecer algumas regras:
+%%   - Acento agudo:        "á = {\'a}".
+%%   - Acento crase:        "à = {\`a}".
+%%   - Acento til:          "ã = {\~a}".
+%%   - Acento circunflexo:  "ê = {\^e}".
+%%   - Acento trema:        "ü = {\"u}".
+%%   - Acento na letra i:   "í = {\'\i}".
+%%   - Cedilha:             "ç = {\c{c}}".
+%%   - Sobrenome composto:  "Santos, Filho, Jos{\'e} C. S.; da Silva, Erivanildo Lopes".
+%%   - Nome de organização: "{\mbox IONA Technologies PLC}".
+%%
+%% A formatação do texto no campo "TITLE" deve obedecer algumas regras (também válidas para o texto no campo "AUTHOR"):
+%%   - MAIÚSCULAS: "REAL = {REAL}".
+%%   - Minúsculas: "real = {real}".
+%%   - CamelCase:  "Real = {R}eal".
+
+%% TIPOS DE ENTRADA
+%%
+%% Ao inserir uma referência no banco de dados, a primeira coisa a decidir é o tipo de entrada. Existem vários tipos de entrada, mas
+%% não são completas, porém são suficientes para o BibTeX fornecer entradas para lidar com praticamente qualquer tipo de referência
+%% razoavelmente bem.
+
+%% ARTICLE - Um artigo de um jornal ou revista.
+%%   - Campos requeridos: AUTHOR, TITLE, JOURNAL e YEAR.
+%%   - Campos opcionais: VOLUME, NUMBER, PAGES, MONTH e NOTE.
+
+% SEBRAE. Entenda a importância da normalização para o seu negócio. Normas técnicas. 8 jan. 2016. Disponível em: http://www.sebrae.com.br/sites/PortalSebrae/artigos/entenda-a-importancia-da-normalizacao-para-o-seu-negocio. Acesso em: 11 mar. 2025. (Modelo de referência: material disponível na Internet).
+
+@misc{SEBRAE:2016,
+  TITLE         = {Normas técnicas},
+  AUTHOR        = {{SEBRAE}},
+  Institution  = {Entenda a importância da normalização para o seu negócio.},
+  YEAR          = {2016},
+  mounth = {8 jan},
+  URL = {http://www.sebrae.com.br/sites/PortalSebrae/artigos/entenda-a-importancia-da-normalizacao-para-o-seu-negocio},
+  URLACCESSDATE = {11 mar. 2025},
+}
+
+
+@INPROCEEDINGS{Renaux2001,
+  AUTHOR       = {Douglas P. B. Renaux and Faimara do Rocio Strauhs and Aline França Abreu and Leandro Gustavo Biss Becker},
+  TITLE        = {Gestão do conhecimento de um laboratório de pesquisa: uma abordagem prática},
+  BOOKTITLE    = {Simpósio Internacional de Gestão do Conhecimento},
+  YEAR         = {2001},
+  VOLUME        = {4},
+  PAGES        = {195-208},
+  pUBLISHER = {PUC-PR},
+  ADDRESS      = {Curitiba},
+}
+
+@article{Monteiro2009,
+  author = {S. Monteiro},
+  title = {Breve espaço entre cor e sombra},
+  journal = {Revista de Letras},
+  year = {2009},
+  month = {dez.},
+  ADDRESS   = {Curitiba,},
+  number = {11},
+  pages = {183--200},
+  volume = {13},
+  subtitle = {o romance da maturidade literária de {Cristóvão Tezza}},
+}
+
+@BOOK{KOTLER:2012,
+  AUTHOR    = {P. KOTLER and H. KARTAJAYA and I. SETIAWAN},
+  TITLE     = {Marketing 3.0},
+  SUBTITLE   = {as forças que estão definindo o novo marketing centrado no ser humano},
+  PUBLISHER = {Elsevier},
+  YEAR      = {2012},
+  ADDRESS   = {Rio de Janeiro},
+  URL = {https://bibliotecas.sebrae.com.br/chronus/ARQUIVOS_CHRONUS/bds/bds.nsf/3472e2ca0932a98d7edbc110c8c58de9/$File/9938.pdf.},
+  URLACCESSDATE = {8 fev. 2025},
+}
+
+@book{DAVENPORT:2012,
+  author = {Laurence Davenport and Thomas H. Prusak},
+  title = {Conhecimento empresarial},
+  subtitle = {como as organizações gerenciam o seu capital intelectual},
+  publisher = {Campus},
+  address = {Rio de Janeiro},
+  YEAR = {2012},
+}
+
+@book{AACR2,
+  author = {},
+  title = {Código de catalogação anglo-americano},
+  edition = {2},
+  publisher = {FEBAB},
+  address = {São Paulo},
+  YEAR = {1983-1985},
+}
+
+@BOOK{Barton:1998,
+  AUTHOR    = {Dorothy Leonard-Barton},
+  TITLE     = {Nascentes do saber},
+  PUBLISHER = {FGV},
+  YEAR      = {1998},
+  ADDRESS   = {Rio de Janeiro},
+}
+
+@manual{BRASIL:2014,
+  TITLE         = {Relatório educação para todos no Brasil 2000-2015},
+  SUBTITLE      = {versão preliminar},
+  AUTHOR        = {{BRASIL}},
+  ORGANIZATION  = {Ministério da Educação},
+  ADDRESS       = {[Brasília, DF]},
+  ORG-SHORT     = {[MEC]},
+  YEAR          = {2014},
+  URL = {http://portal.mec.gov.br/index.php?option=com_docman&view=download&alias=15774-ept-relatorio-06062014&Itemid=30192},
+  URLACCESSDATE = {12 fev. 2025},
+  institution = {Ministério da Educação}, 
+}
+
+@BOOK{FLEURY:2018,
+  AUTHOR    = {A. C. C. FLEURY and M. T. L. FLEURY},
+  TITLE     = {Estratégias empresariais e formação de competências},
+  SUBTITLE   = {um quebra-cabeça caleidoscópico da indústria brasileira},
+  PUBLISHER = {Atlas},
+  EDITION = {3},
+  YEAR      = {2018},
+  ADDRESS   = {São Paulo},
+}
+
+@MANUAL{NBR6023:2018,
+  TITLE         = {{ABNT NBR} 6023},
+  AUTHOR        = {{ABNT}},
+  ORGANIZATION  = {Associação Brasileira de Normas Técnicas},
+  ADDRESS       = {Rio de Janeiro},
+  YEAR          = {2018},
+  ORG-SHORT     = {ABNT},
+  SUBTITLE      = {informação e documentação: referências: elaboração},
+ 
+}
+
+
+@manual{Centro:2025,
+  TITLE         = {As dimensões curriculares de pré-escolar},
+  AUTHOR        = {Centro{ }Social{ }de{ }Azurva},
+  ADDRESS       = {Valência},
+  year = {2020},
+  org-SHORT = {Pré-escolar},
+  URL = {https://centrosocialazurva.org/seccao.php?s=pre-escolar},
+  URLACCESSDATE = {7 ago. 2025},
+}
+
+@BOOK{Pawlina:2018,
+  AUTHOR    = {Michael H. Ross and Wojciech Pawlina},
+  TITLE     = {Histologia},
+  SUBTITLE   = {Texto e Atlas},
+  EDITION = {7},
+  PUBLISHER = {Guanabara Koogan},
+  YEAR      = {2018},
+  ADDRESS   = {Rio de Janeiro},
+  URL = {https://webapp.utfpr.edu.br/bibservices/minhaBiblioteca?ISBN=9788527729888.},
+  URLACCESSDATE = {18 maio 2025},
+  note = {E-book},
+}
+
+@misc{UTFPR:2025,
+  title        = {Sustentabilidade},
+  subtitle = {estudo da {UTFPR} identifica desmatamento em áreas de preservação do {Rio Pato Branco}},
+  author       = {{UTFPR}},
+  Institution = {},
+  shortauthor  = {{UTFPR}},
+  mounth = {21 fev.},
+  year         = {2025},
+  address     = {Curitiba},
+  url = {https://www.instagram.com/p/DHgMWuCP1xt/?utm_source=ig_web_copy_link},
+  URLACCESSDATE = {25 mar. 2025},
+note = {Instagram: @utfpr\_}
+}
+
+@manual{UTFPR2020,
+  title        = {Relatório de gestão},
+  subtitle = {2020},
+  author       = {{UTFPR}},
+  Institution = {Diretoria de Graduação e Educação Profissional. Departamento de Biblioteca},
+  shortauthor  = {{UTFPR}},
+  note         = {(Relatório técnico)},
+  year         = {2020},
+  address     = {Ponta Grossa},
+  publisher    = {[s.n.]},
+  org-short    = {[\textit{s.n.}]},
+}
+
+@MANUAL{INEP:2016,
+  TITLE         = {Relatório dos cursos avaliados em 2015},
+  AUTHOR        = {{INEP}},
+  Institution = {Sistema Nacional de Avaliação da Educação Superior.},
+  ORGANIZATION  = {Sistema Nacional de Avaliação da Educação Superior},
+  ADDRESS       = {Brasília, DF},
+  YEAR          = {2016},
+  ORG-SHORT     = {INEP},
+}
+
+@MANUAL{NBR6028:2021,
+  TITLE         = {{ABNT NBR} 6028},
+  AUTHOR        = {{ABNT}},
+  ORGANIZATION  = {Associação Brasileira de Normas Técnicas},
+  ADDRESS       = {Rio de Janeiro},
+  YEAR          = {2021},
+  ORG-SHORT     = {ABNT},
+  SUBTITLE      = {informação e documentação: resumo -- apresentação}
+}
+
+@MANUAL{NBR6027:2012,
+  TITLE         = {{ABNT NBR} 6027},
+  AUTHOR        = {{ABNT}},
+  ORGANIZATION  = {Associação Brasileira de Normas Técnicas},
+  ADDRESS       = {Rio de Janeiro},
+  YEAR          = {2012},
+  ORG-SHORT     = {ABNT},
+  SUBTITLE      = {informação e documentação: sumário -- apresentação}
+}
+
+@BOOK{KROGH:2001,
+  AUTHOR    = {Georg Von{ }Ichijo and Kazuo Nonaka and Ikujiro Krogh},
+  TITLE     = {Facilitando a criação de conhecimento},
+  PUBLISHER = {Campus},
+  YEAR      = {2001},
+  ADDRESS   = {Rio de Janeiro},
+  SUBTITLE  = {reinventando a empresa com o poder da inovação contínua}
+}
+
+@MANUAL{NBR10520:2023,
+  TITLE         = {{ABNT NBR} 10520},
+  AUTHOR        = {{ABNT}},
+  ORGANIZATION  = {Associação Brasileira de Normas Técnicas},
+  ADDRESS       = {Rio de Janeiro},
+  YEAR          = {2023},
+  ORG-SHORT     = {ABNT},
+  SUBTITLE      = {informação e documentação -- apresentação de citações em documentos}
+}
+
+@MANUAL{NBR14724:2011,
+  TITLE         = {{ABNT NBR} 14724},
+  AUTHOR        = {{ABNT}},
+  ORGANIZATION  = {Associação Brasileira de Normas Técnicas},
+  ADDRESS       = {Rio de Janeiro, RJ},
+  MONTH         = mar,
+  YEAR          = {2024},
+  ORG-SHORT     = {ABNT},
+  SUBTITLE      = {informação e documentação -- trabalhos acadêmicos -- apresentação}
+}
+
+@MASTERSTHESIS{Andrade2005,
+  AUTHOR  = {M. M. Andrade},
+  TITLE   = {Competências requeridas pelos gestores de Instituições de ensino superior privadas},
+  SCHOOL  = {Programa de Pós-Graduação em
+Tecnologia, Universidade Tecnológica Federal do Paraná,},
+  YEAR    = {2005},
+  ADDRESS = {Curitiba,},
+  PAGES   = {150},
+  SUBTITLE= {um estudo em Curitiba e região metropolitana}
+}
+
+@INBOOK{Borges2014,
+  AUTHOR    = {L. O. BORGES and O. H. YAMAMOTO},
+  booktitle  = {Psicologia, organizações e trabalho no Brasil},
+  title = {Mundo do trabalho},
+  SUBTITLE = {construção histórica e desafios contemporâneos},
+  Organization = {{BASTOS, A. V. B; BORGES-ANDRADE, J. E.; ZANELLI, J. C. (Org.)}},
+  PAGES     = {25--72},
+  PUBLISHER = {Artmed},
+  YEAR      = {2014},
+  ADDRESS   = {Porto Alegre},
+  edition      = {2}
+}
+
+@INBOOK{Candido2002,
+  AUTHOR    = {A. Candido},
+  booktitle  = {Textos de intervenção},
+  title = {A literatura e a formação do homem},
+  PAGES     = {67},
+  PUBLISHER = {Duas Cidades},
+  YEAR      = {2002},
+  ADDRESS   = {São Paulo},
+  SERIES    = {Coleção Espírito Crítico},
+}
+
+@MISC{BRASIL:1998,
+  TITLE         = {Lei n. 9.610, de 19 de fevereiro de 1998},
+  AUTHOR        = {{BRASIL}},
+  ORGANIZATION  = {Casa Civil},
+  ADDRESS       = {Brasília, DF:},
+  ORG-SHORT     = {Casa Civil},
+  YEAR          = {1998},
+  URL = {http://www.planalto.gov.br/ccivil_03/leis/L9610.htm},
+  URLACCESSDATE = {11 mar. 2025},
+  SUBTITLE      = {Altera, atualiza e consolida a legislação sobre direitos autorais e dá outras providências}
+}
+
+
+%% ====================================================================
+%% Referências do trabalho — Fator Casa, metodologia e modelagem
+%% ====================================================================
+
+@article{Courneya1992,
+  author  = {Courneya, Kerry S. and Carron, Albert V.},
+  title   = {The Home Advantage in Sport Competitions: A Literature Review},
+  journal = {Journal of Sport and Exercise Psychology},
+  volume  = {14},
+  number  = {1},
+  pages   = {13--27},
+  year    = {1992},
+  doi     = {10.1123/jsep.14.1.13}
+}
+
+@article{Nevill1999,
+  author  = {Nevill, Alan M. and Holder, Roger L.},
+  title   = {Home Advantage in Sport: An Overview of Studies on the Advantage of Playing at Home},
+  journal = {Sports Medicine},
+  volume  = {28},
+  number  = {4},
+  pages   = {221--236},
+  year    = {1999},
+  doi     = {10.2165/00007256-199928040-00001}
+}
+
+@article{Pollard2006,
+  author  = {Pollard, Richard},
+  title   = {Worldwide Regional Variations in Home Advantage in Association Football},
+  journal = {Journal of Sports Sciences},
+  volume  = {24},
+  number  = {3},
+  pages   = {231--240},
+  year    = {2006},
+  doi     = {10.1080/02640410400021542}
+}
+
+@article{Fischer2021,
+  author  = {Fischer, Kai and Haucap, Justus},
+  title   = {Does Crowd Support Drive the Home Advantage in Professional Football? Evidence from German Ghost Games during the COVID-19 Pandemic},
+  journal = {Journal of Sports Economics},
+  volume  = {22},
+  number  = {8},
+  pages   = {982--1008},
+  year    = {2021},
+  doi     = {10.1177/15270025211026552}
+}
+
+@article{DixonColes1997,
+  author  = {Dixon, Mark J. and Coles, Stuart G.},
+  title   = {Modelling Association Football Scores and Inefficiencies in the Football Betting Market},
+  journal = {Journal of the Royal Statistical Society: Series C (Applied Statistics)},
+  volume  = {46},
+  number  = {2},
+  pages   = {265--280},
+  year    = {1997},
+  doi     = {10.1111/1467-9876.00065}
+}
+
+@article{Maher1982,
+  author  = {Maher, Michael J.},
+  title   = {Modelling Association Football Scores},
+  journal = {Statistica Neerlandica},
+  volume  = {36},
+  number  = {3},
+  pages   = {109--118},
+  year    = {1982},
+  doi     = {10.1111/j.1467-9574.1982.tb00782.x}
+}
+
+@article{Brier1950,
+  author  = {Brier, Glenn W.},
+  title   = {Verification of Forecasts Expressed in Terms of Probability},
+  journal = {Monthly Weather Review},
+  volume  = {78},
+  number  = {1},
+  pages   = {1--3},
+  year    = {1950},
+  doi     = {10.1175/1520-0493(1950)078<0001:VOFEIT>2.0.CO;2}
+}
+
+@article{GneitingRaftery2007,
+  author  = {Gneiting, Tilmann and Raftery, Adrian E.},
+  title   = {Strictly Proper Scoring Rules, Prediction, and Estimation},
+  journal = {Journal of the American Statistical Association},
+  volume  = {102},
+  number  = {477},
+  pages   = {359--378},
+  year    = {2007},
+  doi     = {10.1198/016214506000001437}
+}
+
+@inproceedings{Wirth2000,
+  author    = {Wirth, R{\"u}diger and Hipp, Jochen},
+  title     = {{CRISP-DM}: Towards a Standard Process Model for Data Mining},
+  booktitle = {Proceedings of the 4th International Conference on the Practical
+               Applications of Knowledge Discovery and Data Mining},
+  pages     = {29--39},
+  address   = {Manchester},
+  year      = {2000}
+}
+
+@book{Chapman2000,
+  author    = {Chapman, Pete and Clinton, Julian and Kerber, Randy and Khabaza,
+               Thomas and Reinartz, Thomas and Shearer, Colin and Wirth, R{\"u}diger},
+  title     = {{CRISP-DM} 1.0: Step-by-Step Data Mining Guide},
+  publisher = {SPSS Inc.},
+  year      = {2000}
+}
+
+@book{Cohen1988,
+  author    = {Cohen, Jacob},
+  title     = {Statistical Power Analysis for the Behavioral Sciences},
+  edition   = {2},
+  publisher = {Lawrence Erlbaum Associates},
+  address   = {Hillsdale},
+  year      = {1988}
+}
+
+@article{Wasserstein2016,
+  author  = {Wasserstein, Ronald L. and Lazar, Nicole A.},
+  title   = {The {ASA} Statement on $p$-Values: Context, Process, and Purpose},
+  journal = {The American Statistician},
+  volume  = {70},
+  number  = {2},
+  pages   = {129--133},
+  year    = {2016},
+  doi     = {10.1080/00031305.2016.1154108}
+}
+
+@article{Kaufman2012,
+  author  = {Kaufman, Shachar and Rosset, Saharon and Perlich, Claudia and Stitelman, Ori},
+  title   = {Leakage in Data Mining: Formulation, Detection, and Avoidance},
+  journal = {ACM Transactions on Knowledge Discovery from Data},
+  volume  = {6},
+  number  = {4},
+  pages   = {1--21},
+  year    = {2012},
+  doi     = {10.1145/2382577.2382579}
+}
+
+@article{Bergmeir2012,
+  author  = {Bergmeir, Christoph and Ben{\'i}tez, Jos{\'e} M.},
+  title   = {On the Use of Cross-Validation for Time Series Predictor Evaluation},
+  journal = {Information Sciences},
+  volume  = {191},
+  pages   = {192--213},
+  year    = {2012},
+  doi     = {10.1016/j.ins.2011.12.028}
+}
+
+@article{Pedregosa2011,
+  author  = {Pedregosa, Fabian and Varoquaux, Ga{\"e}l and Gramfort, Alexandre and
+             Michel, Vincent and Thirion, Bertrand and Grisel, Olivier and others},
+  title   = {Scikit-learn: Machine Learning in {Python}},
+  journal = {Journal of Machine Learning Research},
+  volume  = {12},
+  pages   = {2825--2830},
+  year    = {2011}
+}
+
+@article{Virtanen2020,
+  author  = {Virtanen, Pauli and Gommers, Ralf and Oliphant, Travis E. and others},
+  title   = {{SciPy} 1.0: Fundamental Algorithms for Scientific Computing in {Python}},
+  journal = {Nature Methods},
+  volume  = {17},
+  pages   = {261--272},
+  year    = {2020},
+  doi     = {10.1038/s41592-019-0686-2}
+}
+
+@misc{FootballData2026,
+  author       = {{Football-Data.co.uk}},
+  title        = {Historical Football Results and Betting Odds Data: England},
+  howpublished = {\url{https://www.football-data.co.uk/englandm.php}},
+  year         = {2026},
+  note         = {Acesso em: 19 out. 2026}
+}
+
+@misc{PremierLeague2024,
+  author       = {{Premier League}},
+  title        = {This Is Premier League: Football, Community and Economy},
+  howpublished = {\url{https://www.premierleague.com/publications}},
+  year         = {2024},
+  note         = {Acesso em: 19 out. 2026}
+}

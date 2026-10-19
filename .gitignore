@@ -11,3 +11,26 @@ venv/
 # dos dados usados nas tabelas e figuras deste repositório.
 data/raw/
 data/processed/
+
+# Artefatos de compilação do LaTeX
+tcc2/*.aux
+tcc2/*.bbl
+tcc2/*.blg
+tcc2/*.log
+tcc2/*.out
+tcc2/*.toc
+tcc2/*.lof
+tcc2/*.lot
+tcc2/*.fls
+tcc2/*.fdb_latexmk
+tcc2/*.glo
+tcc2/*.ist
+tcc2/*.idx
+tcc2/*.nlo
+tcc2/*.mw
+tcc2/*.xmpi
+tcc2/*.pdf
+tcc2/**/*-eps-converted-to.pdf
+!tcc2/figuras/*.pdf
+!tcc2/PreTexto/**/*.pdf
+!tcc2/PosTexto/**/*.pdf
