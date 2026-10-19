@@ -27,7 +27,17 @@ tcc2/*.glo
 tcc2/*.ist
 tcc2/*.idx
 tcc2/*.nlo
+tcc2/*.nls
 tcc2/*.mw
+tcc2/*.acn*
+tcc2/*.acr*
+tcc2/*.alg*
+tcc2/*.gls
+tcc2/*.glg
+tcc2/*.ilg
+tcc2/*.ind
+tcc2/*.loge
+tcc2/*.ist
 tcc2/*.xmpi
 tcc2/*.pdf
 tcc2/**/*-eps-converted-to.pdf
