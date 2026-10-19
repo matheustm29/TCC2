@@ -39,8 +39,11 @@ tcc2/**/*.alg*
 tcc2/**/*.loge
 tcc2/**/*.mw
 tcc2/**/*.xmpi
-tcc2/**/*-eps-converted-to.pdf
 tcc2/main.pdf
 !tcc2/figuras/*.pdf
 !tcc2/PreTexto/**/*.pdf
 !tcc2/PosTexto/**/*.pdf
+# Convertidos pelo epstopdf a cada compilação. A exclusão precisa vir depois
+# das negações acima, que de outro modo os reincluiriam junto com as imagens
+# legítimas do modelo.
+tcc2/**/*-eps-converted-to.pdf
