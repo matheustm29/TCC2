@@ -2,12 +2,142 @@
 
 \chapter{Conclusão}\label{cap:conclusao}
 
-[Capítulo em elaboração.]
+Este trabalho analisou a influência do mando de campo nos resultados da
+\textit{Premier League} ao longo de onze temporadas, de 2015/16 a 2025/26,
+totalizando 4.180 partidas. A pesquisa foi estruturada segundo o modelo
+CRISP-DM e combinou análise descritiva, inferência estatística, modelagem
+probabilística e avaliação de modelos preditivos sob validação temporal.
+
+\section{Síntese dos Resultados}\label{sec:sintese}
+
+Retomando os objetivos específicos definidos na Seção~\ref{sec:objetivos-especificos}:
+
+\textbf{Quanto à magnitude do domínio}, confirmou-se a existência do Fator Casa
+com alto grau de confiança. Mandantes venceram 58,09\% das partidas decididas, e
+a vantagem média é de 0,37 ponto por partida. O modelo de Poisson bivariado
+estima acréscimo de 21,7\% no número esperado de gols, já descontada a qualidade
+do adversário. Cabe destacar, entretanto, que o tamanho de efeito associado
+($d = 0{,}143$) classifica-se como pequeno: trata-se de fenômeno consistente e
+sistemático, porém de magnitude moderada. A vantagem manifesta-se por volume de
+oportunidades, e não por eficiência de finalização, uma vez que as taxas de
+conversão de mandantes (32,58\%) e visitantes (31,75\%) são praticamente
+equivalentes.
+
+\textbf{Quanto à heterogeneidade entre equipes}, o resultado contraria a
+intuição corrente. Equipes que terminam a temporada entre as seis primeiras
+colocadas apresentam vantagem de mando \textbf{maior} (0,450 ponto) que as seis
+últimas (0,319), em gradiente monotônico que se repete em gols, finalizações no
+alvo e escanteios. O achado é reforçado pelo efeito de teto, que atua contra as
+equipes mais bem classificadas. A comparação entre um grupo fixo de clubes de
+elite e os demais, por sua vez, não produz diferença estatisticamente
+significativa ($p = 0{,}351$), o que evidencia a superioridade da segmentação
+por posição final recalculada a cada temporada.
+
+\textbf{Quanto à evolução temporal}, o parâmetro de mando apresenta
+variabilidade elevada em torno de um patamar estável. Duas temporadas exibem
+intervalo de confiança contendo o zero: 2020/21 e, de forma menos esperada,
+2024/25. A sobreposição dos intervalos entre as demais temporadas recomenda
+cautela na afirmação de tendência monotônica de queda, ainda que a média móvel
+indique patamar recente ligeiramente inferior ao do início do período.
+
+\textbf{Quanto ao papel do público}, a principal contribuição metodológica do
+trabalho reside na distinção entre contrastes intertemporadas e
+intratemporada. Dentro da temporada 2019/20, com os mesmos elencos e o mesmo
+calendário, a ausência de torcida não reduziu a vantagem do mandante
+($p = 0{,}952$ na comparação descritiva; $p = 0{,}680$ no modelo ajustado). A
+inversão do Fator Casa restringe-se a 2020/21, temporada que diferiu das
+anteriores em diversos aspectos além do público. A atribuição da queda
+especificamente à ausência de torcida, frequente na literatura, não é
+corroborada pelo contraste intratemporada disponível.
+
+Associado a esse resultado, identificou-se a \textbf{dissociação entre dois
+mecanismos} habitualmente tratados em conjunto. O viés disciplinar favorável ao
+mandante — que recebe sistematicamente menos cartões amarelos que o visitante —
+desaparece nas partidas sem público já em 2019/20, mesma temporada em que a
+vantagem em pontos permaneceu inalterada. A torcida parece, portanto,
+influenciar o comportamento da arbitragem sem que esse viés constitua o
+mecanismo central da vantagem em resultados.
+
+\textbf{Quanto à modelagem}, o modelo de Poisson bivariado obteve o melhor
+desempenho preditivo entre os métodos avaliados, com \textit{log-loss} de
+0,9762, superando tanto a regressão logística quanto o modelo de \textit{gradient
+boosting}. Este último, apesar de acurácia superior à dos modelos de referência,
+apresentou \textit{log-loss} pior que o da frequência base, em razão de
+calibração deficiente — resultado que ilustra concretamente a inadequação da
+acurácia como critério único em problemas probabilísticos.
+
+\section{Contribuições}\label{sec:contribuicoes}
+
+As principais contribuições deste trabalho são:
+
+\begin{enumerate}
+  \item A demonstração empírica de que a vantagem de mando é \textbf{crescente
+    com a qualidade da equipe}, resultado que inverte a intuição corrente e que
+    só se torna visível quando a segmentação acompanha a classificação de cada
+    temporada;
+  \item A \textbf{separação empírica entre o viés de arbitragem e a vantagem em
+    resultados}, obtida pelo exame conjunto de métricas disciplinares e de
+    desempenho sob diferentes regimes de público;
+  \item A demonstração de que a atribuição causal da queda do Fator Casa em
+    2020/21 à ausência de torcida \textbf{não se sustenta} quando o contraste é
+    construído dentro de uma mesma temporada;
+  \item Um \textbf{pipeline reprodutível}, com verificação de integridade dos
+    dados de origem, detecção automática de descontinuidades na série histórica
+    e cobertura por testes automatizados, incluindo verificação experimental de
+    ausência de vazamento de dados na etapa preditiva.
+\end{enumerate}
 
 \section{Limitações}\label{sec:limitacoes}
 
-[Seção em elaboração.]
+O trabalho apresenta as seguintes limitações:
+
+\begin{itemize}
+  \item \textbf{Parâmetro de mando único para a liga.} O modelo estima um valor
+    de $\gamma$ comum a todos os clubes. Estimar um parâmetro por clube exigiria
+    tratamento de amostra reduzida por equipe e técnicas de encolhimento, não
+    contempladas neste trabalho;
+  \item \textbf{Ausência de variáveis de contexto.} Distância de viagem, horário
+    da partida, identidade do árbitro designado e taxa de ocupação do estádio são
+    apontados pela literatura como relevantes e não estão disponíveis na fonte
+    utilizada;
+  \item \textbf{Classificação do público por janelas de datas.} As liberações
+    parciais de dezembro de 2020 e maio de 2021 variavam por clube e por semana;
+    essas partidas foram mantidas em categoria própria e excluídas dos
+    contrastes, mas o público efetivo por partida permanece desconhecido;
+  \item \textbf{Impossibilidade do contraste intratemporada em 2020/21.}
+    Nenhuma partida daquela temporada ocorreu com público pleno, o que impede
+    reproduzir nela o teste aplicado a 2019/20;
+  \item \textbf{Ausência de comparação com o mercado.} As probabilidades
+    implícitas nas cotações de casas de apostas constituem referência externa
+    exigente para modelos preditivos. O procedimento está implementado, porém
+    não foi executado neste trabalho;
+  \item \textbf{Descontinuidade na série histórica.} Comparações de finalizações
+    no alvo que atravessem a temporada 2013/14 não são válidas, o que restringe
+    o estudo de caso sobre mudanças de estádio a métricas de pontos e gols;
+  \item \textbf{Escopo a uma única liga.} Os resultados referem-se à
+    \textit{Premier League} e não são automaticamente generalizáveis a
+    competições com outras características de calendário, deslocamento e cultura
+    de torcida.
+\end{itemize}
 
 \section{Trabalhos Futuros}\label{sec:trabalhos-futuros}
 
-[Seção em elaboração.]
+A partir das limitações identificadas, sugerem-se as seguintes direções:
+
+\begin{enumerate}
+  \item \textbf{Estimação do mando por clube}, por meio de modelos hierárquicos
+    com encolhimento em direção à média da liga, permitindo verificar se as
+    diferenças observadas entre clubes superam a variabilidade amostral;
+  \item \textbf{Incorporação de variáveis de contexto}, especialmente distância
+    de deslocamento e taxa de ocupação do estádio, viabilizando teste direto das
+    hipóteses de desgaste logístico e de intensidade do apoio da torcida;
+  \item \textbf{Comparação com as probabilidades implícitas no mercado}, de modo
+    a posicionar o desempenho dos modelos frente a uma referência que incorpora
+    informação indisponível nas variáveis utilizadas;
+  \item \textbf{Extensão a outras ligas europeias}, verificando se o gradiente
+    por faixa de classificação e a dissociação entre viés de arbitragem e
+    vantagem em resultados se reproduzem em contextos distintos;
+  \item \textbf{Investigação da temporada 2024/25}, cujo parâmetro de mando
+    próximo de zero não encontra explicação evidente e não foi objeto de análise
+    específica neste trabalho.
+\end{enumerate}
