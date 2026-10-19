@@ -1,0 +1,226 @@
+%%%% CAPÍTULO 3 - MATERIAIS E MÉTODOS
+
+\chapter{Materiais e Métodos}\label{cap:metodologia}
+
+Este capítulo detalha os procedimentos metodológicos adotados para a realização
+do estudo, cobrindo as fases de coleta, tratamento e preparação dos dados, bem
+como as decisões de projeto que sustentam a reprodutibilidade da análise. A
+estrutura da pesquisa fundamenta-se no modelo CRISP-DM, descrito na
+Seção~\ref{sec:crisp-dm}.
+
+\section{Ambiente de Desenvolvimento e Tecnologias}\label{sec:ambiente}
+
+O ecossistema de desenvolvimento foi estruturado na linguagem de programação
+Python~3. Foram empregadas as seguintes bibliotecas computacionais:
+
+\begin{itemize}
+  \item \textbf{pandas:} manipulação de estruturas de dados tabulares,
+    tratamento de valores ausentes e transformações matemáticas;
+  \item \textbf{NumPy e SciPy:} operações numéricas, testes de hipótese e
+    otimização por máxima verossimilhança~\cite{Virtanen2020};
+  \item \textbf{scikit-learn:} implementação dos modelos de aprendizado de
+    máquina e das rotinas de avaliação~\cite{Pedregosa2011};
+  \item \textbf{Matplotlib:} geração das figuras estatísticas.
+\end{itemize}
+
+Diferentemente da etapa anterior da pesquisa, na qual a análise foi conduzida
+integralmente em um \textit{notebook}, o código foi reorganizado em módulos
+Python versionados e cobertos por testes automatizados. Essa reorganização
+atende a dois propósitos. O primeiro é a verificabilidade: cada procedimento de
+cálculo possui testes que fixam seu comportamento esperado, incluindo casos
+construídos para falhar caso um erro específico seja reintroduzido. O segundo é a
+separação entre a lógica da análise e a narrativa do trabalho, de modo que o
+\textit{notebook} passe a consumir funções testadas em vez de reimplementá-las.
+
+\section{Coleta e Fonte de Dados}\label{sec:coleta}
+
+O conjunto de dados utilizado foi obtido a partir do repositório público
+\textit{Football-Data.co.uk}~\cite{FootballData2026}, que disponibiliza o
+histórico detalhado das partidas da \textit{Premier League} em arquivos no
+formato CSV, organizados por temporada.
+
+O recorte temporal estabelecido abrange 11 temporadas completas, da temporada
+2015/16 à temporada 2025/26, totalizando 4.180 partidas. Cada registro contém
+variáveis como a identificação dos times mandante e visitante, os gols marcados
+por cada equipe, o total de finalizações, as finalizações no alvo, os escanteios
+cobrados, as faltas cometidas e os cartões aplicados.
+
+\subsection{Integridade e Procedência dos Dados}\label{sec:integridade}
+
+A fonte reescreve periodicamente seus arquivos, seja para corrigir placares, seja
+para acrescentar colunas. Uma coleta realizada diretamente a cada execução, como
+na etapa anterior da pesquisa, implica que duas execuções em datas distintas
+possam produzir números diferentes sem qualquer indicação disso.
+
+Para evitar esse comportamento, adotou-se o seguinte procedimento: os arquivos
+são baixados uma única vez e armazenados localmente; a procedência de cada
+arquivo, a data de acesso e seu resumo criptográfico SHA-256 são registrados em
+um manifesto; e toda execução subsequente confere os arquivos contra esse
+manifesto, interrompendo o processamento em caso de divergência. Falhas de
+coleta, por sua vez, interrompem a execução em vez de serem registradas e
+ignoradas, o que impede que uma análise prossiga sobre um conjunto incompleto.
+
+\subsection{Verificação de Comparabilidade Histórica}\label{sec:quebras}
+
+Antes de qualquer comparação ao longo do tempo, verificou-se se as próprias
+variáveis são comparáveis entre temporadas. Implementou-se, para isso, uma
+rotina que sinaliza variações abruptas nas médias da liga entre temporadas
+consecutivas.
+
+Aplicada a um recorte estendido, iniciado em 2009/10, a rotina identificou uma
+descontinuidade: a média de finalizações no alvo da liga cai aproximadamente
+37\% entre as temporadas 2012/13 e 2013/14, enquanto gols e finalizações totais
+permanecem estáveis. A estabilidade das demais variáveis indica que não se trata
+de mudança no jogo, mas de alteração no critério de registro adotado pelo
+provedor dos dados. Em consequência, comparações dessa variável que atravessem a
+fronteira de 2013/14 não são válidas. O recorte principal do trabalho situa-se
+integralmente após essa descontinuidade e, portanto, não é afetado; a restrição
+aplica-se apenas ao estudo de caso apresentado na
+Seção~\ref{sec:resultados-estadios}.
+
+\section{Preparação e Engenharia de Dados}\label{sec:preparacao}
+
+Os dados brutos necessitaram de transformações estruturais para que fosse
+possível responder aos objetivos específicos da pesquisa.
+
+\subsection{Criação de Variáveis de Desempenho}\label{sec:variaveis}
+
+Foram computadas as seguintes variáveis derivadas:
+
+\begin{itemize}
+  \item \textbf{Pontos conquistados:} aplicação da regra oficial do esporte,
+    atribuindo 3 pontos para vitória, 1 ponto em caso de empate e 0 pontos para
+    derrota, calculados separadamente para mandante e visitante;
+  \item \textbf{Saldo de gols do mandante:} diferença entre os gols marcados
+    pelo time da casa e os gols sofridos;
+  \item \textbf{Gols totais da partida:} soma dos gols de ambas as equipes,
+    utilizada como indicador de dinamicidade dos jogos.
+\end{itemize}
+
+\subsection{Formato Longo e Perspectiva da Equipe}\label{sec:formato-longo}
+
+O conjunto de dados original organiza-se com uma linha por partida, o que dificulta
+agregações por equipe: as métricas de um mesmo clube encontram-se ora nas colunas
+de mandante, ora nas de visitante, conforme o jogo. Essa organização favorece um
+erro específico, consistente em agregar colunas de mandante e visitante de uma
+mesma partida e interpretar o resultado como desempenho dentro e fora de casa de
+um mesmo grupo de equipes, quando se trata, na realidade, do desempenho de
+grupos distintos.
+
+Para eliminar essa possibilidade, o conjunto foi convertido para o formato longo,
+com duas observações por partida — uma para cada equipe — e as métricas sempre
+expressas na perspectiva do clube, acompanhadas de uma coluna explícita de mando.
+Nesse formato, agregações por clube e por condição de mando tornam-se diretas.
+
+\subsection{Tabela de Classificação}\label{sec:classificacao}
+
+Para possibilitar a análise do comportamento das equipes segundo sua posição
+final, construiu-se a tabela de classificação de cada temporada a partir dos
+resultados das partidas, ordenada pelo critério oficial da competição: pontos,
+saldo de gols e gols marcados. Critérios de desempate subsequentes, como
+confronto direto, não foram implementados, por raramente alterarem a faixa de
+posição de uma equipe.
+
+As equipes foram então segmentadas em três faixas, recalculadas a cada
+temporada: G6, correspondente às posições 1 a 6; Meio, posições 7 a 14; e Z6,
+posições 15 a 20. Essa segmentação é preferível a rótulos fixos de grupo, como o
+chamado \textit{Big Six}, pois acompanha a variação de desempenho dos clubes ao
+longo do período estudado.
+
+\subsection{Classificação do Regime de Público}\label{sec:regime-publico}
+
+A ausência de público não coincide com temporadas inteiras. Apenas 92 das 380
+partidas da temporada 2019/20 ocorreram com portões fechados, correspondentes ao
+período posterior à retomada da competição, em 17 de junho de 2020. Além disso, a
+temporada 2020/21 registrou janelas de liberação parcial de público.
+
+Por esse motivo, a classificação foi realizada por data da partida e não por
+temporada, com três categorias: público total, público limitado e sem público. A
+categoria intermediária merece justificativa. As autorizações de dezembro de 2020
+e maio de 2021 variavam por clube e por semana, e o público efetivo de cada
+partida não está disponível na fonte. Atribuir essas partidas a um dos regimes
+extremos exigiria suposição não respaldada pelos dados; mantê-las em categoria
+própria, excluída dos contrastes, preserva a validade das comparações.
+
+\section{Procedimentos de Análise Estatística}\label{sec:procedimentos}
+
+Os testes de hipótese foram selecionados de modo que a hipótese nula correspondesse
+exatamente à pergunta de pesquisa.
+
+Para avaliar a vantagem do mandante, adotou-se o teste binomial condicionado aos
+jogos decididos, cuja hipótese nula estabelece igual probabilidade de vitória para
+mandante e visitante. Essa formulação é preferível ao teste qui-quadrado contra a
+distribuição uniforme entre os três resultados possíveis, pois esta última embute
+a suposição de que um terço das partidas terminaria empatada, proporção que
+nenhuma teoria do Fator Casa prevê e que não se verifica historicamente.
+
+Para a comparação entre pontos do mandante e do visitante, empregou-se o teste
+$t$ pareado. As duas séries provêm da mesma partida e são determinísticas entre
+si, de modo que a hipótese de independência exigida pelo teste para amostras
+independentes não se sustenta.
+
+Todos os resultados inferenciais são reportados com estimativa pontual, intervalo
+de confiança de 95\% e tamanho de efeito, conforme discutido na
+Seção~\ref{sec:efeito}. Intervalos para estatísticas sem forma fechada foram
+obtidos por reamostragem \textit{bootstrap}.
+
+\section{Modelagem}\label{sec:modelagem}
+
+\subsection{Modelo de Poisson Bivariado}\label{sec:met-dixon-coles}
+
+Adotou-se o modelo de \citeonline{DixonColes1997}, especificado na
+Equação~\ref{eq:dixon-coles}, estimado por máxima verossimilhança. A
+identificabilidade dos parâmetros de ataque e defesa, determinados a menos de
+uma constante aditiva, foi assegurada pela imposição de média nula aos
+parâmetros de ataque.
+
+O erro padrão do parâmetro de mando foi obtido pela curvatura da verossimilhança
+perfilada, isto é, reotimizando os demais parâmetros a cada deslocamento de
+$\gamma$. Essa escolha decorre de verificação empírica: a curvatura marginal,
+que mantém os demais parâmetros fixos, subestimou a incerteza em aproximadamente
+25\% em simulação controlada, em razão da correlação entre $\gamma$ e o termo de
+escala~$\mu$.
+
+Para estimar o efeito de uma condição binária sobre o mando, o parâmetro foi
+reparametrizado como $\gamma + \delta \cdot \mathbb{1}[\text{condição}]$. Essa
+formulação permite estimar o efeito dentro de um mesmo recorte temporal, com um
+único parâmetro adicional, viabilizando a análise em subconjuntos nos quais o
+ajuste de um modelo completo não seria possível.
+
+A implementação foi validada por recuperação de parâmetro: partidas sintéticas
+foram geradas a partir do próprio modelo, com $\gamma$ conhecido, verificando-se
+se o procedimento de ajuste o recupera e se a cobertura dos intervalos de
+confiança corresponde ao nível nominal.
+
+\subsection{Modelos Preditivos}\label{sec:met-preditivo}
+
+A etapa preditiva teve como alvo o resultado da partida, em suas três categorias.
+Em conformidade com o exposto na Seção~\ref{sec:vazamento}, nenhuma estatística
+produzida durante a partida foi utilizada como variável explicativa. As variáveis
+empregadas utilizam exclusivamente informação disponível antes do apito inicial:
+\textit{rating} Elo de cada equipe, desempenho nas cinco partidas anteriores em
+pontos e gols, desempenho recente específico da condição de mando, dias de
+descanso desde a partida anterior, momento da temporada e regime de público.
+
+A ausência de vazamento foi verificada experimentalmente. O procedimento de teste
+altera o placar de uma partida situada no meio do conjunto, reconstrói todas as
+variáveis explicativas e exige que nenhuma variável daquela mesma partida se
+altere. Um segundo teste assegura que as variáveis das partidas subsequentes se
+alterem, de modo a impedir que o primeiro seja satisfeito trivialmente.
+
+A validação adotada foi temporal. Para prever determinada temporada, o conjunto
+de treino compreende exclusivamente partidas anteriores a ela; dentro da
+temporada avaliada, o histórico é ampliado a cada bloco de dez partidas e todos
+os modelos são reajustados sobre ele. A uniformidade desse procedimento entre os
+modelos é deliberada: caso apenas um deles reestimasse parâmetros ao longo da
+temporada, a comparação mediria o protocolo de reajuste e não a qualidade dos
+modelos. A imputação de valores ausentes utiliza estatísticas calculadas
+exclusivamente sobre o conjunto de treino de cada dobra.
+
+Foram avaliados cinco modelos: dois de referência, correspondentes à frequência
+histórica dos resultados e à heurística de prever sempre a vitória do mandante; o
+modelo de Poisson bivariado descrito na seção anterior, empregado como preditor;
+uma regressão logística multinomial; e um modelo de \textit{gradient boosting}. As
+métricas adotadas foram o \textit{log-loss} e o escore de Brier como principais,
+a acurácia como métrica secundária e a curva de calibração como análise
+complementar.

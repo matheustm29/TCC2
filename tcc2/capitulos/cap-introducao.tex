@@ -1,0 +1,103 @@
+%%%% CAPÍTULO 1 - INTRODUÇÃO
+
+\chapter{Introdução}\label{cap:introducao}
+
+O futebol inglês possui uma das tradições mais ricas e antigas do cenário
+desportivo mundial. A \textit{Premier League}, na sua configuração moderna de
+liga independente, foi fundada em 1992 após uma ruptura estratégica com a antiga
+\textit{Football League First Division}, cuja fundação original remonta a 1888.
+Essa transição visou não apenas uma modernização comercial e técnica, mas também
+a consolidação do campeonato como o produto de entretenimento esportivo mais
+consumido no planeta~\cite{PremierLeague2024}.
+
+Dentro do contexto competitivo do futebol, o fenômeno conhecido como Fator Casa
+(\textit{home advantage}) surge como um dos pilares centrais da cultura do
+esporte. Tradicionalmente, assume-se que jogar em domínios próprios confere uma
+vantagem competitiva real às equipes mandantes, impulsionada por fatores como o
+apoio da torcida, a familiaridade com o gramado, o desgaste logístico imposto ao
+visitante e a pressão psicológica exercida sobre a equipe de
+arbitragem~\cite{Courneya1992,Nevill1999}.
+
+\section{Problema de Pesquisa}\label{sec:problema}
+
+Embora o Fator Casa seja um conceito amplamente aceito historicamente, o futebol
+moderno passou por profundas transformações nas últimas décadas. A globalização
+do esporte, a massificação de esquemas táticos altamente estruturados, a melhoria
+na logística de viagens e, mais recentemente, a introdução de tecnologias de
+auxílio à arbitragem levantaram novos questionamentos.
+
+A pandemia de COVID-19 acrescentou a esse cenário um elemento raro na pesquisa
+esportiva: a realização de centenas de partidas com portões fechados, condição
+que a literatura passou a tratar como um experimento natural sobre o papel do
+público~\cite{Fischer2021}. A interpretação desse episódio, contudo, exige
+cautela, pois a ausência de torcida não foi a única alteração do período.
+
+Diante desse cenário, formula-se o seguinte problema de pesquisa: \textbf{até que
+ponto o mando de campo ainda se configura como um fator estatisticamente
+determinante no desempenho das equipes da \textit{Premier League} na era moderna,
+e quais mecanismos sustentam essa vantagem?}
+
+\section{Justificativa}\label{sec:justificativa}
+
+A realização deste estudo justifica-se pela necessidade de validar, por meio de
+uma abordagem estritamente quantitativa e empírica, mitos e convenções enraizados
+na cultura do futebol profissional. Para além do interesse puramente esportivo, a
+análise científica do Fator Casa possui relevância prática direta para analistas
+de desempenho, comissões técnicas e para o mercado de ciência de dados aplicada
+ao esporte.
+
+Soma-se a isso uma justificativa de ordem metodológica. Análises descritivas do
+mando de campo, baseadas em médias de pontos conquistados dentro e fora de casa,
+são incapazes de separar a vantagem atribuível ao mando da qualidade dos
+adversários enfrentados em cada condição. Modelos estatísticos que estimam
+simultaneamente a força de cada clube e um parâmetro de mando permitem essa
+separação, e sua aplicação a um recorte recente da \textit{Premier League}
+constitui uma contribuição deste trabalho.
+
+\section{Objetivos}\label{sec:objetivos}
+
+Nesta seção são delimitados o objetivo geral e os objetivos específicos que
+guiam a execução desta pesquisa.
+
+\subsection{Objetivo Geral}\label{sec:objetivo-geral}
+
+Analisar de forma quantitativa e estatística a influência do mando de campo nos
+resultados e nas métricas de desempenho das equipes na \textit{Premier League},
+cobrindo o recorte temporal das temporadas de 2015/16 até 2025/26, e estimar essa
+influência por meio de modelos que controlem pela força dos adversários.
+
+\subsection{Objetivos Específicos}\label{sec:objetivos-especificos}
+
+Para alcançar o objetivo geral, o trabalho propõe-se a:
+
+\begin{enumerate}
+  \item \textbf{Magnitude do domínio:} quantificar a vantagem do mandante em
+    pontos, gols e ações ofensivas, reportando estimativas acompanhadas de
+    intervalos de confiança e tamanhos de efeito;
+  \item \textbf{Heterogeneidade entre equipes:} verificar se equipes que
+    terminam a temporada em diferentes faixas da tabela de classificação
+    apresentam o mesmo comportamento em relação ao mando de campo;
+  \item \textbf{Evolução temporal:} identificar se o Fator Casa apresenta
+    tendência de queda, subida ou estabilidade ao longo do período estudado;
+  \item \textbf{Papel do público:} avaliar o impacto da ausência de torcida
+    sobre a vantagem do mandante, distinguindo o efeito do público de outras
+    alterações ocorridas no mesmo período;
+  \item \textbf{Modelagem:} estimar o parâmetro de mando de campo por meio de um
+    modelo de Poisson bivariado e avaliar a capacidade preditiva de modelos
+    estatísticos e de aprendizado de máquina sob validação temporal.
+\end{enumerate}
+
+\section{Organização do Trabalho}\label{sec:organizacao}
+
+Este trabalho está estruturado em cinco capítulos. Este primeiro capítulo
+apresentou a introdução, o problema de pesquisa, a justificativa e os objetivos
+do estudo. O Capítulo~\ref{cap:fundamentacao} aborda a fundamentação teórica,
+trazendo o levantamento da literatura sobre o Fator Casa, os conceitos da
+metodologia CRISP-DM, os modelos estatísticos aplicados a resultados de futebol e
+os critérios de avaliação de modelos probabilísticos. O
+Capítulo~\ref{cap:metodologia} detalha os materiais e métodos, descrevendo a
+coleta de dados, as tecnologias utilizadas, as técnicas de engenharia de dados
+aplicadas e os procedimentos adotados para garantir a reprodutibilidade da
+análise. O Capítulo~\ref{cap:resultados} apresenta e discute os resultados
+obtidos. Por fim, o Capítulo~\ref{cap:conclusao} apresenta as conclusões, as
+limitações do estudo e as possibilidades de trabalhos futuros.
