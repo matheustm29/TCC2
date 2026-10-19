@@ -152,3 +152,20 @@
 \setlength{\leftmargini}{1.5cm}
 \setlength{\leftmarginii}{1.5cm}
 
+%% ####################################################
+%% Correção do sumário
+%%
+%% A classe redefine \l@section aplicando \xmakefirstuc à entrada do sumário,
+%% com a intenção de deixar maiúscula apenas a primeira letra do título. O
+%% comando expande o argumento antes de operar, e o argumento começa pelo
+%% \numberline já embrulhado pelo hyperref: a expansão despeja os nomes das
+%% opções do pacote como texto, produzindo entradas como
+%% "LinkbordercolorLinkcolor5.2 Contribuições" no lugar de "5.2 Contribuições".
+%%
+%% O próprio comentário da classe registra que o recurso não funciona como
+%% pretendido. Redefinir \l@section aqui não basta, porque a classe a
+%% restabelece depois; a neutralização é feita no próprio \xmakefirstuc, que
+%% neste modelo é usado apenas nesse ponto.
+\AtBeginDocument{%
+  \renewcommand{\xmakefirstuc}[1]{#1}%
+}
