@@ -80,3 +80,26 @@ Registro:
 * A versão 2.5a adiciona apenas o texto que exime os desenvolvedores deste template de qualquer responsabilidade a respeito do trabalho de quem utilizar tal template.
 
 * A versão 2.6 foi disponibilizada em abril de 2025
+---
+
+# Ajuste local em `abntex2-alf.bst`
+
+O modelo, como distribuído na versão 2.6, não produz nenhuma referência: o
+BibTeX aborta com `write is an unknown function` e o documento compila com a
+seção REFERÊNCIAS vazia e todas as citações indefinidas. Como o pdflatex
+termina mesmo assim, o erro passa despercebido.
+
+A causa está em 13 chamadas da forma `... output ", " * write`, introduzidas na
+customização de 27/jun/2022 para inserir vírgulas entre os campos. O trecho não
+é BibTeX válido: o operador `*` concatena duas cadeias da pilha, mas apenas uma
+havia sido empilhada, e `write` está sem o `$` que o torna a função embutida.
+As entradas afetadas são `article`, `book`, `inbook`, `inproceedings`, `manual`
+e `misc` — ou seja, praticamente qualquer bibliografia.
+
+O arquivo deste projeto corrige o problema voltando os pontos afetados, e a
+pontuação de `output.nonnull`, ao comportamento do abntex2 oficial, que é a
+implementação de referência da NBR 6023. O resultado é a saída ABNT usual
+(`Information Sciences, v. 191, p. 192–213, 2012.`).
+
+Vale reportar o defeito à coordenação: ele atinge todos os trabalhos feitos a
+partir deste modelo.

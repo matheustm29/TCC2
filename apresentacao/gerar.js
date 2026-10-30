@@ -153,7 +153,7 @@ s.addText("Trabalho de Conclusão de Curso 2", {
   fontSize: 15, color: CINZA, objectName: "capa-tipo" });
 s.addText([
   { text: "Matheus Ferreira Alphonse dos Anjos", options: { bold: true, breakLine: true } },
-  { text: "Orientador: Prof. Dr. Francisco Pereira Junior", options: { breakLine: true } },
+  { text: "Orientador: Prof. Francisco Pereira Junior", options: { breakLine: true } },
   { text: "Bacharelado em Engenharia de Computação", options: {} },
 ], { isTextBox: true, x: X, y: 4.46, w: 9.3, h: 1.3, margin: 0,
      fontSize: 16, color: TINTA, lineSpacingMultiple: 1.2, objectName: "capa-autoria" });
@@ -592,7 +592,7 @@ s.addShape(pres.ShapeType.rect, { x: X, y: 3.66, w: 1.5, h: 0.055,
 s.addText("Matheus Ferreira Alphonse dos Anjos", {
   isTextBox: true, x: X, y: 3.96, w: 8.6, h: 0.36, margin: 0,
   fontSize: 17, bold: true, color: TINTA, objectName: "fim-autor" });
-s.addText("Orientador: Prof. Dr. Francisco Pereira Junior", {
+s.addText("Orientador: Prof. Francisco Pereira Junior", {
   isTextBox: true, x: X, y: 4.32, w: 8.6, h: 0.34, margin: 0,
   fontSize: 15, color: CINZA, objectName: "fim-orientador" });
 s.addText("Código, dados e documentação: github.com/matheustm29/TCC2", {
