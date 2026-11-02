@@ -8,29 +8,181 @@ como as decisões de projeto que sustentam a reprodutibilidade da análise. A
 estrutura da pesquisa fundamenta-se no modelo CRISP-DM, descrito na
 Seção~\ref{sec:crisp-dm}.
 
-\section{Ambiente de Desenvolvimento e Tecnologias}\label{sec:ambiente}
+\section{Arquitetura da Solução Computacional}\label{sec:arquitetura}
 
-O ecossistema de desenvolvimento foi estruturado na linguagem de programação
-Python~3. Foram empregadas as seguintes bibliotecas computacionais:
+A etapa anterior desta pesquisa foi conduzida integralmente em um
+\textit{notebook} único, no qual coleta, tratamento, cálculo e redação ocupavam o
+mesmo arquivo. Essa organização tornou possível um erro de agregação que
+permaneceu sem detecção até a banca, porque uma célula de \textit{notebook} não
+admite verificação automatizada. A reformulação descrita nesta seção parte desse
+diagnóstico: o processamento foi reorganizado como um programa, com fronteiras
+explícitas entre as etapas, e cada procedimento de cálculo passou a ser coberto
+por testes.
 
-\begin{itemize}
-  \item \textbf{pandas:} manipulação de estruturas de dados tabulares,
-    tratamento de valores ausentes e transformações matemáticas;
-  \item \textbf{NumPy e SciPy:} operações numéricas, testes de hipótese e
-    otimização por máxima verossimilhança~\cite{Virtanen2020};
-  \item \textbf{scikit-learn:} implementação dos modelos de aprendizado de
-    máquina e das rotinas de avaliação~\cite{Pedregosa2011};
-  \item \textbf{Matplotlib:} geração das figuras estatísticas.
-\end{itemize}
+\subsection{Organização em Camadas}\label{sec:camadas}
 
-Diferentemente da etapa anterior da pesquisa, na qual a análise foi conduzida
-integralmente em um \textit{notebook}, o código foi reorganizado em módulos
-Python versionados e cobertos por testes automatizados. Essa reorganização
-atende a dois propósitos. O primeiro é a verificabilidade: cada procedimento de
-cálculo possui testes que fixam seu comportamento esperado, incluindo casos
-construídos para falhar caso um erro específico seja reintroduzido. O segundo é a
-separação entre a lógica da análise e a narrativa do trabalho, de modo que o
-\textit{notebook} passe a consumir funções testadas em vez de reimplementá-las.
+A solução foi implementada como um pacote Python, \texttt{src/tcc/}, composto por
+sete módulos dispostos em camadas, sem dependências circulares. Cada camada
+consome exclusivamente a anterior e comunica-se com a seguinte por meio de
+artefatos persistidos em disco, e não por estado compartilhado em memória. A
+Figura~\ref{fig:arquitetura} apresenta essa organização.
+
+\begin{figure}[htb]
+  \centering
+  \caption{Organização em camadas do processamento, da fonte externa aos
+    artefatos consumidos pelo texto.}
+  \label{fig:arquitetura}
+  \includegraphics[width=0.82\textwidth]{./figuras/arquitetura_pipeline.pdf}
+  \fonte{Autoria própria (2026)}
+\end{figure}
+
+O módulo \texttt{config.py} concentra as constantes do estudo --- recorte
+temporal, janelas de datas dos regimes de público, limiares de significância e
+semente dos geradores pseudoaleatórios --- de modo que nenhuma decisão de escopo
+fique embutida no corpo de uma rotina de cálculo. O diretório \texttt{tests/}
+atravessa todas as camadas, conforme discutido na Seção~\ref{sec:verificacao}.
+
+A execução ocorre por dois pontos de entrada, separados por custo computacional.
+O primeiro, \texttt{executar\_analise.py}, percorre coleta, preparação, testes de
+hipótese e geração de figuras. O segundo, \texttt{executar\_mo\-de\-la\-gem.py},
+executa a estimação do modelo de Poisson bivariado e a validação temporal dos
+modelos preditivos, etapa consideravelmente mais lenta porque reestima o modelo
+centenas de vezes. Um terceiro script, \texttt{gerar\_tabelas\_latex.py},
+converte os arquivos CSV de resultado em tabelas formatadas.
+
+Essa separação sustenta a regra que organiza todo o trabalho: \textbf{nenhum
+valor numérico é transcrito manualmente para o texto}. Toda tabela e toda figura
+desta monografia são lidas de \texttt{tabelas/} e \texttt{figuras/}, diretórios
+cujo conteúdo é integralmente gerado por código. Uma alteração no tratamento dos
+dados propaga-se ao texto por reexecução e recompilação, sem intervenção manual.
+
+\subsection{Ambiente e Bibliotecas}\label{sec:ambiente}
+
+O desenvolvimento ocorreu em Python~3, com as versões das bibliotecas fixadas em
+arquivo de dependências para assegurar que execuções futuras reproduzam os
+mesmos resultados. A Tabela~\ref{tab:bibliotecas} relaciona as bibliotecas
+empregadas e sua função no trabalho.
+
+\begin{table}[htb]
+  \centering
+  \caption{Bibliotecas empregadas e respectivas funções.}
+  \label{tab:bibliotecas}
+  \small
+  \begin{tabular}{@{}llp{7.4cm}@{}}
+    \toprule
+    \textbf{Biblioteca} & \textbf{Versão} & \textbf{Função no trabalho} \\
+    \midrule
+    pandas       & 3.0.5  & Estruturas tabulares, tratamento de ausentes e
+                            transformações entre formatos \\
+    NumPy        & 2.3.4  & Operações vetoriais sobre os arranjos de gols e
+                            índices de clube \\
+    SciPy        & 1.17.1 & Testes de hipótese e otimização por máxima
+                            verossimilhança~\cite{Virtanen2020} \\
+    scikit-learn & 1.9.0  & Regressão logística e \textit{gradient boosting} na
+                            comparação preditiva~\cite{Pedregosa2011} \\
+    Matplotlib   & 3.10.7 & Geração das figuras em formato vetorial \\
+    pytest       & 8.4.2  & Execução da suíte de testes automatizados \\
+    \bottomrule
+  \end{tabular}
+  \fonte{Autoria própria (2026)}
+\end{table}
+
+Cabe registrar o que \emph{não} foi delegado a biblioteca. O modelo de Poisson
+bivariado e o sistema de \textit{rating} Elo foram implementados integralmente
+neste trabalho, conforme descrito nas Seções~\ref{sec:met-dixon-coles}
+e~\ref{sec:met-preditivo}; da biblioteca de aprendizado de máquina utilizam-se
+apenas os dois modelos de comparação.
+
+\subsection{Correspondência com as Fases do CRISP-DM}\label{sec:crisp-mapa}
+
+A Seção~\ref{sec:crisp-dm} apresentou o CRISP-DM em termos gerais. A
+Tabela~\ref{tab:crisp} explicita a correspondência entre cada fase do modelo de
+processo e os componentes que a implementam neste trabalho, de modo que a adoção
+da metodologia possa ser verificada no código, e não apenas declarada.
+
+\begin{table}[htb]
+  \centering
+  \caption{Correspondência entre as fases do CRISP-DM e os componentes
+    implementados.}
+  \label{tab:crisp}
+  \small
+  \begin{tabular}{@{}llp{6.2cm}@{}}
+    \toprule
+    \textbf{Fase} & \textbf{Componente} & \textbf{Procedimentos} \\
+    \midrule
+    Entendimento do negócio & Capítulo~\ref{cap:introducao} &
+      Formulação da pergunta de pesquisa e dos objetivos \\
+    Entendimento dos dados & \texttt{coleta.py} &
+      Procedência, verificação de integridade e detecção de quebra de série
+      histórica \\
+    Preparação dos dados & \texttt{preparacao.py} &
+      Normalização de datas, variáveis derivadas, formato longo e tabela de
+      classificação \\
+    Modelagem & \texttt{modelos.py}, \texttt{preditivo.py} &
+      Poisson bivariado, \textit{rating} Elo, regressão logística e
+      \textit{gradient boosting} \\
+    Avaliação & \texttt{estatistica.py} e rotinas de métrica &
+      Intervalos de confiança, tamanho de efeito, \textit{log-loss},
+      escore de Brier e curvas de calibração \\
+    Implantação & \texttt{scripts/}, \texttt{tabelas/}, \texttt{figuras/} &
+      Pipeline reexecutável e publicação do código-fonte \\
+    \bottomrule
+  \end{tabular}
+  \fonte{Autoria própria (2026)}
+\end{table}
+
+O caráter iterativo do modelo manifestou-se de forma concreta: a fase de
+modelagem revelou que o procedimento de cálculo do erro padrão subestimava a
+incerteza, o que exigiu retorno à implementação antes que qualquer resultado
+pudesse ser reportado. Esse episódio é descrito na
+Seção~\ref{sec:met-dixon-coles}.
+
+\subsection{Verificação Automatizada e Reprodutibilidade}\label{sec:verificacao}
+
+O código é acompanhado de uma suíte de 81 testes automatizados, distribuídos por
+módulo conforme a Tabela~\ref{tab:testes}. Os testes não se limitam a verificar
+que as funções executam sem erro: parte deles constrói cenários sintéticos com
+resposta conhecida e exige que o procedimento a recupere.
+
+\begin{table}[htb]
+  \centering
+  \caption{Distribuição dos testes automatizados por módulo.}
+  \label{tab:testes}
+  \small
+  \begin{tabular}{@{}lrp{6.6cm}@{}}
+    \toprule
+    \textbf{Módulo} & \textbf{Casos} & \textbf{Comportamento fixado} \\
+    \midrule
+    \texttt{preditivo}   & 25 & Ausência de vazamento, ordenação temporal e
+                                cálculo das métricas \\
+    \texttt{preparacao}  & 16 & Formatos de data, descarte de registros nulos e
+                                consistência da classificação \\
+    \texttt{modelos}     & 12 & Identificabilidade, convergência e recuperação de
+                                parâmetro \\
+    \texttt{analise}     & 11 & Unidade de análise e recortes por faixa e por
+                                regime de público \\
+    \texttt{coleta}      &  9 & Integridade por resumo criptográfico e
+                                validação estrutural \\
+    \texttt{estatistica} &  8 & Testes de hipótese e intervalos por
+                                reamostragem \\
+    \bottomrule
+  \end{tabular}
+  \fonte{Autoria própria (2026)}
+\end{table}
+
+Dois testes merecem destaque por fixarem propriedades que erros silenciosos
+violariam. O primeiro, no módulo preditivo, altera o placar de uma partida e
+exige que nenhuma variável explicativa daquela mesma partida se modifique; é a
+formulação executável da ausência de vazamento temporal, discutida na
+Seção~\ref{sec:vazamento}. O segundo, no módulo de modelos, gera partidas
+sintéticas a partir de parâmetros conhecidos e verifica se a estimação os
+recupera dentro do intervalo declarado.
+
+A reprodutibilidade apoia-se em três mecanismos: o armazenamento local dos
+arquivos originais com resumo criptográfico, descrito na
+Seção~\ref{sec:integridade}; a fixação das versões de todas as bibliotecas; e a
+definição de semente única para os geradores pseudoaleatórios, empregada tanto
+na reamostragem \textit{bootstrap} quanto nos modelos de aprendizado de máquina.
 
 \section{Coleta e Fonte de Dados}\label{sec:coleta}
 
@@ -44,6 +196,43 @@ O recorte temporal estabelecido abrange 11 temporadas completas, da temporada
 variáveis como a identificação dos times mandante e visitante, os gols marcados
 por cada equipe, o total de finalizações, as finalizações no alvo, os escanteios
 cobrados, as faltas cometidas e os cartões aplicados.
+
+\subsection{Estrutura dos Arquivos Originais}\label{sec:estrutura-bruta}
+
+Cada temporada corresponde a um arquivo CSV independente, com uma linha por
+partida e 380 linhas por temporada, perfazendo cerca de 30~KB por arquivo. O
+volume total do recorte é, portanto, modesto: o esforço computacional do
+trabalho não reside no tamanho do conjunto, mas no seu tratamento, conforme
+exposto na Seção~\ref{sec:defeitos}.
+
+A Tabela~\ref{tab:colunas} agrupa as 22 colunas aproveitadas. A fonte
+disponibiliza ainda dezenas de colunas com cotações de casas de apostas, não
+utilizadas neste recorte.
+
+\begin{table}[htb]
+  \centering
+  \caption{Colunas dos arquivos originais, por grupo.}
+  \label{tab:colunas}
+  \small
+  \begin{tabular}{@{}lp{9.0cm}@{}}
+    \toprule
+    \textbf{Grupo} & \textbf{Colunas} \\
+    \midrule
+    Identificação & \texttt{Date}, \texttt{HomeTeam}, \texttt{AwayTeam},
+                    \texttt{Referee} \\
+    Placar        & \texttt{FTHG}, \texttt{FTAG}, \texttt{FTR},
+                    \texttt{HTHG}, \texttt{HTAG}, \texttt{HTR} \\
+    Finalizações  & \texttt{HS}, \texttt{AS}, \texttt{HST}, \texttt{AST} \\
+    Demais estatísticas & \texttt{HC}, \texttt{AC}, \texttt{HF}, \texttt{AF},
+                          \texttt{HY}, \texttt{AY}, \texttt{HR}, \texttt{AR} \\
+    \bottomrule
+  \end{tabular}
+  \fonte{Autoria própria (2026)}
+\end{table}
+
+Além das 11 temporadas do recorte principal, foram coletadas as seis temporadas
+anteriores, de 2009/10 a 2014/15, empregadas exclusivamente na verificação de
+comparabilidade histórica descrita na Seção~\ref{sec:quebras}.
 
 \subsection{Integridade e Procedência dos Dados}\label{sec:integridade}
 
@@ -82,6 +271,56 @@ Seção~\ref{sec:resultados-estadios}.
 
 Os dados brutos necessitaram de transformações estruturais para que fosse
 possível responder aos objetivos específicos da pesquisa.
+
+\subsection{Defeitos Identificados nos Arquivos Originais}\label{sec:defeitos}
+
+A inspeção dos arquivos revelou quatro defeitos capazes de corromper a análise
+sem produzir mensagem de erro. Cada procedimento de tratamento descrito adiante
+responde a um defeito observado, e não à aplicação genérica de boas práticas. A
+Tabela~\ref{tab:defeitos} os sintetiza.
+
+\begin{table}[htb]
+  \centering
+  \caption{Defeitos identificados nos dados e respectivo tratamento.}
+  \label{tab:defeitos}
+  \small
+  \begin{tabular}{@{}p{3.1cm}p{4.4cm}p{4.8cm}@{}}
+    \toprule
+    \textbf{Defeito} & \textbf{Consequência se ignorado} &
+      \textbf{Tratamento adotado} \\
+    \midrule
+    Três formatos de data no mesmo acervo &
+      Conversão silenciosa de 380 partidas para valor nulo; com inferência de
+      dia à frente do mês, datas no padrão ISO são reinterpretadas de forma
+      incorreta &
+      Detecção do formato por expressão regular e normalização de cada
+      subconjunto antes da conversão final \\
+    \addlinespace
+    Linha de preenchimento ao final do arquivo de 2014/15 &
+      Contagem de 381 partidas e introdução de registro integralmente nulo &
+      Descarte condicionado à nulidade de todas as colunas de identidade;
+      registro parcialmente preenchido interrompe a execução \\
+    \addlinespace
+    Reescrita periódica dos arquivos na fonte &
+      Execuções em datas distintas produzem resultados distintos sem aviso &
+      Armazenamento local com manifesto de resumos SHA-256
+      (Seção~\ref{sec:integridade}) \\
+    \addlinespace
+    Descontinuidade no critério de registro de finalizações no alvo &
+      Comparação histórica de uma variável cuja definição mudou &
+      Rotina de detecção de quebra de série e restrição explícita do intervalo
+      comparável (Seção~\ref{sec:quebras}) \\
+    \bottomrule
+  \end{tabular}
+  \fonte{Autoria própria (2026)}
+\end{table}
+
+A estes somam-se verificações estruturais executadas a cada processamento: a
+contagem de partidas por temporada, a exigência de que cada clube dispute
+$2(n-1)$ jogos na tabela de classificação e a confirmação de que nenhum clube
+atue duas vezes na mesma data --- propriedade que garante que o par
+\texttt{(Date, HomeTeam)} constitui chave de ordenação total, requisito do
+protocolo de validação temporal.
 
 \subsection{Criação de Variáveis de Desempenho}\label{sec:variaveis}
 
@@ -142,6 +381,47 @@ partida não está disponível na fonte. Atribuir essas partidas a um dos regime
 extremos exigiria suposição não respaldada pelos dados; mantê-las em categoria
 própria, excluída dos contrastes, preserva a validade das comparações.
 
+\subsection{Conjunto Resultante}\label{sec:conjunto-resultante}
+
+Concluída a preparação, o processamento persiste dois conjuntos. O primeiro
+reúne as 4.180 partidas em 29 colunas: as 22 originais e as sete derivadas
+relacionadas na Tabela~\ref{tab:derivadas}. O segundo contém as tabelas de
+classificação, com 220 registros, correspondentes a 11 temporadas de 20 clubes.
+O formato longo descrito na Seção~\ref{sec:formato-longo}, utilizado nas
+agregações por clube, possui 8.360 observações.
+
+\begin{table}[htb]
+  \centering
+  \caption{Variáveis derivadas na etapa de preparação.}
+  \label{tab:derivadas}
+  \small
+  \begin{tabular}{@{}lp{8.3cm}@{}}
+    \toprule
+    \textbf{Variável} & \textbf{Definição} \\
+    \midrule
+    \texttt{pts\_mandante}, \texttt{pts\_visitante} &
+      Pontos pela regra oficial, 3 para vitória e 1 para empate \\
+    \texttt{saldo\_mandante} &
+      Gols marcados menos gols sofridos pelo mandante \\
+    \texttt{gols\_totais} &
+      Soma dos gols das duas equipes \\
+    \texttt{publico} &
+      Regime de público da partida, atribuído por data
+      (Seção~\ref{sec:regime-publico}) \\
+    \texttt{mandante\_big\_six}, \texttt{visitante\_big\_six} &
+      Pertencimento ao grupo de referência, usado no contraste do
+      Capítulo~\ref{cap:resultados} \\
+    \bottomrule
+  \end{tabular}
+  \fonte{Autoria própria (2026)}
+\end{table}
+
+A distribuição das partidas entre os regimes de público é desigual, o que
+condiciona a análise do Capítulo~\ref{cap:resultados}: 3.708 partidas ocorreram
+com público pleno, 419 sem público e 53 sob liberação parcial. O recorte
+contempla 34 clubes distintos, número superior aos 20 participantes de cada
+temporada em razão do acesso e do rebaixamento ao longo do período.
+
 \section{Procedimentos de Análise Estatística}\label{sec:procedimentos}
 
 Os testes de hipótese foram selecionados de modo que a hipótese nula correspondesse
@@ -187,6 +467,32 @@ formulação permite estimar o efeito dentro de um mesmo recorte temporal, com u
 único parâmetro adicional, viabilizando a análise em subconjuntos nos quais o
 ajuste de um modelo completo não seria possível.
 
+A implementação foi desenvolvida neste trabalho, sem recurso a biblioteca
+específica de modelos de futebol. O vetor de parâmetros reúne os termos de
+ataque, os de defesa e os três parâmetros globais $\mu$, $\gamma$ e $\rho$. Como
+a restrição de média nula elimina um grau de liberdade do bloco de ataque, o
+recorte completo, com 34 clubes distintos, resulta em 70 parâmetros livres. A
+restrição não é imposta por penalização na função objetivo, mas estruturalmente:
+o último termo de ataque é reconstruído como o simétrico da soma dos demais no
+momento do desempacotamento do vetor, de modo que a região viável do otimizador
+já satisfaz a identificabilidade.
+
+A minimização da log-verossimilhança negativa emprega o algoritmo L-BFGS-B,
+disponível em \textit{SciPy}, com limites de caixa sobre $\rho$. Em um problema
+dessa dimensão o limite padrão de avaliações da função pode ser atingido antes
+da convergência; a rotina trata esse caso reiniciando a otimização a partir do
+último ponto alcançado, em vez de aceitar o resultado como final. A ausência de
+convergência após as tentativas previstas gera exceção, e não resultado
+silenciosamente incorreto.
+
+O cálculo do erro padrão por verossimilhança perfilada exige duas reotimizações
+adicionais por ajuste, custo incompatível com o laço de validação temporal, no
+qual o modelo é reestimado centenas de vezes. Mantêm-se, por isso, dois perfis
+de tolerância do otimizador: um estrito, aplicado às estimativas reportadas, e
+um relaxado, aplicado ao laço preditivo. A equivalência entre ambos foi
+verificada antes da adoção: a maior diferença observada entre as probabilidades
+previstas pelos dois perfis é de $1{,}2 \times 10^{-3}$.
+
 A implementação foi validada por recuperação de parâmetro: partidas sintéticas
 foram geradas a partir do próprio modelo, com $\gamma$ conhecido, verificando-se
 se o procedimento de ajuste o recupera e se a cobertura dos intervalos de
@@ -216,6 +522,21 @@ modelos é deliberada: caso apenas um deles reestimasse parâmetros ao longo da
 temporada, a comparação mediria o protocolo de reajuste e não a qualidade dos
 modelos. A imputação de valores ausentes utiliza estatísticas calculadas
 exclusivamente sobre o conjunto de treino de cada dobra.
+
+A Figura~\ref{fig:walkforward} representa o protocolo. Cada linha corresponde a
+uma temporada avaliada; a janela de treino acumula todas as temporadas
+anteriores e nunca inclui informação posterior à partida prevista. O painel
+inferior detalha o mecanismo de reajuste dentro da temporada de teste. São oito
+temporadas avaliadas, 3.040 partidas previstas e 38 reajustes por temporada para
+cada modelo.
+
+\begin{figure}[htb]
+  \centering
+  \caption{Protocolo de validação temporal e reajuste em blocos.}
+  \label{fig:walkforward}
+  \includegraphics[width=0.88\textwidth]{./figuras/validacao_temporal.pdf}
+  \fonte{Autoria própria (2026)}
+\end{figure}
 
 Foram avaliados cinco modelos: dois de referência, correspondentes à frequência
 histórica dos resultados e à heurística de prever sempre a vitória do mandante; o

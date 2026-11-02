@@ -103,6 +103,9 @@ def main() -> int:
         ("volume_ofensivo", visualizacao.volume_ofensivo_por_temporada(evolucao)),
         ("dispersao_casa_fora", visualizacao.dispersao_casa_fora(por_time)),
         ("contraste_publico", visualizacao.contraste_publico(publico)),
+        # diagramas estruturais: descrevem o processamento, não os dados
+        ("arquitetura_pipeline", visualizacao.arquitetura_pipeline()),
+        ("validacao_temporal", visualizacao.validacao_temporal()),
     )
     for nome, figura in figuras:
         visualizacao.salvar(figura, nome)

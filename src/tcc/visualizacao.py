@@ -376,3 +376,169 @@ def calibracao(curvas) -> plt.Figure:
     ax.set_xlim(0, 1)
     ax.set_ylim(0, 1)
     return fig
+
+
+# ─────────────────── diagramas estruturais ───────────────────
+# Não dependem dos dados: descrevem a organização do processamento. Ficam aqui,
+# e não num editor de diagramas, pela mesma razão das demais figuras — o que vai
+# para a monografia é gerado por código.
+
+def _caixa(ax, x, y, w, h, texto, *, cor=None, tinta=None, negrito=False,
+           tamanho=9, mono=False, raio=0.02):
+    """Retângulo arredondado com rótulo centralizado."""
+    from matplotlib.patches import FancyBboxPatch
+    cor = cor or SUPERFICIE
+    ax.add_patch(FancyBboxPatch(
+        (x, y), w, h, boxstyle=f"round,pad=0,rounding_size={raio}",
+        facecolor=cor, edgecolor=EIXO, linewidth=0.9, zorder=2,
+    ))
+    ax.text(
+        x + w / 2, y + h / 2, texto,
+        ha="center", va="center", zorder=3,
+        fontsize=tamanho, color=tinta or TINTA_PRIMARIA,
+        fontweight="bold" if negrito else "normal",
+        family="monospace" if mono else None,
+        linespacing=1.45,
+    )
+
+
+def _seta(ax, x1, y1, x2, y2, texto=None):
+    ax.annotate(
+        "", xy=(x2, y2), xytext=(x1, y1),
+        arrowprops=dict(arrowstyle="-|>", color=TINTA_SECUNDARIA,
+                        linewidth=1.1, shrinkA=0, shrinkB=0),
+        zorder=4,
+    )
+    if texto:
+        ax.text((x1 + x2) / 2 + 0.012, (y1 + y2) / 2, texto,
+                ha="left", va="center", fontsize=7.5, color=TINTA_SUAVE)
+
+
+def arquitetura_pipeline() -> plt.Figure:
+    """Camadas do processamento, da fonte externa ao texto da monografia."""
+    fig, ax = plt.subplots(figsize=(7.0, 6.4))
+    ax.set_xlim(0, 1)
+    ax.set_ylim(0, 1)
+    ax.axis("off")
+    ax.grid(False)
+
+    xe, we = 0.075, 0.40          # coluna dos módulos
+    xd, wd = 0.555, 0.37          # coluna dos artefatos
+    h = 0.082
+    cx_e, cx_d = xe + we / 2, xd + wd / 2
+
+    niveis = [0.885, 0.715, 0.545, 0.300, 0.130]
+
+    # fonte externa, atravessando as duas colunas
+    _caixa(ax, xe, niveis[0], wd + xd - xe, h,
+           "Football-Data.co.uk\nCSV por temporada",
+           cor="#eef1f6", negrito=True)
+
+    etapas = [
+        (1, "coleta.py", "data/raw/\nmanifesto SHA-256", "download único"),
+        (2, "preparacao.py", "data/processed/\n4.180 × 29", "tratamento"),
+    ]
+    for idx, modulo, artefato, rotulo in etapas:
+        y = niveis[idx]
+        _caixa(ax, xe, y, we, h, modulo, negrito=True, mono=True)
+        _caixa(ax, xd, y, wd, h, artefato, cor="#f6f5f1",
+               tinta=TINTA_SECUNDARIA, tamanho=8.2, mono=True)
+        _seta(ax, xe + we, y + h / 2, xd, y + h / 2)
+        _seta(ax, cx_e, niveis[idx - 1], cx_e, y + h, rotulo)
+
+    # camada de análise: quatro módulos lado a lado
+    y = niveis[3]
+    analise_h = 0.135
+    larg = (wd + xd - xe)
+    _caixa(ax, xe, y, larg, analise_h, "", cor="#f6f5f1")
+    nomes = ["estatistica", "analise", "modelos", "preditivo"]
+    passo = larg / len(nomes)
+    for i, nome in enumerate(nomes):
+        _caixa(ax, xe + 0.012 + i * passo, y + 0.016, passo - 0.024,
+               analise_h - 0.032, nome, mono=True, tamanho=8.2, negrito=True)
+    _seta(ax, cx_e, niveis[2], cx_e, y + analise_h, "análise e modelagem")
+
+    # saída
+    y = niveis[4]
+    _caixa(ax, xe, y, we, h, "visualizacao.py", negrito=True, mono=True)
+    _caixa(ax, xd, y, wd, h, "tabelas/  ·  figuras/\n→ LaTeX", cor="#eef1f6",
+           tinta=TINTA_SECUNDARIA, tamanho=8.2, mono=True)
+    _seta(ax, xe + we, y + h / 2, xd, y + h / 2)
+    _seta(ax, cx_e, niveis[3], cx_e, y + h)
+
+    # bandas laterais: o que atravessa todas as camadas
+    for x, rotulo in ((0.028, "config.py"), (0.962, "tests/  81 casos")):
+        ax.text(x, 0.505, rotulo, rotation=90, ha="center", va="center",
+                fontsize=8, color=TINTA_SUAVE, family="monospace")
+    for x in (0.047, 0.945):
+        ax.plot([x, x], [0.13, 0.885 + h], color=EIXO, linewidth=0.8,
+                linestyle=(0, (3, 3)), zorder=1)
+
+    ax.set_title("Organização do processamento", pad=14)
+    return fig
+
+
+def validacao_temporal(temporadas_teste=None, por_temporada: int = 380,
+                       passo: int = 10) -> plt.Figure:
+    """Janelas expansivas e o reajuste em blocos dentro da temporada de teste."""
+    temporadas_teste = list(temporadas_teste or
+                            ("1819", "1920", "2021", "2122",
+                             "2223", "2324", "2425", "2526"))
+    todas = list(config.TEMPORADAS)
+    fig, (ax, az) = plt.subplots(
+        2, 1, figsize=(7.0, 5.4), gridspec_kw={"height_ratios": [3, 1],
+                                               "hspace": 0.45})
+
+    for eixo in (ax, az):
+        eixo.grid(False)
+        eixo.set_facecolor(SUPERFICIE)
+        for lado in ("top", "right", "left", "bottom"):
+            eixo.spines[lado].set_visible(False)
+
+    for linha, temporada in enumerate(temporadas_teste):
+        y = len(temporadas_teste) - linha - 1
+        corte = todas.index(temporada)
+        ax.barh(y, corte, left=0, height=0.62, color=AZUL, alpha=0.85,
+                edgecolor=SUPERFICIE, linewidth=1.2)
+        ax.barh(y, 1, left=corte, height=0.62, color=LARANJA,
+                edgecolor=SUPERFICIE, linewidth=1.2)
+        ax.text(corte + 1.18, y, _rotular_temporada(temporada),
+                va="center", fontsize=8.5, color=TINTA_SECUNDARIA)
+
+    ax.set_xlim(0, len(todas) + 1.6)
+    ax.set_ylim(-0.7, len(temporadas_teste) - 0.3)
+    ax.set_yticks([])
+    ax.set_xticks(range(len(todas)))
+    ax.set_xticklabels([_rotular_temporada(t) for t in todas],
+                       fontsize=7.5, rotation=45, ha="right")
+    ax.tick_params(length=0)
+    ax.set_title("Validação temporal: a janela de treino só olha para trás",
+                 pad=10)
+
+    from matplotlib.patches import Patch
+    # canto superior direito: as barras crescem para baixo, então sobra espaço lá
+    ax.legend(handles=[Patch(facecolor=AZUL, label="treino"),
+                       Patch(facecolor=LARANJA, label="teste")],
+              loc="upper right", bbox_to_anchor=(1.0, 1.02), ncol=1)
+
+    # painel inferior: o reajuste em blocos
+    blocos = por_temporada // passo
+    for i in range(blocos):
+        az.barh(0, 0.84, left=i, height=0.5, color=LARANJA,
+                alpha=0.35 + 0.65 * (i == 12), edgecolor="none")
+    az.annotate(
+        f"a cada {passo} partidas o histórico cresce\ne todos os modelos reajustam",
+        xy=(12.4, 0.26), xytext=(16.5, 0.95), fontsize=8,
+        color=TINTA_SECUNDARIA,
+        arrowprops=dict(arrowstyle="-|>", color=TINTA_SECUNDARIA, linewidth=1.0),
+    )
+    az.set_xlim(-0.6, blocos + 0.6)
+    az.set_ylim(-0.45, 1.5)
+    az.set_yticks([])
+    az.set_xticks([0, blocos // 2, blocos])
+    az.set_xticklabels(["1", f"{por_temporada // 2}", f"{por_temporada}"],
+                       fontsize=8)
+    az.tick_params(length=0)
+    az.set_xlabel("partida dentro da temporada de teste", fontsize=9)
+    az.set_title(f"{blocos} blocos por temporada", fontsize=10, pad=6)
+    return fig
