@@ -19,6 +19,17 @@ vantagem pode ser quantificada pela porcentagem de vitórias ou pontos
 conquistados em casa, que historicamente supera a marca de 50\% em diversas
 modalidades de esportes coletivos.
 
+A persistência do fenômeno é documentada também por trabalhos recentes.
+\citeonline{Wunderlich2021} analisaram mais de 40 mil partidas de ligas
+europeias, incluindo mais de mil disputadas sem público durante a pandemia, e
+concluíram que a vantagem do mandante permanece mesmo na ausência de
+espectadores. \citeonline{Bryson2021}, examinando partidas de portões fechados
+das temporadas 2019/20, chegam a conclusão convergente quanto ao resultado das
+partidas, ainda que identifiquem redução expressiva na punição disciplinar ao
+visitante. Em conjunto, esses estudos indicam que o Fator Casa continua
+mensurável na era recente, mas que seus mecanismos não contribuem todos na mesma
+proporção --- questão retomada na análise conduzida neste trabalho.
+
 \citeonline{Nevill1999} realizaram uma ampla revisão da literatura e apontaram
 que o Fator Casa é um fenômeno multifatorial. As principais variáveis que
 sustentam esse comportamento incluem:
@@ -43,7 +54,7 @@ fatores produzem assinaturas empíricas distintas: o viés de arbitragem deve
 manifestar-se em cartões e faltas, ao passo que a familiaridade com o ambiente e
 a logística afetam diretamente o volume de ações ofensivas. A análise conjunta
 dessas métricas permite, portanto, discriminar parcialmente entre os mecanismos,
-em vez de tratá-los como um bloco indiviso.
+em vez de tratá-los como um bloco único.
 
 \subsection{O Impacto da Pandemia e os Jogos com Portões Fechados}\label{sec:covid}
 
@@ -60,7 +71,8 @@ um experimento natural.
 Cabe, entretanto, uma ressalva metodológica que orienta a análise conduzida neste
 trabalho. A temporada 2020/21 não se diferenciou das anteriores apenas pela
 ausência de público: houve também encurtamento da pré-temporada, congestionamento
-de calendário e alteração no número de substituições permitidas por partida.
+de calendário, alteração no número de substituições permitidas por partida e
+desfalques frequentes por jogadores infectados ou em isolamento preventivo.
 Comparações entre temporadas, portanto, confundem o efeito da torcida com o
 efeito de todas as demais mudanças ocorridas simultaneamente. Contrastes
 construídos \textit{dentro} de uma mesma temporada, quando disponíveis, oferecem
@@ -93,6 +105,18 @@ referência~\cite{Chapman2000} organiza o trabalho em seis fases:
   \item \textbf{Implantação} (\textit{deployment}): organização dos resultados em
     relatórios finais, códigos reaproveitáveis ou \textit{dashboards}.
 \end{enumerate}
+
+A Figura~\ref{fig:crispdm} representa o modelo. As fases dispõem-se em ciclo, e
+as setas de duplo sentido entre pares vizinhos indicam que o retorno a uma fase
+anterior faz parte do processo, e não constitui desvio dele.
+
+\begin{figure}[htb]
+  \centering
+  \caption{As seis fases do CRISP-DM e os retornos entre elas.}
+  \label{fig:crispdm}
+  \includegraphics[width=0.78\textwidth]{./figuras/crisp_dm.pdf}
+  \fonte{Adaptado de \citeonline{Chapman2000}}
+\end{figure}
 
 Uma característica central do CRISP-DM é seu caráter iterativo: as fases não
 constituem uma sequência linear, e descobertas feitas em etapas avançadas
@@ -135,8 +159,12 @@ visitante~$j$, os gols são modelados como variáveis de Poisson com médias:
 ataque e de defesa de cada clube, $\mu$ é um termo comum de escala e $\gamma$ é o
 parâmetro de mando de campo. Como $\gamma$ é estimado conjuntamente com as forças
 de todas as equipes, ele mede a vantagem do mandante já descontada a qualidade de
-quem enfrentou quem. A quantidade $e^{\gamma} - 1$ expressa o acréscimo
-percentual esperado de gols atribuível ao mando.
+quem enfrentou quem. Como as médias são escritas na forma exponencial, $\gamma$ atua de modo
+multiplicativo: a mesma equipe, diante do mesmo adversário, marca $e^{\gamma}$
+vezes mais gols jogando em casa do que jogando fora. A quantidade
+$e^{\gamma} - 1$ traduz esse fator em acréscimo percentual. Um valor de
+$\gamma = 0{,}20$, por exemplo, corresponde a cerca de 22\% mais gols
+esperados.
 
 \section{Avaliação de Modelos Probabilísticos}\label{sec:avaliacao}
 

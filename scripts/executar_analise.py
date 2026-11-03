@@ -106,6 +106,7 @@ def main() -> int:
         # diagramas estruturais: descrevem o processamento, não os dados
         ("arquitetura_pipeline", visualizacao.arquitetura_pipeline()),
         ("validacao_temporal", visualizacao.validacao_temporal()),
+        ("crisp_dm", visualizacao.crisp_dm()),
     )
     for nome, figura in figuras:
         visualizacao.salvar(figura, nome)

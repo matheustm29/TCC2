@@ -542,3 +542,65 @@ def validacao_temporal(temporadas_teste=None, por_temporada: int = 380,
     az.set_xlabel("partida dentro da temporada de teste", fontsize=9)
     az.set_title(f"{blocos} blocos por temporada", fontsize=10, pad=6)
     return fig
+
+
+def crisp_dm() -> plt.Figure:
+    """As seis fases do CRISP-DM e o caráter iterativo do processo.
+
+    Desenhada a partir da descrição em Chapman et al. (2000): fases dispostas em
+    ciclo, com retornos entre pares de fases vizinhas e um laço externo que
+    recomeça o processo.
+    """
+    from matplotlib.patches import Circle, FancyArrowPatch
+
+    fig, ax = plt.subplots(figsize=(6.6, 5.4))
+    ax.set_xlim(0, 1); ax.set_ylim(0, 1)
+    ax.axis("off"); ax.grid(False)
+
+    fases = {
+        "negocio":    (0.295, 0.845, "Entendimento\ndo negócio"),
+        "dados":      (0.705, 0.845, "Entendimento\ndos dados"),
+        "preparacao": (0.880, 0.500, "Preparação\ndos dados"),
+        "modelagem":  (0.705, 0.155, "Modelagem"),
+        "avaliacao":  (0.295, 0.155, "Avaliação"),
+        "implantacao":(0.120, 0.500, "Implantação"),
+    }
+    w, h = 0.235, 0.145
+    for chave, (x, y, rotulo) in fases.items():
+        _caixa(ax, x - w / 2, y - h / 2, w, h, rotulo,
+               cor="#eef1f6", negrito=True, tamanho=9, raio=0.03)
+
+    # núcleo: os dados, que todas as fases consultam
+    ax.add_patch(Circle((0.5, 0.5), 0.105, facecolor=SUPERFICIE,
+                        edgecolor=EIXO, linewidth=1.0, zorder=2))
+    ax.text(0.5, 0.5, "Dados", ha="center", va="center", zorder=3,
+            fontsize=10, fontweight="bold", color=TINTA_SECUNDARIA)
+
+    def liga(a, b, duplo=False, recuo=0.012):
+        (x1, y1, _), (x2, y2, _) = fases[a], fases[b]
+        estilo = "<|-|>" if duplo else "-|>"
+        ax.add_patch(FancyArrowPatch(
+            (x1, y1), (x2, y2), arrowstyle=estilo, mutation_scale=11,
+            color=TINTA_SECUNDARIA, linewidth=1.2, zorder=1,
+            shrinkA=46, shrinkB=46,
+        ))
+
+    # os retornos entre fases vizinhas são o que caracteriza o modelo
+    liga("negocio", "dados", duplo=True)
+    liga("dados", "preparacao")
+    liga("preparacao", "modelagem", duplo=True)
+    liga("modelagem", "avaliacao")
+    liga("avaliacao", "implantacao")
+    liga("avaliacao", "negocio")
+
+    # laço externo: concluída a implantação, o processo recomeça
+    ax.add_patch(FancyArrowPatch(
+        (0.120, 0.578), (0.235, 0.770),
+        connectionstyle="arc3,rad=-0.45", arrowstyle="-|>", mutation_scale=12,
+        color=AZUL, linewidth=1.4, zorder=1,
+    ))
+    ax.text(0.010, 0.648, "o processo\nrecomeça", fontsize=8,
+            color=AZUL, ha="left", va="center", linespacing=1.4)
+
+    ax.set_title("As seis fases do CRISP-DM", pad=10)
+    return fig

@@ -26,8 +26,9 @@ equivalentes.
 \textbf{Quanto à heterogeneidade entre equipes}, o resultado contraria a
 intuição corrente. Equipes que terminam a temporada entre as seis primeiras
 colocadas apresentam vantagem de mando \textbf{maior} (0,450 ponto) que as seis
-últimas (0,319), em gradiente monotônico que se repete em gols, finalizações no
-alvo e escanteios. O achado é reforçado pelo efeito de teto, que atua contra as
+últimas (0,319). A vantagem cresce de forma ordenada da parte de baixo para a
+parte de cima da tabela, e o mesmo ordenamento reaparece em gols, finalizações
+no alvo e escanteios. O achado é reforçado pelo efeito de teto, que atua contra as
 equipes mais bem classificadas. A comparação entre um grupo fixo de clubes de
 elite e os demais, por sua vez, não produz diferença estatisticamente
 significativa ($p = 0{,}351$), o que evidencia a superioridade da segmentação
@@ -37,8 +38,9 @@ por posição final recalculada a cada temporada.
 variabilidade elevada em torno de um patamar estável. Duas temporadas exibem
 intervalo de confiança contendo o zero: 2020/21 e, de forma menos esperada,
 2024/25. A sobreposição dos intervalos entre as demais temporadas recomenda
-cautela na afirmação de tendência monotônica de queda, ainda que a média móvel
-indique patamar recente ligeiramente inferior ao do início do período.
+cautela ao afirmar que a vantagem venha caindo ano após ano: a média móvel
+situa o patamar recente abaixo do inicial, mas a série sobe e desce ao longo do
+período em vez de declinar continuamente.
 
 \textbf{Quanto ao papel do público}, a principal contribuição metodológica do
 trabalho reside na distinção entre contrastes intertemporadas e
@@ -53,10 +55,12 @@ corroborada pelo contraste intratemporada disponível.
 Associado a esse resultado, identificou-se a \textbf{dissociação entre dois
 mecanismos} habitualmente tratados em conjunto. O viés disciplinar favorável ao
 mandante — que recebe sistematicamente menos cartões amarelos que o visitante —
-desaparece nas partidas sem público já em 2019/20, mesma temporada em que a
-vantagem em pontos permaneceu inalterada. A torcida parece, portanto,
-influenciar o comportamento da arbitragem sem que esse viés constitua o
-mecanismo central da vantagem em resultados.
+desaparece nas partidas sem público já em 2019/20 --- mesma temporada em que a
+vantagem em pontos permaneceu a mesma. Os dois efeitos, portanto, não caminham
+juntos: a torcida influencia o comportamento da arbitragem, mas não é por esse
+caminho que se produz a vantagem em resultados. Tratá-los como um só mecanismo,
+como é frequente, leva a atribuir à arbitragem um papel que os dados não
+sustentam.
 
 \textbf{Quanto à modelagem}, o modelo de Poisson bivariado obteve o melhor
 desempenho preditivo entre os métodos avaliados, com \textit{log-loss} de
@@ -93,9 +97,14 @@ O trabalho apresenta as seguintes limitações:
 
 \begin{itemize}
   \item \textbf{Parâmetro de mando único para a liga.} O modelo estima um valor
-    de $\gamma$ comum a todos os clubes. Estimar um parâmetro por clube exigiria
-    tratamento de amostra reduzida por equipe e técnicas de encolhimento, não
-    contempladas neste trabalho;
+    de $\gamma$ comum a todos os clubes, o que impede responder se um clube
+    específico depende mais do mando que outro. Estimar um parâmetro por clube
+    esbarra no tamanho da amostra: são cerca de 19 partidas em casa por equipe a
+    cada temporada, e estimativas obtidas sobre tão poucos jogos oscilam
+    demais para serem comparadas entre si. O tratamento usual para esse problema
+    são os modelos hierárquicos, que aproximam cada estimativa individual da
+    média da liga na proporção da incerteza de cada clube --- recurso conhecido
+    como encolhimento. Tais modelos não foram contemplados neste trabalho;
   \item \textbf{Ausência de variáveis de contexto.} Distância de viagem, horário
     da partida, identidade do árbitro designado e taxa de ocupação do estádio são
     apontados pela literatura como relevantes e não estão disponíveis na fonte
@@ -109,8 +118,13 @@ O trabalho apresenta as seguintes limitações:
     reproduzir nela o teste aplicado a 2019/20;
   \item \textbf{Ausência de comparação com o mercado.} As probabilidades
     implícitas nas cotações de casas de apostas constituem referência externa
-    exigente para modelos preditivos. O procedimento está implementado, porém
-    não foi executado neste trabalho;
+    exigente para modelos preditivos, por incorporarem informação ausente dos
+    dados de partidas, como lesões e escalações. As rotinas de leitura dessas
+    cotações e de remoção da margem da casa foram implementadas e testadas, mas
+    a comparação não chegou a ser executada: as colunas de cotação não estavam
+    presentes no acervo efetivamente coletado. A comparação permanece, portanto,
+    como etapa imediata de continuidade, sem necessidade de novo
+    desenvolvimento;
   \item \textbf{Descontinuidade na série histórica.} Comparações de finalizações
     no alvo que atravessem a temporada 2013/14 não são válidas, o que restringe
     o estudo de caso sobre mudanças de estádio a métricas de pontos e gols;

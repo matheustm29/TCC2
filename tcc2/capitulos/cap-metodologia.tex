@@ -441,10 +441,25 @@ independentes não se sustenta.
 
 Todos os resultados inferenciais são reportados com estimativa pontual, intervalo
 de confiança de 95\% e tamanho de efeito, conforme discutido na
-Seção~\ref{sec:efeito}. Intervalos para estatísticas sem forma fechada foram
-obtidos por reamostragem \textit{bootstrap}.
+Seção~\ref{sec:efeito}. Algumas estatísticas deste trabalho, como a diferença entre faixas de
+classificação, não possuem fórmula fechada para o cálculo do intervalo de
+confiança. Nesses casos recorreu-se à reamostragem \textit{bootstrap}: sorteia-se
+repetidamente, com reposição, uma amostra do mesmo tamanho da original,
+recalcula-se a estatística em cada sorteio e tomam-se os percentis da
+distribuição assim obtida como limites do intervalo. Quando as observações não
+são independentes entre si --- caso das partidas de um mesmo clube ---, o sorteio
+é feito por clube, e não por partida, de modo a preservar a estrutura de
+dependência.
 
 \section{Modelagem}\label{sec:modelagem}
+
+A etapa de modelagem cumpre dois papéis distintos neste trabalho. O primeiro é
+explicativo: estimar a magnitude da vantagem de mando isolada da qualidade dos
+adversários enfrentados, o que as médias condicionais da seção anterior não
+permitem. O segundo é preditivo: verificar se essa representação do fenômeno
+sustenta previsões sobre partidas ainda não disputadas, submetida à comparação
+com modelos de aprendizado de máquina. As duas subseções seguintes descrevem,
+respectivamente, cada uma dessas frentes.
 
 \subsection{Modelo de Poisson Bivariado}\label{sec:met-dixon-coles}
 
@@ -461,11 +476,22 @@ que mantém os demais parâmetros fixos, subestimou a incerteza em aproximadamen
 25\% em simulação controlada, em razão da correlação entre $\gamma$ e o termo de
 escala~$\mu$.
 
-Para estimar o efeito de uma condição binária sobre o mando, o parâmetro foi
-reparametrizado como $\gamma + \delta \cdot \mathbb{1}[\text{condição}]$. Essa
-formulação permite estimar o efeito dentro de um mesmo recorte temporal, com um
-único parâmetro adicional, viabilizando a análise em subconjuntos nos quais o
-ajuste de um modelo completo não seria possível.
+Parte das perguntas do trabalho exige comparar o mando entre dois subconjuntos
+de partidas --- por exemplo, com e sem público --- dentro de um mesmo recorte.
+Ajustar um modelo independente para cada subconjunto não é viável quando um
+deles é pequeno: as 92 partidas sem público de 2019/20 não bastam para estimar
+as forças de ataque e defesa de vinte clubes.
+
+A solução adotada foi acrescentar um único parâmetro ao modelo. Em vez de um
+$\gamma$ fixo, o termo de mando passa a ser
+$\gamma + \delta \cdot \mathbb{1}[\text{condição}]$, em que
+$\mathbb{1}[\cdot]$ vale 1 nas partidas que satisfazem a condição e 0 nas
+demais. Assim, $\gamma$ mede o mando nas partidas de referência e $\delta$ mede
+quanto o mando se desloca nas demais. Todas as partidas contribuem para estimar
+as forças dos clubes, que são comuns aos dois subconjuntos, e apenas o
+deslocamento do mando é estimado separadamente. Um intervalo de confiança para
+$\delta$ que contenha o zero indica ausência de efeito detectável da condição
+sobre o mando.
 
 A implementação foi desenvolvida neste trabalho, sem recurso a biblioteca
 específica de modelos de futebol. O vetor de parâmetros reúne os termos de
@@ -504,9 +530,18 @@ A etapa preditiva teve como alvo o resultado da partida, em suas três categoria
 Em conformidade com o exposto na Seção~\ref{sec:vazamento}, nenhuma estatística
 produzida durante a partida foi utilizada como variável explicativa. As variáveis
 empregadas utilizam exclusivamente informação disponível antes do apito inicial:
-\textit{rating} Elo de cada equipe, desempenho nas cinco partidas anteriores em
-pontos e gols, desempenho recente específico da condição de mando, dias de
-descanso desde a partida anterior, momento da temporada e regime de público.
+
+\begin{itemize}
+  \item \textit{rating} Elo de cada equipe, calculado imediatamente antes da
+    partida;
+  \item desempenho nas cinco partidas anteriores, em pontos, em gols marcados e
+    em gols sofridos;
+  \item desempenho recente específico da condição de mando, isto é, do mandante
+    atuando em casa e do visitante atuando fora;
+  \item dias de descanso desde a partida anterior de cada equipe;
+  \item rodada, como indicador do momento da temporada;
+  \item regime de público da partida.
+\end{itemize}
 
 A ausência de vazamento foi verificada experimentalmente. O procedimento de teste
 altera o placar de uma partida situada no meio do conjunto, reconstrói todas as
