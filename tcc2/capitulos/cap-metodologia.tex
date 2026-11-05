@@ -36,10 +36,10 @@ Figura~\ref{fig:arquitetura} apresenta essa organização.
   \fonte{Autoria própria (2026)}
 \end{figure}
 
-O módulo \texttt{config.py} concentra as constantes do estudo --- recorte
-temporal, janelas de datas dos regimes de público, limiares de significância e
-semente dos geradores pseudoaleatórios --- de modo que nenhuma decisão de escopo
-fique embutida no corpo de uma rotina de cálculo. O diretório \texttt{tests/}
+O módulo \texttt{config.py} concentra as constantes do estudo, como o recorte
+temporal, as janelas de datas dos regimes de público, os limiares de
+significância e a semente dos geradores pseudoaleatórios. Dessa forma, nenhuma
+decisão de escopo fica embutida no corpo de uma rotina de cálculo. O diretório \texttt{tests/}
 atravessa todas as camadas, conforme discutido na Seção~\ref{sec:verificacao}.
 
 A execução ocorre por dois pontos de entrada, separados por custo computacional.
@@ -90,7 +90,7 @@ empregadas e sua função no trabalho.
 Cabe registrar o que \emph{não} foi delegado a biblioteca. O modelo de Poisson
 bivariado e o sistema de \textit{rating} Elo foram implementados integralmente
 neste trabalho, conforme descrito nas Seções~\ref{sec:met-dixon-coles}
-e~\ref{sec:met-preditivo}; da biblioteca de aprendizado de máquina utilizam-se
+e~\ref{sec:met-preditivo}. Da biblioteca de aprendizado de máquina utilizam-se
 apenas os dois modelos de comparação.
 
 \subsection{Correspondência com as Fases do CRISP-DM}\label{sec:crisp-mapa}
@@ -172,17 +172,18 @@ resposta conhecida e exige que o procedimento a recupere.
 
 Dois testes merecem destaque por fixarem propriedades que erros silenciosos
 violariam. O primeiro, no módulo preditivo, altera o placar de uma partida e
-exige que nenhuma variável explicativa daquela mesma partida se modifique; é a
+exige que nenhuma variável explicativa daquela mesma partida se modifique. É a
 formulação executável da ausência de vazamento temporal, discutida na
 Seção~\ref{sec:vazamento}. O segundo, no módulo de modelos, gera partidas
 sintéticas a partir de parâmetros conhecidos e verifica se a estimação os
 recupera dentro do intervalo declarado.
 
-A reprodutibilidade apoia-se em três mecanismos: o armazenamento local dos
-arquivos originais com resumo criptográfico, descrito na
-Seção~\ref{sec:integridade}; a fixação das versões de todas as bibliotecas; e a
-definição de semente única para os geradores pseudoaleatórios, empregada tanto
-na reamostragem \textit{bootstrap} quanto nos modelos de aprendizado de máquina.
+A reprodutibilidade apoia-se em três mecanismos. O primeiro é o armazenamento
+local dos arquivos originais com resumo criptográfico, descrito na
+Seção~\ref{sec:integridade}. O segundo é a fixação das versões de todas as
+bibliotecas. O terceiro é a definição de uma semente única para os geradores
+pseudoaleatórios, empregada tanto na reamostragem \textit{bootstrap} quanto nos
+modelos de aprendizado de máquina.
 
 \section{Coleta e Fonte de Dados}\label{sec:coleta}
 
@@ -242,10 +243,10 @@ na etapa anterior da pesquisa, implica que duas execuções em datas distintas
 possam produzir números diferentes sem qualquer indicação disso.
 
 Para evitar esse comportamento, adotou-se o seguinte procedimento: os arquivos
-são baixados uma única vez e armazenados localmente; a procedência de cada
-arquivo, a data de acesso e seu resumo criptográfico SHA-256 são registrados em
-um manifesto; e toda execução subsequente confere os arquivos contra esse
-manifesto, interrompendo o processamento em caso de divergência. Falhas de
+os arquivos são baixados uma única vez e armazenados localmente. A procedência
+de cada arquivo, a data de acesso e seu resumo criptográfico SHA-256 ficam
+registrados em um manifesto. Toda execução seguinte confere os arquivos contra
+esse manifesto e interrompe o processamento em caso de divergência. Falhas de
 coleta, por sua vez, interrompem a execução em vez de serem registradas e
 ignoradas, o que impede que uma análise prossiga sobre um conjunto incompleto.
 
@@ -263,7 +264,7 @@ permanecem estáveis. A estabilidade das demais variáveis indica que não se tr
 de mudança no jogo, mas de alteração no critério de registro adotado pelo
 provedor dos dados. Em consequência, comparações dessa variável que atravessem a
 fronteira de 2013/14 não são válidas. O recorte principal do trabalho situa-se
-integralmente após essa descontinuidade e, portanto, não é afetado; a restrição
+integralmente após essa descontinuidade e, portanto, não é afetado. A restrição
 aplica-se apenas ao estudo de caso apresentado na
 Seção~\ref{sec:resultados-estadios}.
 
@@ -290,9 +291,8 @@ Tabela~\ref{tab:defeitos} os sintetiza.
       \textbf{Tratamento adotado} \\
     \midrule
     Três formatos de data no mesmo acervo &
-      Conversão silenciosa de 380 partidas para valor nulo; com inferência de
-      dia à frente do mês, datas no padrão ISO são reinterpretadas de forma
-      incorreta &
+      Conversão silenciosa de 380 partidas para valor nulo. Com inferência de
+      dia à frente do mês, datas no padrão ISO são lidas de forma incorreta &
       Detecção do formato por expressão regular e normalização de cada
       subconjunto antes da conversão final \\
     \addlinespace
@@ -318,8 +318,8 @@ Tabela~\ref{tab:defeitos} os sintetiza.
 A estes somam-se verificações estruturais executadas a cada processamento: a
 contagem de partidas por temporada, a exigência de que cada clube dispute
 $2(n-1)$ jogos na tabela de classificação e a confirmação de que nenhum clube
-atue duas vezes na mesma data --- propriedade que garante que o par
-\texttt{(Date, HomeTeam)} constitui chave de ordenação total, requisito do
+atue duas vezes na mesma data. Essa última propriedade garante que o par
+\texttt{(Date, HomeTeam)} serve como chave de ordenação total, requisito do
 protocolo de validação temporal.
 
 \subsection{Criação de Variáveis de Desempenho}\label{sec:variaveis}
@@ -361,8 +361,8 @@ confronto direto, não foram implementados, por raramente alterarem a faixa de
 posição de uma equipe.
 
 As equipes foram então segmentadas em três faixas, recalculadas a cada
-temporada: G6, correspondente às posições 1 a 6; Meio, posições 7 a 14; e Z6,
-posições 15 a 20. Essa segmentação é preferível a rótulos fixos de grupo, como o
+temporada. A faixa G6 reúne as posições 1 a 6, a faixa Meio reúne as posições 7
+a 14 e a faixa Z6 reúne as posições 15 a 20. Essa segmentação é preferível a rótulos fixos de grupo, como o
 chamado \textit{Big Six}, pois acompanha a variação de desempenho dos clubes ao
 longo do período estudado.
 
@@ -378,8 +378,9 @@ temporada, com três categorias: público total, público limitado e sem públic
 categoria intermediária merece justificativa. As autorizações de dezembro de 2020
 e maio de 2021 variavam por clube e por semana, e o público efetivo de cada
 partida não está disponível na fonte. Atribuir essas partidas a um dos regimes
-extremos exigiria suposição não respaldada pelos dados; mantê-las em categoria
-própria, excluída dos contrastes, preserva a validade das comparações.
+extremos exigiria uma suposição que os dados não respaldam. Mantê-las em
+categoria própria, excluída dos contrastes, preserva a validade das
+comparações.
 
 \subsection{Conjunto Resultante}\label{sec:conjunto-resultante}
 
@@ -447,89 +448,90 @@ confiança. Nesses casos recorreu-se à reamostragem \textit{bootstrap}: sorteia
 repetidamente, com reposição, uma amostra do mesmo tamanho da original,
 recalcula-se a estatística em cada sorteio e tomam-se os percentis da
 distribuição assim obtida como limites do intervalo. Quando as observações não
-são independentes entre si --- caso das partidas de um mesmo clube ---, o sorteio
-é feito por clube, e não por partida, de modo a preservar a estrutura de
-dependência.
+são independentes entre si, como acontece com as partidas de um mesmo clube, o
+sorteio é feito por clube em vez de por partida. Assim a estrutura de
+dependência é preservada.
 
 \section{Modelagem}\label{sec:modelagem}
 
-A etapa de modelagem cumpre dois papéis distintos neste trabalho. O primeiro é
-explicativo: estimar a magnitude da vantagem de mando isolada da qualidade dos
-adversários enfrentados, o que as médias condicionais da seção anterior não
-permitem. O segundo é preditivo: verificar se essa representação do fenômeno
-sustenta previsões sobre partidas ainda não disputadas, submetida à comparação
-com modelos de aprendizado de máquina. As duas subseções seguintes descrevem,
-respectivamente, cada uma dessas frentes.
+A modelagem cumpre dois papéis neste trabalho. O primeiro é explicativo. Trata-se
+de medir a vantagem de mando separada da qualidade dos adversários enfrentados,
+o que as médias da seção anterior não permitem fazer. O segundo é preditivo.
+Trata-se de verificar se o modelo construído para explicar o fenômeno também
+acerta previsões sobre partidas que ainda não aconteceram, em comparação com
+modelos de aprendizado de máquina. As duas subseções a seguir tratam de cada uma
+dessas frentes.
 
 \subsection{Modelo de Poisson Bivariado}\label{sec:met-dixon-coles}
 
-Adotou-se o modelo de \citeonline{DixonColes1997}, especificado na
-Equação~\ref{eq:dixon-coles}, estimado por máxima verossimilhança. A
-identificabilidade dos parâmetros de ataque e defesa, determinados a menos de
-uma constante aditiva, foi assegurada pela imposição de média nula aos
-parâmetros de ataque.
+Adotou-se o modelo de \citeonline{DixonColes1997}, apresentado na
+Equação~\ref{eq:dixon-coles} e estimado por máxima verossimilhança. As forças de
+ataque e defesa só ficam determinadas depois que se fixa um ponto de referência,
+porque somar uma constante a todos os ataques e subtraí-la de todas as defesas
+produz exatamente as mesmas previsões. Esse ponto de referência foi fixado
+exigindo que a média dos parâmetros de ataque seja zero.
 
-O erro padrão do parâmetro de mando foi obtido pela curvatura da verossimilhança
-perfilada, isto é, reotimizando os demais parâmetros a cada deslocamento de
-$\gamma$. Essa escolha decorre de verificação empírica: a curvatura marginal,
-que mantém os demais parâmetros fixos, subestimou a incerteza em aproximadamente
-25\% em simulação controlada, em razão da correlação entre $\gamma$ e o termo de
-escala~$\mu$.
+O erro padrão do parâmetro de mando foi calculado pela verossimilhança
+perfilada. O procedimento consiste em deslocar $\gamma$ e, a cada deslocamento,
+reotimizar todos os demais parâmetros. A alternativa mais simples seria manter
+os demais parâmetros fixos, e foi essa a primeira escolha. Uma simulação
+controlada mostrou que ela subestimava a incerteza em cerca de 25\%, porque
+$\gamma$ e o termo de escala $\mu$ variam juntos. Daí a troca pelo procedimento
+mais custoso.
 
 Parte das perguntas do trabalho exige comparar o mando entre dois subconjuntos
-de partidas --- por exemplo, com e sem público --- dentro de um mesmo recorte.
-Ajustar um modelo independente para cada subconjunto não é viável quando um
-deles é pequeno: as 92 partidas sem público de 2019/20 não bastam para estimar
-as forças de ataque e defesa de vinte clubes.
+de partidas dentro de um mesmo recorte, como as partidas com e sem público.
+Ajustar um modelo separado para cada subconjunto não funciona quando um deles é
+pequeno. As 92 partidas sem público de 2019/20, por exemplo, não bastam para
+estimar as forças de ataque e defesa de vinte clubes.
 
 A solução adotada foi acrescentar um único parâmetro ao modelo. Em vez de um
 $\gamma$ fixo, o termo de mando passa a ser
 $\gamma + \delta \cdot \mathbb{1}[\text{condição}]$, em que
 $\mathbb{1}[\cdot]$ vale 1 nas partidas que satisfazem a condição e 0 nas
-demais. Assim, $\gamma$ mede o mando nas partidas de referência e $\delta$ mede
-quanto o mando se desloca nas demais. Todas as partidas contribuem para estimar
-as forças dos clubes, que são comuns aos dois subconjuntos, e apenas o
-deslocamento do mando é estimado separadamente. Um intervalo de confiança para
-$\delta$ que contenha o zero indica ausência de efeito detectável da condição
-sobre o mando.
+demais. Dessa forma, $\gamma$ mede o mando nas partidas de referência e $\delta$
+mede quanto o mando se desloca nas outras. Todas as partidas contribuem para
+estimar as forças dos clubes, que são as mesmas nos dois subconjuntos. Apenas o
+deslocamento do mando é estimado à parte. Quando o intervalo de confiança de
+$\delta$ contém o zero, não há efeito detectável da condição sobre o mando.
 
-A implementação foi desenvolvida neste trabalho, sem recurso a biblioteca
-específica de modelos de futebol. O vetor de parâmetros reúne os termos de
-ataque, os de defesa e os três parâmetros globais $\mu$, $\gamma$ e $\rho$. Como
-a restrição de média nula elimina um grau de liberdade do bloco de ataque, o
-recorte completo, com 34 clubes distintos, resulta em 70 parâmetros livres. A
-restrição não é imposta por penalização na função objetivo, mas estruturalmente:
-o último termo de ataque é reconstruído como o simétrico da soma dos demais no
-momento do desempacotamento do vetor, de modo que a região viável do otimizador
-já satisfaz a identificabilidade.
+A implementação foi desenvolvida neste trabalho, sem usar biblioteca específica
+de modelos de futebol. O vetor de parâmetros reúne os termos de ataque, os de
+defesa e os três parâmetros globais $\mu$, $\gamma$ e $\rho$. Como a exigência de
+média zero elimina um grau de liberdade do bloco de ataque, o recorte completo,
+com 34 clubes distintos, chega a 70 parâmetros livres. Essa exigência não é
+imposta por penalização na função objetivo. Ela é imposta pela própria estrutura
+do código: o último termo de ataque é reconstruído como o simétrico da soma dos
+demais no momento em que o vetor é lido. Assim, qualquer ponto que o otimizador
+visite já a satisfaz.
 
-A minimização da log-verossimilhança negativa emprega o algoritmo L-BFGS-B,
-disponível em \textit{SciPy}, com limites de caixa sobre $\rho$. Em um problema
-dessa dimensão o limite padrão de avaliações da função pode ser atingido antes
-da convergência; a rotina trata esse caso reiniciando a otimização a partir do
-último ponto alcançado, em vez de aceitar o resultado como final. A ausência de
-convergência após as tentativas previstas gera exceção, e não resultado
-silenciosamente incorreto.
+A minimização da log-verossimilhança negativa usa o algoritmo L-BFGS-B,
+disponível no \textit{SciPy}, com limites sobre $\rho$. Num problema desse
+tamanho, o otimizador pode esgotar o número de avaliações permitidas antes de
+convergir. A rotina trata esse caso reiniciando a otimização a partir do último
+ponto alcançado, em vez de aceitar o resultado como final. Se ainda assim não
+houver convergência, o programa interrompe a execução com erro, em vez de
+devolver um resultado silenciosamente incorreto.
 
 O cálculo do erro padrão por verossimilhança perfilada exige duas reotimizações
-adicionais por ajuste, custo incompatível com o laço de validação temporal, no
-qual o modelo é reestimado centenas de vezes. Mantêm-se, por isso, dois perfis
-de tolerância do otimizador: um estrito, aplicado às estimativas reportadas, e
-um relaxado, aplicado ao laço preditivo. A equivalência entre ambos foi
-verificada antes da adoção: a maior diferença observada entre as probabilidades
-previstas pelos dois perfis é de $1{,}2 \times 10^{-3}$.
+a cada ajuste. Esse custo é alto demais para o laço de validação temporal, no
+qual o modelo é reestimado centenas de vezes. Por isso existem dois perfis de
+tolerância do otimizador. O perfil estrito é usado nas estimativas apresentadas
+no trabalho e o perfil relaxado, no laço preditivo. Antes de adotar o perfil
+relaxado, comparou-se o resultado dos dois: a maior diferença encontrada entre
+as probabilidades previstas foi de $1{,}2 \times 10^{-3}$.
 
-A implementação foi validada por recuperação de parâmetro: partidas sintéticas
-foram geradas a partir do próprio modelo, com $\gamma$ conhecido, verificando-se
-se o procedimento de ajuste o recupera e se a cobertura dos intervalos de
-confiança corresponde ao nível nominal.
+A implementação foi validada por recuperação de parâmetro. Partidas sintéticas
+foram geradas pelo próprio modelo, com $\gamma$ conhecido. Verificou-se então se
+o procedimento de ajuste devolve esse valor e se os intervalos de confiança
+cobrem o valor verdadeiro na proporção esperada.
 
 \subsection{Modelos Preditivos}\label{sec:met-preditivo}
 
-A etapa preditiva teve como alvo o resultado da partida, em suas três categorias.
-Em conformidade com o exposto na Seção~\ref{sec:vazamento}, nenhuma estatística
-produzida durante a partida foi utilizada como variável explicativa. As variáveis
-empregadas utilizam exclusivamente informação disponível antes do apito inicial:
+A etapa preditiva teve como alvo o resultado da partida, em suas três
+categorias. Conforme exposto na Seção~\ref{sec:vazamento}, nenhuma estatística
+produzida durante a partida foi usada como variável explicativa. As variáveis
+empregadas usam apenas informação disponível antes do apito inicial:
 
 \begin{itemize}
   \item \textit{rating} Elo de cada equipe, calculado imediatamente antes da
@@ -543,27 +545,27 @@ empregadas utilizam exclusivamente informação disponível antes do apito inici
   \item regime de público da partida.
 \end{itemize}
 
-A ausência de vazamento foi verificada experimentalmente. O procedimento de teste
-altera o placar de uma partida situada no meio do conjunto, reconstrói todas as
-variáveis explicativas e exige que nenhuma variável daquela mesma partida se
-altere. Um segundo teste assegura que as variáveis das partidas subsequentes se
-alterem, de modo a impedir que o primeiro seja satisfeito trivialmente.
+A ausência de vazamento foi verificada experimentalmente. O procedimento de
+teste altera o placar de uma partida no meio do conjunto, reconstrói todas as
+variáveis explicativas e exige que nenhuma variável daquela mesma partida mude.
+Um segundo teste exige que as variáveis das partidas seguintes mudem, o que
+impede que o primeiro seja satisfeito de forma trivial.
 
-A validação adotada foi temporal. Para prever determinada temporada, o conjunto
-de treino compreende exclusivamente partidas anteriores a ela; dentro da
-temporada avaliada, o histórico é ampliado a cada bloco de dez partidas e todos
-os modelos são reajustados sobre ele. A uniformidade desse procedimento entre os
-modelos é deliberada: caso apenas um deles reestimasse parâmetros ao longo da
-temporada, a comparação mediria o protocolo de reajuste e não a qualidade dos
-modelos. A imputação de valores ausentes utiliza estatísticas calculadas
-exclusivamente sobre o conjunto de treino de cada dobra.
+A validação adotada foi temporal. Para prever uma temporada, o conjunto de
+treino contém apenas partidas anteriores a ela. Dentro da temporada avaliada, o
+histórico é ampliado a cada bloco de dez partidas, e todos os modelos são
+reajustados sobre esse histórico. A uniformidade desse procedimento é
+deliberada. Se apenas um dos modelos reestimasse parâmetros ao longo da
+temporada, a comparação mediria o protocolo de reajuste em vez da qualidade dos
+modelos. A imputação de valores ausentes usa estatísticas calculadas somente
+sobre o conjunto de treino de cada janela.
 
 A Figura~\ref{fig:walkforward} representa o protocolo. Cada linha corresponde a
-uma temporada avaliada; a janela de treino acumula todas as temporadas
-anteriores e nunca inclui informação posterior à partida prevista. O painel
-inferior detalha o mecanismo de reajuste dentro da temporada de teste. São oito
-temporadas avaliadas, 3.040 partidas previstas e 38 reajustes por temporada para
-cada modelo.
+uma temporada avaliada. A janela de treino acumula todas as temporadas
+anteriores e nunca inclui informação posterior à partida prevista. O painel de
+baixo detalha o reajuste dentro da temporada de teste. São oito temporadas
+avaliadas, 3.040 partidas previstas e 38 reajustes por temporada para cada
+modelo.
 
 \begin{figure}[htb]
   \centering
@@ -573,10 +575,18 @@ cada modelo.
   \fonte{Autoria própria (2026)}
 \end{figure}
 
-Foram avaliados cinco modelos: dois de referência, correspondentes à frequência
-histórica dos resultados e à heurística de prever sempre a vitória do mandante; o
-modelo de Poisson bivariado descrito na seção anterior, empregado como preditor;
-uma regressão logística multinomial; e um modelo de \textit{gradient boosting}. As
-métricas adotadas foram o \textit{log-loss} e o escore de Brier como principais,
-a acurácia como métrica secundária e a curva de calibração como análise
+Foram avaliados cinco modelos:
+
+\begin{itemize}
+  \item a frequência histórica dos resultados, usada como referência;
+  \item a heurística de prever sempre a vitória do mandante, também usada como
+    referência;
+  \item o modelo de Poisson bivariado descrito na subseção anterior, aqui
+    empregado como preditor;
+  \item uma regressão logística multinomial;
+  \item um modelo de \textit{gradient boosting}.
+\end{itemize}
+
+As métricas principais foram o \textit{log-loss} e o escore de Brier. A acurácia
+entrou como métrica secundária e a curva de calibração, como análise
 complementar.
