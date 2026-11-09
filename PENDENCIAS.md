@@ -50,16 +50,19 @@ O rótulo `tab:testes` estava definido duas vezes, na metodologia e nos
 resultados, e a referência da Seção 3.1.4 apontava para a tabela errada. O
 rótulo da metodologia passou a ser `tab:testes-automatizados`.
 
+### Fundamentação teórica da área de Computação
+
+Escrita como Seção 2.3, "Engenharia de Software para Pesquisa Reprodutível", com
+três subseções e quatro referências novas, todas conferidas:
+
+* reprodutibilidade como requisito (Sandve et al., 2013; Wilson et al., 2014);
+* pipeline de dados e dívida técnica (Sculley et al., 2015);
+* verificação de software científico (Kanewala e Bieman, 2014).
+
+Cada subseção aponta para a decisão correspondente do Capítulo 3.
+
 ---
 
 ## Em aberto
 
-### Fundamentação teórica da área de Computação
-
-O Capítulo 2 não tem seção de fundamentos de Computação. O conteúdo
-computacional está todo no Capítulo 3, que descreve o que foi feito, não o que a
-literatura diz. Falta base para pipeline de dados, reprodutibilidade em pesquisa
-computacional, teste automatizado de software científico e aprendizado
-supervisionado.
-
-Pendente de decisão: vale combinar com o orientador antes de escrever.
+Nada no momento.

@@ -5,9 +5,10 @@
 Este capítulo apresenta a base teórica necessária para a compreensão dos
 conceitos discutidos ao longo do trabalho. Inicialmente, aborda-se o fenômeno do
 Fator Casa no contexto esportivo e suas variáveis determinantes. Em seguida,
-detalha-se a metodologia CRISP-DM, utilizada como guia estrutural da pesquisa.
-Por fim, apresentam-se os modelos estatísticos aplicados a resultados de futebol
-e os critérios de avaliação de previsões probabilísticas.
+detalha-se a metodologia CRISP-DM, utilizada como guia estrutural da pesquisa, e
+as práticas de engenharia de software que sustentam a reprodutibilidade de uma
+análise computacional. Por fim, apresentam-se os modelos estatísticos aplicados a
+resultados de futebol e os critérios de avaliação de previsões probabilísticas.
 
 \section{O Fenômeno do Fator Casa}\label{sec:fator-casa}
 
@@ -127,6 +128,86 @@ frequentemente exigem o retorno a etapas anteriores. Esse aspecto é
 particularmente relevante neste trabalho, no qual a fase de modelagem revelou
 limitações na preparação dos dados que exigiram revisão retroativa, conforme
 descrito no Capítulo~\ref{cap:metodologia}.
+
+\section{Engenharia de Software para Pesquisa Reprodutível}\label{sec:eng-software}
+
+O CRISP-DM descreve quais fases um projeto de mineração de dados percorre, mas
+não diz como escrever o programa que as executa. Essa lacuna não é um detalhe de
+implementação. Em um trabalho quantitativo, o código é o instrumento de medida, e
+um resultado só vale o quanto vale o programa que o produziu. Esta seção reúne as
+práticas de engenharia de software que fundamentam as decisões técnicas descritas
+no Capítulo~\ref{cap:metodologia}.
+
+\subsection{Reprodutibilidade como Requisito}\label{sec:reprodutibilidade}
+
+Reprodutibilidade, no contexto computacional, significa que outra pessoa, de
+posse do código e dos dados, obtém os mesmos números. \citeonline{Sandve2013}
+formulam o problema em dez regras práticas, das quais quatro orientam
+diretamente este trabalho: registrar como cada resultado foi produzido, evitar
+manipulação manual de dados, guardar a versão exata de cada programa externo
+utilizado e manter o código sob controle de versão.
+
+A segunda regra merece destaque por ser a mais violada. Uma planilha editada à
+mão, um valor copiado de uma saída de terminal para o texto ou um filtro
+aplicado uma única vez em uma sessão interativa são operações que não deixam
+registro. O resultado continua correto, mas deixa de ser verificável, porque
+ninguém, nem o próprio autor meses depois, consegue refazer o caminho.
+
+\citeonline{Wilson2014} chegam a recomendações convergentes a partir da
+experiência de ensino de computação a pesquisadores. Entre as práticas que
+listam estão escrever programas para pessoas e não apenas para computadores,
+automatizar tarefas repetitivas, usar controle de versão desde o início e
+documentar a intenção do código em vez de sua mecânica. Os autores observam que
+o pesquisador que adota essas práticas escreve software melhor, e não apenas mais
+organizado, porque erros passam a ser encontrados em vez de permanecerem
+invisíveis.
+
+\subsection{Pipeline de Dados e Dívida Técnica}\label{sec:divida-tecnica}
+
+Sistemas que aprendem a partir de dados raramente são, em volume de código,
+sistemas de aprendizado. \citeonline{Sculley2015} mostram que o modelo
+propriamente dito ocupa uma fração pequena de uma solução real, e que a maior
+parte do código trata de coleta, verificação, extração de atributos, gerência de
+configuração e monitoramento. Os autores denominam dívida técnica oculta ao
+custo que essa camada acumula quando é tratada como código acessório.
+
+Entre os padrões problemáticos que descrevem está o que chamam de emaranhado de
+pipelines, situação em que as etapas de preparação crescem por acréscimo, sem
+fronteiras definidas, até que nenhuma delas possa ser alterada ou testada
+isoladamente. O trabalho conduzido em um único arquivo interativo, no qual
+coleta, transformação e análise se misturam, é a forma que esse emaranhado
+assume em contexto acadêmico.
+
+A resposta recomendada é separar as etapas por fronteiras explícitas, de modo que
+cada uma possa ser verificada por conta própria e que a saída de uma seja a
+entrada bem definida da seguinte. É essa a organização adotada na
+Seção~\ref{sec:camadas}.
+
+\subsection{Verificação de Software Científico}\label{sec:teste-cientifico}
+
+Testar software científico apresenta uma dificuldade que software comercial
+raramente enfrenta. \citeonline{Kanewala2014}, em revisão sistemática da
+literatura da área, identificam o chamado problema do oráculo: quando o programa
+é escrito justamente para calcular algo que ninguém conhece de antemão, não
+existe resposta esperada contra a qual comparar a saída. Afirmar que um
+estimador está correto exige, portanto, estratégia diferente da simples
+comparação com valores tabelados.
+
+Os autores catalogam duas respostas recorrentes na literatura, ambas empregadas
+neste trabalho. A primeira é o uso de dados sintéticos com resposta conhecida.
+Em vez de testar o estimador contra dados reais, geram-se observações a partir
+do próprio modelo, com parâmetros escolhidos, e verifica-se se o procedimento os
+recupera. A Seção~\ref{sec:met-dixon-coles} descreve a aplicação dessa técnica
+ao parâmetro de mando, e foi ela que revelou uma falha no cálculo original do
+erro padrão.
+
+A segunda é o teste de propriedades, ou relações metamórficas, em que não se
+verifica o valor da saída, mas uma relação que ela deve obedecer quando a
+entrada é modificada de forma controlada. A trava contra vazamento descrita na
+Seção~\ref{sec:met-preditivo} pertence a essa categoria. Ela não afirma qual
+deveria ser o valor de cada variável explicativa. Afirma apenas que alterar o
+placar de uma partida não pode alterar as variáveis daquela mesma partida, o que
+é uma propriedade verificável sem conhecer a resposta certa.
 
 \section{Modelos Estatísticos para Resultados de Futebol}\label{sec:modelos-futebol}
 
