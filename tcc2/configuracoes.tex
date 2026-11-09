@@ -63,12 +63,10 @@
   breakatwhitespace=true,
   columns=fullflexible,
   keepspaces=true,
-  literate=
-    {á}{{\'a}}1 {à}{{\`a}}1 {ã}{{\~a}}1 {â}{{\^a}}1
-    {é}{{\'e}}1 {ê}{{\^e}}1 {í}{{\'i}}1
-    {ó}{{\'o}}1 {õ}{{\~o}}1 {ô}{{\^o}}1
-    {ú}{{\'u}}1 {ç}{{\c c}}1
-    {Á}{{\'A}}1 {É}{{\'E}}1 {Í}{{\'I}}1 {Ó}{{\'O}}1 {Ú}{{\'U}}1 {Ç}{{\c C}}1,
+  % As listagens são escritas sem acento, de propósito. Sem `literate` e com
+  % `extendedchars` desligado, o pacote nunca precisa interpretar byte alto,
+  % o que evita divergência entre versões do TeX Live.
+  extendedchars=false,
 }
 
 
