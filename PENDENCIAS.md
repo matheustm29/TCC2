@@ -1,32 +1,65 @@
 # Pendências da revisão
 
-Observações anotadas, ainda sem decisão sobre o que fazer com cada uma.
+Observações do orientador e notas próprias, com o estado de cada uma.
 
-Registrado em 09/11/2026.
+Atualizado em 09/11/2026.
 
 ---
 
-## 1. Trocar a imagem do CRISP-DM
+## Resolvidas
+
+### Imagem do CRISP-DM
 
 Referência indicada: <https://www.dataviking.com.br/post/crisp-dm-e-util-mesmo>
 
-Afeta a Figura 1, na Seção 2.2. A figura atual foi desenhada por código em
-`src/tcc/visualizacao.py`, na função `crisp_dm()`, a partir da descrição de
-Chapman et al. (2000).
+O orientador observou que a seta azul de recomeço deveria envolver todas as
+fases, e não apenas o retorno ao entendimento do negócio, para dar o caráter
+incremental de todo o processo. A Figura 1 foi redesenhada com anel externo em
+torno das seis fases, no sentido do fluxo. O texto da Seção 2.2 passou a
+explicar o anel.
 
-## 2. Números do texto iguais aos da tabela, com referência à origem
+### Números do texto com referência à origem
 
-Cada valor citado no corpo do texto deve coincidir com o da tabela ou figura
-correspondente e indicar de onde vem, para que o leitor localize o dado.
+Os 18 parágrafos do Capítulo 4 que citavam valores sem dizer de onde vinham
+agora nomeiam a tabela ou a figura correspondente.
 
-Relacionado ao comentário já atendido sobre colocar a temporada entre
-parênteses junto do valor, na Seção 4.2.
+### Trechos de código
 
-## 3. Incluir trechos de código
+Três listagens no Capítulo 3, no float `sourcecode` do próprio modelo:
 
-Ainda sem definição de quais trechos, de qual extensão e em que capítulo.
+* Listagem 1, encadeamento das etapas em `executar_analise.py`;
+* Listagem 2, teste de ausência de vazamento;
+* Listagem 3, conversão de datas.
 
-## 4. Explicar o pipeline com imagens do código
+### Pipeline explicado com código
 
-Ilustrar o processo de processamento com imagens do próprio código, em vez de
-apenas com o diagrama de blocos atual (Figura 2, Seção 3.1.1).
+A Listagem 1 acompanha a Figura 2 na Seção 3.1.1. O diagrama mostra as camadas e
+a listagem mostra a chamada de cada etapa.
+
+### Exemplo concreto de caso de teste
+
+Pedido do orientador na Seção 3.1.4. Atendido pela Listagem 2.
+
+### "até a banca"
+
+Trocado por "na apresentação do TCC 1", conforme confirmado.
+
+### Referência cruzada da tabela de testes
+
+O rótulo `tab:testes` estava definido duas vezes, na metodologia e nos
+resultados, e a referência da Seção 3.1.4 apontava para a tabela errada. O
+rótulo da metodologia passou a ser `tab:testes-automatizados`.
+
+---
+
+## Em aberto
+
+### Fundamentação teórica da área de Computação
+
+O Capítulo 2 não tem seção de fundamentos de Computação. O conteúdo
+computacional está todo no Capítulo 3, que descreve o que foi feito, não o que a
+literatura diz. Falta base para pipeline de dados, reprodutibilidade em pesquisa
+computacional, teste automatizado de software científico e aprendizado
+supervisionado.
+
+Pendente de decisão: vale combinar com o orientador antes de escrever.

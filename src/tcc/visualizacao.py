@@ -545,44 +545,44 @@ def validacao_temporal(temporadas_teste=None, por_temporada: int = 380,
 
 
 def crisp_dm() -> plt.Figure:
-    """As seis fases do CRISP-DM e o caráter iterativo do processo.
+    """As seis fases do CRISP-DM, o núcleo de dados e o ciclo externo.
 
-    Desenhada a partir da descrição em Chapman et al. (2000): fases dispostas em
-    ciclo, com retornos entre pares de fases vizinhas e um laço externo que
-    recomeça o processo.
+    Desenhada a partir da descrição em Chapman et al. (2000). O anel externo
+    envolve todas as fases, e não apenas o retorno ao entendimento do negócio:
+    é o processo inteiro que se repete a cada iteração.
     """
+    import numpy as np
     from matplotlib.patches import Circle, FancyArrowPatch
 
-    fig, ax = plt.subplots(figsize=(6.6, 5.4))
-    ax.set_xlim(0, 1); ax.set_ylim(0, 1)
+    fig, ax = plt.subplots(figsize=(6.6, 6.0))
+    ax.set_xlim(-0.02, 1.02); ax.set_ylim(-0.02, 1.02)
     ax.axis("off"); ax.grid(False)
 
     fases = {
-        "negocio":    (0.295, 0.845, "Entendimento\ndo negócio"),
-        "dados":      (0.705, 0.845, "Entendimento\ndos dados"),
-        "preparacao": (0.880, 0.500, "Preparação\ndos dados"),
-        "modelagem":  (0.705, 0.155, "Modelagem"),
-        "avaliacao":  (0.295, 0.155, "Avaliação"),
-        "implantacao":(0.120, 0.500, "Implantação"),
+        "negocio":     (0.335, 0.820, "Entendimento\ndo negócio"),
+        "dados":       (0.665, 0.820, "Entendimento\ndos dados"),
+        "preparacao":  (0.825, 0.500, "Preparação\ndos dados"),
+        "modelagem":   (0.665, 0.180, "Modelagem"),
+        "avaliacao":   (0.335, 0.180, "Avaliação"),
+        "implantacao": (0.175, 0.500, "Implantação"),
     }
-    w, h = 0.235, 0.145
-    for chave, (x, y, rotulo) in fases.items():
+    w, h = 0.190, 0.120
+    for x, y, rotulo in fases.values():
         _caixa(ax, x - w / 2, y - h / 2, w, h, rotulo,
-               cor="#eef1f6", negrito=True, tamanho=9, raio=0.03)
+               cor="#eef1f6", negrito=True, tamanho=8.5, raio=0.03)
 
     # núcleo: os dados, que todas as fases consultam
-    ax.add_patch(Circle((0.5, 0.5), 0.105, facecolor=SUPERFICIE,
+    ax.add_patch(Circle((0.5, 0.5), 0.098, facecolor=SUPERFICIE,
                         edgecolor=EIXO, linewidth=1.0, zorder=2))
     ax.text(0.5, 0.5, "Dados", ha="center", va="center", zorder=3,
             fontsize=10, fontweight="bold", color=TINTA_SECUNDARIA)
 
-    def liga(a, b, duplo=False, recuo=0.012):
+    def liga(a, b, duplo=False):
         (x1, y1, _), (x2, y2, _) = fases[a], fases[b]
-        estilo = "<|-|>" if duplo else "-|>"
         ax.add_patch(FancyArrowPatch(
-            (x1, y1), (x2, y2), arrowstyle=estilo, mutation_scale=11,
-            color=TINTA_SECUNDARIA, linewidth=1.2, zorder=1,
-            shrinkA=46, shrinkB=46,
+            (x1, y1), (x2, y2), arrowstyle="<|-|>" if duplo else "-|>",
+            mutation_scale=10, color=TINTA_SECUNDARIA, linewidth=1.1,
+            zorder=1, shrinkA=40, shrinkB=40,
         ))
 
     # os retornos entre fases vizinhas são o que caracteriza o modelo
@@ -593,14 +593,20 @@ def crisp_dm() -> plt.Figure:
     liga("avaliacao", "implantacao")
     liga("avaliacao", "negocio")
 
-    # laço externo: concluída a implantação, o processo recomeça
-    ax.add_patch(FancyArrowPatch(
-        (0.120, 0.578), (0.235, 0.770),
-        connectionstyle="arc3,rad=-0.45", arrowstyle="-|>", mutation_scale=12,
-        color=AZUL, linewidth=1.4, zorder=1,
-    ))
-    ax.text(0.010, 0.648, "o processo\nrecomeça", fontsize=8,
-            color=AZUL, ha="left", va="center", linespacing=1.4)
+    # anel externo: o processo inteiro se repete, no sentido das fases
+    raio = 0.470
+    for inicio in (100, 10, -80, -170):
+        angulos = np.radians(np.linspace(inicio, inicio - 70, 90))
+        ax.plot(0.5 + raio * np.cos(angulos), 0.5 + raio * np.sin(angulos),
+                color=AZUL, linewidth=1.6, solid_capstyle="round", zorder=1)
+        a1, a2 = np.radians(inicio - 69), np.radians(inicio - 70)
+        ax.annotate(
+            "", xytext=(0.5 + raio * np.cos(a1), 0.5 + raio * np.sin(a1)),
+            xy=(0.5 + raio * np.cos(a2), 0.5 + raio * np.sin(a2)),
+            arrowprops=dict(arrowstyle="-|>", color=AZUL, linewidth=1.6,
+                            shrinkA=0, shrinkB=0),
+            zorder=1,
+        )
 
-    ax.set_title("As seis fases do CRISP-DM", pad=10)
+    ax.set_title("As seis fases do CRISP-DM", pad=12)
     return fig

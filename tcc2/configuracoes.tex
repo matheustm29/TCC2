@@ -37,6 +37,40 @@
 \usepackage{xspace}
 \usepackage{xcolor}
 
+%% Listagens de código. O float `sourcecode` (\sourcecodename = "Listagem") já
+%% vem definido pela classe; aqui só se configura a aparência do corpo.
+\usepackage{listings}
+\definecolor{corComentario}{HTML}{5A6670}
+\definecolor{corPalavra}{HTML}{2A78D6}
+\definecolor{corTexto}{HTML}{EB6834}
+\definecolor{corFundoCodigo}{HTML}{F6F5F1}
+\lstset{
+  language=Python,
+  basicstyle=\ttfamily\footnotesize,
+  keywordstyle=\color{corPalavra}\bfseries,
+  commentstyle=\color{corComentario}\itshape,
+  stringstyle=\color{corTexto},
+  numbers=left,
+  numberstyle=\ttfamily\scriptsize\color{corComentario},
+  numbersep=10pt,
+  backgroundcolor=\color{corFundoCodigo},
+  frame=single,
+  rulecolor=\color{corComentario!40},
+  framesep=6pt,
+  xleftmargin=20pt,
+  showstringspaces=false,
+  breaklines=true,
+  breakatwhitespace=true,
+  columns=fullflexible,
+  keepspaces=true,
+  literate=
+    {á}{{\'a}}1 {à}{{\`a}}1 {ã}{{\~a}}1 {â}{{\^a}}1
+    {é}{{\'e}}1 {ê}{{\^e}}1 {í}{{\'i}}1
+    {ó}{{\'o}}1 {õ}{{\~o}}1 {ô}{{\^o}}1
+    {ú}{{\'u}}1 {ç}{{\c c}}1
+    {Á}{{\'A}}1 {É}{{\'E}}1 {Í}{{\'I}}1 {Ó}{{\'O}}1 {Ú}{{\'U}}1 {Ç}{{\c C}}1,
+}
+
 
 % luiz: primeira letra maiúscula
 % solução 1

@@ -12,8 +12,8 @@ Seção~\ref{sec:crisp-dm}.
 
 A etapa anterior desta pesquisa foi conduzida integralmente em um
 \textit{notebook} único, no qual coleta, tratamento, cálculo e redação ocupavam o
-mesmo arquivo. Essa organização tornou possível um erro de agregação que
-permaneceu sem detecção até a banca, porque uma célula de \textit{notebook} não
+mesmo arquivo. Essa organização tornou possível um erro de agregação que só foi
+detectado na apresentação do TCC~1, porque uma célula de \textit{notebook} não
 admite verificação automatizada. A reformulação descrita nesta seção parte desse
 diagnóstico: o processamento foi reorganizado como um programa, com fronteiras
 explícitas entre as etapas, e cada procedimento de cálculo passou a ser coberto
@@ -35,6 +35,41 @@ Figura~\ref{fig:arquitetura} apresenta essa organização.
   \includegraphics[width=0.82\textwidth]{./figuras/arquitetura_pipeline.pdf}
   \fonte{Autoria própria (2026)}
 \end{figure}
+
+A Listagem~\ref{lst:pipeline} mostra o encadeamento no ponto de entrada da
+análise. Cada etapa recebe o resultado da anterior, e as saídas são gravadas em
+disco nos formatos que o texto consome.
+
+\begin{sourcecode}[htb]
+  \caption{Encadeamento das etapas em \texttt{scripts/executar\_analise.py}.}
+  \label{lst:pipeline}
+\begin{lstlisting}
+# 1. Coleta: baixa uma vez, confere o SHA-256 e falha alto na divergencia
+bruto = coleta.obter_bruto(config.TEMPORADAS)
+
+# 2. Preparacao: datas, variaveis derivadas, formato longo, classificacao
+df = preparacao.preparar(bruto)
+longo = preparacao.formato_longo(df)
+tabela = preparacao.tabela_classificacao(df)
+longo_pos = preparacao.anexar_posicao(longo, tabela)
+
+# 3. Testes de hipotese sobre o conjunto preparado
+resultados = [
+    estatistica.vantagem_mandante_binomial(df),
+    estatistica.diferenca_pontos_pareada(df),
+]
+
+# 4. Recortes do estudo
+por_faixa = analise.fator_casa_por_faixa(longo_pos)
+publico = analise.contraste_publico(longo)
+
+# 5. Saida: tudo que o LaTeX le sai daqui, nada e copiado a mao
+_salvar_tabela(por_faixa, "fator_casa_por_faixa")
+visualizacao.salvar(visualizacao.fator_casa_por_faixa(por_faixa),
+                    "fator_casa_por_faixa")
+\end{lstlisting}
+  \fonte{Autoria própria (2026)}
+\end{sourcecode}
 
 O módulo \texttt{config.py} concentra as constantes do estudo, como o recorte
 temporal, as janelas de datas dos regimes de público, os limiares de
@@ -140,14 +175,14 @@ Seção~\ref{sec:met-dixon-coles}.
 \subsection{Verificação Automatizada e Reprodutibilidade}\label{sec:verificacao}
 
 O código é acompanhado de uma suíte de 81 testes automatizados, distribuídos por
-módulo conforme a Tabela~\ref{tab:testes}. Os testes não se limitam a verificar
+módulo conforme a Tabela~\ref{tab:testes-automatizados}. Os testes não se limitam a verificar
 que as funções executam sem erro: parte deles constrói cenários sintéticos com
 resposta conhecida e exige que o procedimento a recupere.
 
 \begin{table}[htb]
   \centering
   \caption{Distribuição dos testes automatizados por módulo.}
-  \label{tab:testes}
+  \label{tab:testes-automatizados}
   \small
   \begin{tabular}{@{}lrp{6.6cm}@{}}
     \toprule
@@ -177,6 +212,44 @@ formulação executável da ausência de vazamento temporal, discutida na
 Seção~\ref{sec:vazamento}. O segundo, no módulo de modelos, gera partidas
 sintéticas a partir de parâmetros conhecidos e verifica se a estimação os
 recupera dentro do intervalo declarado.
+
+A Listagem~\ref{lst:vazamento} apresenta o primeiro deles na forma em que está
+implementado. O teste reconstrói todas as variáveis explicativas a partir de uma
+base em que apenas o placar de uma partida foi alterado e compara, variável por
+variável, os valores daquela mesma partida. Qualquer diferença indica que alguma
+informação do resultado vazou para a entrada do modelo.
+
+\begin{sourcecode}[htb]
+  \caption{Teste de ausência de vazamento, em
+    \texttt{tests/test\_preditivo.py}.}
+  \label{lst:vazamento}
+\begin{lstlisting}
+def test_features_nao_usam_o_resultado_da_propria_partida():
+    bruto = _liga_longa()
+    original = features_de(bruto)
+
+    # Escolhe uma partida no meio da base e inverte o placar
+    posicao = len(bruto) // 2
+    alterado = bruto.copy()
+    alterado.loc[posicao, ["FTHG", "FTAG"]] = [7, 0]
+    alterado.loc[posicao, "FTR"] = "H"
+    modificado = features_de(alterado)
+
+    alvo_original = _linha_da_partida(original, alterado, posicao)
+    alvo_modificado = _linha_da_partida(modificado, alterado, posicao)
+
+    for feature in preditivo.FEATURES:
+        assert alvo_original.iloc[0][feature] == pytest.approx(
+            alvo_modificado.iloc[0][feature], abs=1e-9
+        ), f"VAZAMENTO: '{feature}' mudou ao alterar o placar da partida"
+\end{lstlisting}
+  \fonte{Autoria própria (2026)}
+\end{sourcecode}
+
+O teste da Listagem~\ref{lst:vazamento} passaria por acidente caso todas as
+variáveis fossem constantes. Por isso existe o segundo teste citado acima, que
+exige o oposto nas partidas posteriores: alterado o placar da partida $n$, o
+\textit{rating} Elo das partidas seguintes tem de mudar.
 
 A reprodutibilidade apoia-se em três mecanismos. O primeiro é o armazenamento
 local dos arquivos originais com resumo criptográfico, descrito na
@@ -314,6 +387,38 @@ Tabela~\ref{tab:defeitos} os sintetiza.
   \end{tabular}
   \fonte{Autoria própria (2026)}
 \end{table}
+
+A Listagem~\ref{lst:datas} apresenta o trecho que resolve o primeiro defeito da
+Tabela~\ref{tab:defeitos}. Cada formato é aplicado apenas às linhas que casam
+com ele, e a conversão final ocorre uma única vez, de modo que o tipo da coluna
+não dependa de qual formato apareceu primeiro.
+
+\begin{sourcecode}[htb]
+  \caption{Conversão de datas em \texttt{src/tcc/preparacao.py}.}
+  \label{lst:datas}
+\begin{lstlisting}
+FORMATOS_DE_DATA = (
+    (r"\d{4}-\d{2}-\d{2}", "%Y-%m-%d"),   # espelho no GitHub
+    (r"\d{2}/\d{2}/\d{4}", "%d/%m/%Y"),   # arquivos recentes do portal
+    (r"\d{2}/\d{2}/\d{2}", "%d/%m/%y"),   # arquivos antigos do portal
+)
+
+def converter_datas(datas):
+    texto = datas.astype(str).str.strip()
+    iso = pd.Series(pd.NA, index=datas.index, dtype="object")
+    pendentes = pd.Series(True, index=datas.index)
+
+    for padrao, formato in FORMATOS_DE_DATA:
+        alvo = pendentes & texto.str.fullmatch(padrao)
+        if alvo.any():
+            iso[alvo] = (pd.to_datetime(texto[alvo], format=formato)
+                           .dt.strftime("%Y-%m-%d"))
+            pendentes &= ~alvo
+
+    return pd.to_datetime(iso, format="%Y-%m-%d", errors="coerce")
+\end{lstlisting}
+  \fonte{Autoria própria (2026)}
+\end{sourcecode}
 
 A estes somam-se verificações estruturais executadas a cada processamento: a
 contagem de partidas por temporada, a exigência de que cada clube dispute
