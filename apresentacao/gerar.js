@@ -160,7 +160,7 @@ s.addText([
 s.addText("Campus Cornélio Procópio · 2026", {
   isTextBox: true, x: X, y: 5.74, w: 9.3, h: 0.34, margin: 0,
   fontSize: 13, color: SUAVE, objectName: "capa-local" });
-s.addNotes("Bom dia. Vou apresentar a análise do Fator Casa na Premier League, cobrindo 11 temporadas e 4.180 partidas.");
+s.addNotes("Bom dia. Meu nome é Matheus Ferreira Alphonse dos Anjos, sou aluno de Engenharia de Computação aqui no câmpus Cornélio Procópio, e vou apresentar meu trabalho de conclusão de curso, orientado pelo professor Francisco Pereira Junior.\n\nO tema é o Fator Casa na Premier League. Aquela ideia que todo torcedor conhece, de que jogar em casa dá vantagem. A pergunta que eu quis responder é se isso ainda se sustenta nos números, e por quê. O recorte são onze temporadas e 4.180 partidas.");
 
 // ═══════════════════════ 2. Roteiro ═══════════════════════
 s = pres.addSlide({ masterName: "CONTEUDO", sectionTitle: "Abertura" });
@@ -185,7 +185,7 @@ roteiro.forEach(([t, d], i) => {
   s.addText(d, { isTextBox: true, x: X + 0.78, y: y + 0.26, w: 7.6, h: 0.3, margin: 0,
     fontSize: 13.5, color: CINZA, valign: "middle", objectName: `rot-d-${i}` });
 });
-s.addNotes("Cinco blocos. A parte central são os resultados e a modelagem.");
+s.addNotes("A apresentação tem cinco blocos.\n\nComeço pelo contexto e pelo problema. Depois mostro como o trabalho foi construído, que é a parte de método e implementação. O miolo são os resultados descritivos e a modelagem, que é onde estão os achados. E fecho com as conclusões, as limitações e o que fica para continuar.");
 
 // ═══════════════════════ 3. O fenômeno ═══════════════════════
 pres.addSection({ title: "Contexto" });
@@ -204,7 +204,7 @@ mec.forEach(([t, d], i) => {
   cartao(s, { x: X + (i % 2) * 5.5, y: 2.4 + Math.floor(i / 2) * 1.85,
               w: 5.25, h: 1.62, titulo: t, corpo: d, numero: i + 1 });
 });
-s.addNotes("Cada mecanismo deixa uma assinatura empírica diferente. Arbitragem aparece em cartões; familiaridade e logística, em volume ofensivo. Isso vai permitir separá-los mais adiante.");
+s.addNotes("O Fator Casa é documentado na literatura desde pelo menos 1992, com Courneya e Carron. A definição é simples: equipes mandantes obtêm, de forma consistente, resultados melhores do que as visitantes.\n\nO que não é simples é o porquê. A literatura aponta quatro mecanismos. O apoio da torcida, que motiva o mandante e pressiona o visitante. A familiaridade com o ambiente: o gramado, as dimensões do campo, o clima. O desgaste da viagem para quem joga fora. E o viés de arbitragem, a ideia de que o árbitro é influenciado pela pressão do público.\n\nGuardem esses quatro, porque eles não são intercambiáveis. Cada um deixa uma marca diferente nos dados. Arbitragem aparece em cartões. Familiaridade e logística aparecem em volume de jogo. É justamente isso que vai permitir separá-los mais adiante.");
 
 // ═══════════════════════ 4. Problema e objetivos ═══════════════════════
 s = pres.addSlide({ masterName: "CONTEUDO", sectionTitle: "Contexto" });
@@ -224,7 +224,7 @@ lista(s, [
   "Avaliar o papel do público, distinguindo-o de outras mudanças do período",
   "Estimar o mando por modelo que controle a força do adversário e avaliar modelos preditivos",
 ], { x: X, y: 3.66, w: W, h: 2.5, tamanho: 16 });
-s.addNotes("A pergunta tem duas partes: a magnitude e os mecanismos. O quinto objetivo é o que entrou agora, no TCC 2.");
+s.addNotes("A pergunta central tem duas partes: quanto vale o mando de campo hoje, e quais desses mecanismos realmente o sustentam.\n\nPara responder, defini cinco objetivos. Quantificar a magnitude, mas com intervalo de confiança e tamanho de efeito, não só p-valor. Verificar se o fenômeno é igual para todos os clubes. Olhar a evolução no tempo. Avaliar o papel do público, separando-o das outras coisas que mudaram no mesmo período.\n\nE o quinto, que é o que entrou nesta etapa: estimar o mando com um modelo que controle a força do adversário, e avaliar modelos preditivos.");
 
 // ═══════════════════════ 5. Método e dados ═══════════════════════
 pres.addSection({ title: "Método" });
@@ -252,7 +252,7 @@ fases.forEach((f, i) => {
 s.addText("As duas últimas fases são a contribuição desta etapa", {
   isTextBox: true, x: X, y: 5.74, w: W, h: 0.3, margin: 0,
   fontSize: 12, italic: true, color: SUAVE, objectName: "fases-nota" });
-s.addNotes("O TCC 1 cobriu as três primeiras fases. Modelagem e Avaliação entraram agora.");
+s.addNotes("O trabalho segue o CRISP-DM, com a análise feita em Python.\n\nOs dados vêm do portal Football-Data.co.uk: são 4.180 partidas, onze temporadas, de 2015/16 a 2025/26, com 22 variáveis por partida.\n\nNo TCC 1 eu cobri as três primeiras fases do CRISP-DM. Modelagem e Avaliação são a contribuição desta etapa.\n\nE uma observação sobre o número da direita, os 81 testes automatizados. Eu volto nele no próximo slide, porque foi a mudança mais importante entre as duas etapas.");
 // ═══════════════════════ 6. A solução computacional ═══════════════════════
 s = pres.addSlide({ masterName: "CONTEUDO", sectionTitle: "Método" });
 titulo(s, "A solução computacional em camadas");
@@ -277,7 +277,7 @@ rigor.forEach(([t, d], i) => {
 s.addText("Nenhum número desta apresentação foi copiado à mão: todos saem de tabelas e figuras geradas por código.",
   { isTextBox: true, x: X, y: 6.4, w: W, h: 0.34, margin: 0,
     fontSize: 12.5, italic: true, color: SUAVE, objectName: "arq-nota" });
-s.addNotes("Esse slide responde à pergunta do que foi feito de Computação. O diagrama é a Figura 2 da monografia. A quebra de série é achado metodológico: sem ela, o estudo de caso dos estádios reportaria uma queda que seria artefato da planilha.");
+s.addNotes("O TCC 1 era um notebook único: coleta, tratamento, cálculo e texto no mesmo arquivo. Isso tornou possível um erro que eu só descobri na apresentação, e que eu mostro daqui a pouco. A reformulação partiu desse diagnóstico.\n\nHoje o processamento é um pacote Python de sete módulos, em camadas, como vocês veem no diagrama. Cada camada consome a anterior e entrega para a seguinte por arquivo em disco, não por estado compartilhado em memória. É isso que permite testar cada etapa isoladamente.\n\nÀ direita, três decisões que vieram de problemas reais. Primeira: cada arquivo baixado tem procedência e resumo SHA-256 registrados num manifesto. A fonte reescreve os arquivos de tempos em tempos, e sem isso duas execuções em datas diferentes produziriam números diferentes sem nenhum aviso.\n\nSegunda: erro de coleta interrompe a execução. Antes, uma falha de rede gerava um conjunto parcial e a análise seguia normalmente.\n\nA terceira é um achado. Existe uma rotina que detecta quebra de série nos dados, e ela encontrou uma queda de 37% nas finalizações no alvo entre 2012/13 e 2013/14, enquanto gols e finalizações totais ficaram estáveis. Não foi o jogo que mudou, foi o critério de registro do provedor. Sem essa detecção, o estudo de caso sobre mudança de estádio reportaria uma queda que seria artefato de planilha.\n\nE a linha de baixo vale dizer em voz alta: nenhum número desta apresentação foi digitado à mão. Todos saem de tabelas e figuras geradas por código.");
 
 // ═══════════════════════ 6b. Verificação ═══════════════════════
 s = pres.addSlide({ masterName: "CONTEUDO", sectionTitle: "Método" });
@@ -307,7 +307,7 @@ s.addText("tests/test_preditivo.py", {
 stat(s, { x: X + 7.6, y: 5.08, w: 3.2, numero: "83 → 97,5%",
   rotulo: "cobertura do intervalo, antes e depois\nde trocar o cálculo do erro padrão",
   cor: LARANJA, tamanho: 28 });
-s.addNotes("Esta é a contribuição de Computação mais forte do trabalho. A recuperação de parâmetro encontrou um defeito no meu próprio estimador: o intervalo cobria o valor verdadeiro em 83% das réplicas, não em 95%. Troquei o método e passou para 97,5%. Os dois nomes técnicos, problema do oráculo e teste de propriedade, estão na Seção 2.3 da monografia.");
+s.addNotes("Essa é a parte que eu considero a contribuição de Computação mais forte do trabalho.\n\nTestar software científico tem uma dificuldade específica, que a literatura chama de problema do oráculo: o programa foi escrito justamente para calcular algo que ninguém sabe de antemão. Não existe gabarito para comparar.\n\nEu usei duas estratégias. A primeira é gerar dados sintéticos. Em vez de testar o estimador contra dados reais, eu gero partidas a partir do próprio modelo, com um valor de gama que eu escolhi, e verifico se o ajuste consegue recuperar esse valor.\n\nFoi assim que eu encontrei um defeito no meu próprio código. O intervalo de confiança que eu calculava cobria o valor verdadeiro em 83% das simulações, quando deveria cobrir em 95%. Ou seja, eu estava subestimando a incerteza em cerca de um quarto. Troquei o método de cálculo e a cobertura foi para 97,5%.\n\nA segunda estratégia é o teste de propriedade. Aqui eu não afirmo qual é o valor certo. Eu afirmo uma relação que precisa valer: se eu alterar o placar de uma partida, nenhuma variável explicativa daquela mesma partida pode mudar. É a linha de código que está aí embaixo. É a forma executável de provar que não há vazamento de dados, e eu volto nesse conceito na parte preditiva.");
 
 // ═══════════════════════ 7. A vantagem existe ═══════════════════════
 pres.addSection({ title: "Resultados" });
@@ -324,7 +324,7 @@ s.addText("Significância não é magnitude", {
 s.addText("Com 4.180 partidas, p-valores reduzidos são esperados mesmo para diferenças modestas. O tamanho de efeito classifica o fenômeno como pequeno: consistente e sistemático, porém de magnitude moderada. O TCC 1 descrevia a assimetria como contundente — a correção aqui é de interpretação, não de cálculo.",
   { isTextBox: true, x: X + 0.4, y: 4.7, w: W - 0.8, h: 1.0, margin: 0,
     fontSize: 14, color: CINZA, lineSpacingMultiple: 1.12, objectName: "efeito-corpo" });
-s.addNotes("O teste binomial é condicionado aos jogos decididos. A nula do TCC 1 era uniforme entre os três resultados, o que seria rejeitado mesmo num mundo sem fator casa.");
+s.addNotes("Indo para os resultados. A vantagem existe, e com folga de confiança.\n\nDas partidas que terminam com vencedor, 58,09% são vitórias do mandante, com intervalo entre 56,35 e 59,81. Em pontos, são 0,37 ponto a mais por jogo.\n\nMas aqui vem a primeira correção em relação ao TCC 1. O d de Cohen é 0,143, o que classifica o efeito como pequeno. Com 4.180 partidas, qualquer diferença modesta produz p-valor baixo. Significância não é magnitude.\n\nO TCC 1 descrevia a assimetria como contundente, e isso não se sustenta. O fenômeno é consistente e sistemático, mas de magnitude moderada. A correção aqui é de interpretação, não de cálculo.");
 
 // ═══════════════════════ 8. Volume, não eficiência ═══════════════════════
 s = pres.addSlide({ masterName: "CONTEUDO", sectionTitle: "Resultados" });
@@ -337,7 +337,7 @@ s.addText("As taxas de conversão de finalizações no alvo em gols são pratica
   { isTextBox: true, x: X, y: 4.62, w: W, h: 0.9, margin: 0,
     fontSize: 15, color: CINZA, lineSpacingMultiple: 1.12, objectName: "conv-texto" });
 legenda(s, "Fonte: autoria própria (2026).", 5.6);
-s.addNotes("A conclusão qualitativa do TCC 1 se mantém, mas os valores mudaram: antes eram 33,3% e 32,1%, inflados por um filtro que removia justamente as partidas de conversão zero.");
+s.addNotes("E como essa vantagem se manifesta? Não por eficiência.\n\nAs taxas de conversão de finalização no alvo em gol são praticamente iguais: 32,6% para o mandante e 31,8% para o visitante, com intervalos que quase se sobrepõem.\n\nO que muda é o volume. O mandante produz mais finalizações no alvo e mais escanteios em todas as temporadas do recorte, como o gráfico mostra.\n\nEntão o Fator Casa é uma questão de criar mais oportunidades, não de aproveitá-las melhor.");
 
 // ═══════════════════════ 9. Correção do Big Six ═══════════════════════
 s = pres.addSlide({ masterName: "CONTEUDO", sectionTitle: "Resultados" });
@@ -376,7 +376,7 @@ s.addText("O teste aparentava poder por contar partidas, quando a hipótese era 
 s.addText("Dois indícios estavam na própria saída do TCC 1: o Big Six aparecia com 0,701 ponto fora, quando a tabela por clube registrava Man City com 2,05; e os demais clubes apareciam melhores fora do que em casa.",
   { isTextBox: true, x: X, y: 5.06, w: 7.0, h: 0.86, margin: 0,
     fontSize: 13, italic: true, color: SUAVE, lineSpacingMultiple: 1.1, objectName: "bs-indicios" });
-s.addNotes("A conclusão 5.2 da monografia do TCC 1 cai. Não há evidência de que o Big Six dependa menos do mando.");
+s.addNotes("Esse é o slide que eu mais queria mostrar, porque é a correção de um erro meu.\n\nNo TCC 1 eu comparei o Big Six com os demais clubes e encontrei uma diferença enorme, com p menor que 0,001. O cálculo agregava, para cada partida, os pontos do mandante numa coluna e os do visitante na outra, e separava pelo rótulo do mandante.\n\nO problema é que a segunda coluna é o visitante daquela mesma partida. Quando eu olhava a linha do Big Six, a coluna de fora não era o Big Six jogando fora. Eram os adversários do Big Six. Eu estava comparando dois grupos diferentes.\n\nCom a unidade de análise correta, que é o clube e não a partida, o diferencial do Big Six cai de 1,397 para 0,418, o dos demais sobe de menos 0,070 para 0,366, e a diferença entre os grupos vira 0,051, com p de 0,351. Não há diferença estatisticamente significativa.\n\nE havia dois indícios na própria saída do TCC 1 que eu não vi na época. O Big Six aparecia com 0,701 ponto fora de casa, quando a tabela por clube mostrava o Manchester City com 2,05. E os demais clubes apareciam melhores fora do que em casa, o que não faz sentido nenhum.\n\nA conclusão 5.2 da monografia anterior cai.");
 // ═══════════════════════ 10. Por faixa de classificação ═══════════════════════
 s = pres.addSlide({ masterName: "CONTEUDO", sectionTitle: "Resultados" });
 titulo(s, "Times de cima dependem mais do mando, não menos");
@@ -399,7 +399,7 @@ s.addText("E o efeito de teto atua contra o G6: ele já faz 1,73 ponto fora, res
   { isTextBox: true, x: X + 6.7, y: 5.0, w: 3.8, h: 0.8, margin: 0,
     fontSize: 13, color: NAVY, lineSpacingMultiple: 1.1, objectName: "teto-texto" });
 legenda(s, "Fonte: autoria própria (2026).", 5.62);
-s.addNotes("Este é o achado que substitui a comparação com o Big Six, e aponta na direção contrária à intuição.");
+s.addNotes("Refeita a pergunta da forma correta, aparece um achado que contraria a intuição.\n\nEm vez de usar um grupo fixo de clubes, eu segmentei por posição final, recalculada a cada temporada. As seis primeiras colocadas obtêm 0,450 ponto de vantagem em casa. O meio da tabela, 0,349. As seis últimas, 0,319.\n\nOu seja, os times de cima dependem mais do mando, não menos. E o gradiente é ordenado, aparecendo igual em gols, finalizações no alvo e escanteios, o que reduz a chance de ser artefato de uma métrica específica.\n\nTem um detalhe que reforça. Existe efeito de teto trabalhando contra o G6: ele já faz 1,73 ponto por jogo fora de casa, então sobra 1,27 de margem até o máximo de três. O Z6 tem 2,28 de margem. Mesmo com menos espaço para crescer, o G6 cresce mais.");
 
 // ═══════════════════════ 11. Por que um modelo ═══════════════════════
 pres.addSection({ title: "Modelagem" });
@@ -430,7 +430,7 @@ lista(s, [
   "A escala é multiplicativa, portanto comparável entre clubes de patamares distintos",
   "Validado por recuperação de parâmetro: 40 simulações com γ conhecido, cobertura de 97,5%",
 ], { x: X, y: 4.44, w: W, h: 1.8, tamanho: 15, espaco: 16 });
-s.addNotes("Numa temporada completa o calendário é balanceado, então o controle por adversário importa menos. Ele se torna decisivo nos recortes menores, como os 92 jogos sem público de 2019/20.");
+s.addNotes("Até aqui eu usei médias de pontos, e elas têm duas limitações. A primeira é que pontos são limitados a três por partida, o que comprime a vantagem das equipes fortes, como acabamos de ver. A segunda é que a média não vem com medida de incerteza, e não controla quem o time enfrentou.\n\nPor isso eu ajustei o modelo de Dixon e Coles, de 1997. Ele modela os gols de cada lado como variáveis de Poisson, com parâmetros de ataque e defesa para cada clube, e um parâmetro de mando compartilhado, que é o gama.\n\nComo o gama é estimado junto com a força de todos os clubes, ele mede a vantagem já descontada a qualidade do adversário. E como a escala é multiplicativa, o valor é comparável entre clubes de patamares diferentes.\n\nO resultado é um acréscimo de 21,7% nos gols esperados atribuível ao mando. Eu implementei esse modelo do zero, e foi ele que passou pela validação por recuperação de parâmetro que mencionei: 40 simulações com gama conhecido, cobertura de 97,5%.");
 
 // ═══════════════════════ 12. γ por temporada ═══════════════════════
 s = pres.addSlide({ masterName: "CONTEUDO", sectionTitle: "Modelagem" });
@@ -442,7 +442,7 @@ cartao(s, { x: X + 7.7, y: 1.66, w: 3.1, h: 2.0,
 cartao(s, { x: X + 7.7, y: 3.77, w: 3.1, h: 2.0,
   titulo: "2024/25", corpo: "γ = 0,063\nIC [−0,055; 0,180]\n\nSem relação com a pandemia.\nQuestão em aberto." });
 legenda(s, "Os intervalos da maioria das temporadas se sobrepõem: o padrão é variabilidade alta em torno de um nível estável, com dois vales — não uma tendência monotônica de queda.", 5.9);
-s.addNotes("Importante não afirmar queda. 2022/23 está no mesmo patamar de 2016/17. A temporada 2024/25 é um achado novo, sem explicação evidente, e está nos trabalhos futuros.");
+s.addNotes("Com o modelo ajustado temporada a temporada, dá para olhar a evolução.\n\nDuas temporadas têm intervalo de confiança contendo o zero, ou seja, sem vantagem detectável. A primeira é 2020/21, que todo mundo espera. A segunda é 2024/25, que não tem relação com a pandemia e que eu não consigo explicar. É um achado novo, e ficou nos trabalhos futuros.\n\nMas o ponto mais importante do slide é o que não dá para afirmar. Os intervalos da maioria das temporadas se sobrepõem, e 2022/23 está no mesmo patamar de 2016/17. O padrão compatível com os dados é variabilidade alta em torno de um nível estável, com dois vales. Não é uma tendência de queda contínua.");
 // ═══════════════════════ 13. O público ═══════════════════════
 s = pres.addSlide({ masterName: "CONTEUDO", sectionTitle: "Modelagem" });
 titulo(s, "O público explica a queda de 2020/21?");
@@ -468,7 +468,7 @@ s.addText("A vantagem não caiu com a ausência de torcida (p = 0,952 no contras
   { isTextBox: true, x: X, y: 4.76, w: W, h: 0.86, margin: 0,
     fontSize: 14.5, color: CINZA, lineSpacingMultiple: 1.12, objectName: "pub-conclusao" });
 legenda(s, "Alcance da conclusão: o intervalo de 2019/20 ainda contém o valor estimado no agregado — os dados não excluem o efeito, mas mostram que a evidência repousa sobre uma única temporada atípica.", 5.72);
-s.addNotes("Aqui é essencial não afirmar demais. O TCC 1 dizia que o experimento natural isolava o público como variável causal central. Isso não se sustenta no contraste intratemporada.");
+s.addNotes("Agora o público. A literatura trata o período de portões fechados como experimento natural, e o TCC 1 seguiu essa linha. Mas há um problema de desenho.\n\nComparar 2020/21 com as temporadas anteriores confunde o efeito da torcida com tudo o mais que mudou: pré-temporada encurtada, calendário congestionado, número de substituições, desfalques por infecção.\n\nO contraste limpo está dentro de 2019/20, porque ali os mesmos elencos jogaram com e sem público, no mesmo calendário e no mesmo regulamento. São 92 jogos sem público e 288 com público.\n\nE o resultado é esse: sem público, 0,457 ponto de vantagem. Com público, 0,438. A vantagem não caiu. Se mudou alguma coisa, foi ligeiramente para cima. O p-valor é 0,952 no contraste descritivo e 0,680 no modelo ajustado. A inversão do Fator Casa acontece só em 2020/21.\n\nUma ressalva de alcance, que eu faço questão de dizer: o intervalo de 2019/20 ainda contém o valor estimado no agregado. Os dados não excluem o efeito do público. O que eles mostram é que a evidência de que o público explica a queda repousa sobre uma única temporada atípica.");
 
 // ═══════════════════════ 14. A dissociação ═══════════════════════
 s = pres.addSlide({ masterName: "CONTEUDO", sectionTitle: "Modelagem" });
@@ -503,7 +503,7 @@ diss.forEach(([n, c, p, fundo, tinta], i) => {
 s.addText("O viés disciplinar favorável ao mandante desaparece sem público já em 2019/20 — mesma temporada em que a vantagem em pontos permaneceu inalterada. A torcida parece influenciar a arbitragem, mas esse viés não é o mecanismo que sustenta a vantagem em resultados.",
   { isTextBox: true, x: X, y: 5.56, w: W, h: 0.74, margin: 0,
     fontSize: 14.5, color: NAVY, bold: true, lineSpacingMultiple: 1.12, objectName: "diss-conc" });
-s.addNotes("Este é o achado mais original do trabalho: os dois mecanismos se separam empiricamente.");
+s.addNotes("E aqui está o achado mais original do trabalho. Ele aparece quando se olha a coluna de cartões amarelos junto com a de pontos.\n\nEm 2019/20 com público, o mandante recebe 0,247 cartão a menos que o visitante. É o viés disciplinar que a literatura descreve. Nas partidas sem público da mesma temporada, esse viés desaparece: o diferencial vai para mais 0,033, praticamente zero. Em 2020/21, também sem público, fica em 0,034.\n\nOu seja, tirar a torcida realmente muda o comportamento da arbitragem. Isso é consistente com a literatura recente.\n\nMas olhem a coluna da direita. Na mesma temporada de 2019/20, enquanto o viés de cartões sumiu, a vantagem em pontos ficou igual: 0,438 com público, 0,457 sem.\n\nOs dois efeitos não caminham juntos. A torcida influencia a arbitragem, mas não é por esse caminho que se produz a vantagem em resultados. Isso importa porque os dois mecanismos costumam ser tratados como um só.");
 
 // ═══════════════════════ 15. Preditivo: desenho ═══════════════════════
 s = pres.addSlide({ masterName: "CONTEUDO", sectionTitle: "Modelagem" });
@@ -525,7 +525,7 @@ s.addImage({ path: fig("validacao_temporal.png"), x: X + 6.45, y: 2.9, w: 4.35, 
 s.addText("Um contra-teste exige que as partidas seguintes mudem, para impedir que o primeiro seja satisfeito trivialmente.",
   { isTextBox: true, x: X, y: 6.15, w: 6.1, h: 0.4, margin: 0,
     fontSize: 12.5, italic: true, color: SUAVE, objectName: "vaz-nota" });
-s.addNotes("A ausência de vazamento não é declaração: é verificada por teste automatizado.");
+s.addNotes("A última parte é a modelagem preditiva, e ela começa por um cuidado.\n\nAs estatísticas de finalização, escanteio e falta só existem depois do apito final. Se eu usar essas colunas para prever o resultado, eu consigo acurácia alta e um trabalho errado. É o erro mais comum nesse tipo de trabalho.\n\nEntão as variáveis são todas anteriores ao apito inicial: rating Elo, forma recente, forma específica por mando, dias de descanso, rodada e regime de público. E a ausência de vazamento não é uma declaração minha, é verificada pelo teste que eu mostrei. Tem um contra-teste junto, exigindo que as partidas seguintes mudem, para o primeiro não passar por acidente.\n\nDo lado direito está o protocolo de validação. Cada linha é uma temporada avaliada, e a janela de treino só contém temporadas anteriores. Dentro da temporada de teste, o histórico cresce a cada dez partidas e todos os modelos reajustam juntos. Isso é deliberado: se só um deles reestimasse ao longo da temporada, eu estaria medindo o protocolo, e não o modelo.");
 // ═══════════════════════ 16. Preditivo: resultados ═══════════════════════
 s = pres.addSlide({ masterName: "CONTEUDO", sectionTitle: "Modelagem" });
 titulo(s, "O modelo estatístico superou os de aprendizado de máquina");
@@ -566,7 +566,7 @@ s.addText("O gradient boosting tem acurácia melhor que a frequência base e log
 s.addText("Fonte: autoria própria (2026).", {
   isTextBox: true, x: X + 6.75, y: 5.46, w: 4.05, h: 0.28, margin: 0,
   fontSize: 11, italic: true, color: SUAVE, objectName: "legenda" });
-s.addNotes("É a justificativa empírica para adotar log-loss como métrica principal, e não acurácia. Um modelo mais complexo perdendo para um mais simples, com a razão visível na calibração.");
+s.addNotes("E o resultado foi esse. O modelo estatístico, o Dixon-Coles, teve o melhor log-loss, 0,9762, à frente da regressão logística e bem à frente do gradient boosting.\n\nO caso do gradient boosting merece atenção. Ele tem acurácia de 50,7%, melhor que a frequência base, e mesmo assim log-loss pior.\n\nA curva de calibração explica. Quando ele prevê 94% de chance, acerta 81% das vezes. Ele empurra as probabilidades para os extremos, o que ajuda na acurácia, porque ali basta acertar a classe mais provável, e é punido com severidade pelo log-loss, que olha a probabilidade atribuída.\n\nIsso é a justificativa empírica para eu ter adotado log-loss como métrica principal. Em problemas probabilísticos, acurácia sozinha engana.");
 
 // ═══════════════════════ 17. Conclusões ═══════════════════════
 pres.addSection({ title: "Fechamento" });
@@ -592,7 +592,7 @@ s.addText("Achado novo", { isTextBox: true, x: X + 0.4, y: 4.28, w: W - 0.8, h: 
 s.addText("O viés de arbitragem e a vantagem em resultados se dissociam: o primeiro desaparece sem público já em 2019/20, enquanto o segundo permanece. A torcida influencia a arbitragem, mas esse não é o mecanismo central do Fator Casa.",
   { isTextBox: true, x: X + 0.4, y: 4.64, w: W - 0.8, h: 0.82, margin: 0,
     fontSize: 15, color: "FFFFFF", lineSpacingMultiple: 1.12, objectName: "achado-corpo" });
-s.addNotes("Duas conclusões do TCC 1 mudaram. Isso foi explicitado na monografia, com os números antigos e novos lado a lado.");
+s.addNotes("Fechando.\n\nO que se mantém: a vantagem do mandante existe e é robusta, 21,7% a mais de gols já descontada a força do adversário, e ela se manifesta por volume de oportunidades, não por eficiência.\n\nO que mudou em relação ao TCC 1: o Big Six não depende menos do mando, a diferença não é significativa; times de cima dependem mais, num gradiente ordenado por posição final; e o público não explica a queda de 2020/21 quando o contraste é feito dentro da mesma temporada.\n\nE o achado novo, que está em destaque: o viés de arbitragem e a vantagem em resultados se dissociam. O primeiro desaparece sem público já em 2019/20, enquanto o segundo permanece. A torcida influencia a arbitragem, mas esse não é o mecanismo central do Fator Casa.");
 
 // ═══════════════════════ 18. Limitações e futuros ═══════════════════════
 s = pres.addSlide({ masterName: "CONTEUDO", sectionTitle: "Fechamento" });
@@ -614,7 +614,7 @@ lista(s, [
   "Estender a outras ligas europeias",
   "Investigar a temporada 2024/25, cujo parâmetro próximo de zero não tem explicação evidente",
 ], { x: X + 5.6, y: 2.12, w: 5.2, h: 3.5, tamanho: 15, espaco: 16 });
-s.addNotes("A 2024/25 é a questão mais interessante em aberto — apareceu ao ajustar o modelo por temporada e não estava visível no diferencial bruto.");
+s.addNotes("As limitações principais.\n\nO modelo estima um gama comum para a liga inteira, então eu não consigo dizer se um clube específico depende mais do mando que outro. Faltam variáveis de contexto que a literatura aponta como relevantes: distância de viagem, horário da partida, ocupação do estádio. Não foi possível fazer o contraste intratemporada em 2020/21, porque nenhuma partida daquela temporada teve público pleno.\n\nE não houve comparação com as probabilidades do mercado de apostas, que seria a referência externa mais exigente. As rotinas estão implementadas e testadas, mas as colunas de cotação não estavam disponíveis no acervo coletado. É a continuidade mais imediata, junto com estimar o mando por clube com modelos hierárquicos e investigar a temporada 2024/25.");
 
 // ═══════════════════════ 19. Encerramento ═══════════════════════
 s = pres.addSlide({ masterName: "SECAO", sectionTitle: "Fechamento" });
@@ -631,7 +631,7 @@ s.addText("Orientador: Prof. Francisco Pereira Junior", {
 s.addText("Código, dados e documentação: github.com/matheustm29/TCC2", {
   isTextBox: true, x: X, y: 5.0, w: 8.6, h: 0.34, margin: 0,
   fontSize: 13, color: SUAVE, objectName: "fim-repo" });
-s.addNotes("Fico à disposição para as perguntas da banca.");
+s.addNotes("É isso. Obrigado pela atenção, e fico à disposição para as perguntas.");
 
 // ═══════════════════════ gravação ═══════════════════════
 const SAIDA = path.join(DIR, "TCC2_Defesa.pptx");
