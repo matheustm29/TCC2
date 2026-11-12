@@ -167,7 +167,7 @@ s = pres.addSlide({ masterName: "CONTEUDO", sectionTitle: "Abertura" });
 titulo(s, "Roteiro");
 const roteiro = [
   ["Contexto e problema", "O fenômeno e por que revisitá-lo"],
-  ["Método e dados", "CRISP-DM, 11 temporadas, 4.180 partidas"],
+  ["Método e implementação", "CRISP-DM, pipeline em camadas e verificação"],
   ["Resultados descritivos", "Magnitude, heterogeneidade e público"],
   ["Modelagem", "Poisson bivariado e modelos preditivos"],
   ["Conclusões", "Achados, limitações e continuidade"],
@@ -253,27 +253,61 @@ s.addText("As duas últimas fases são a contribuição desta etapa", {
   isTextBox: true, x: X, y: 5.74, w: W, h: 0.3, margin: 0,
   fontSize: 12, italic: true, color: SUAVE, objectName: "fases-nota" });
 s.addNotes("O TCC 1 cobriu as três primeiras fases. Modelagem e Avaliação entraram agora.");
-// ═══════════════════════ 6. Rigor dos dados ═══════════════════════
+// ═══════════════════════ 6. A solução computacional ═══════════════════════
 s = pres.addSlide({ masterName: "CONTEUDO", sectionTitle: "Método" });
-titulo(s, "Reprodutibilidade e integridade dos dados");
-s.addText("A fonte reescreve periodicamente seus arquivos. Sem controle, duas execuções em datas distintas produzem números diferentes sem qualquer aviso.", {
-  isTextBox: true, x: X, y: 1.62, w: W, h: 0.5, margin: 0,
-  fontSize: 15, color: CINZA, objectName: "rigor-intro" });
-cartao(s, { x: X, y: 2.3, w: 5.25, h: 1.72, numero: 1,
-  titulo: "Manifesto com SHA-256",
-  corpo: "Procedência e resumo criptográfico de cada arquivo são registrados. Qualquer divergência interrompe a execução." });
-cartao(s, { x: X + 5.55, y: 2.3, w: 5.25, h: 1.72, numero: 2,
-  titulo: "Falha alta, nunca silenciosa",
-  corpo: "Erro de coleta interrompe o processamento, em vez de gerar um conjunto parcial sem aviso." });
-s.addShape(pres.ShapeType.roundRect, { x: X, y: 4.2, w: W, h: 1.72, rectRadius: 0.08,
-  fill: { color: NAVY }, line: { color: NAVY }, objectName: "quebra-fundo" });
-s.addText("Quebra de série detectada automaticamente", {
-  isTextBox: true, x: X + 0.4, y: 4.42, w: W - 0.8, h: 0.34, margin: 0,
-  fontSize: 16, bold: true, color: AMARELO, objectName: "quebra-tit" });
-s.addText("A média de finalizações no alvo da liga cai 37% entre 2012/13 e 2013/14, enquanto gols e finalizações totais permanecem estáveis. Não é mudança no jogo: é mudança de critério do provedor. Comparações dessa variável que atravessem 2013/14 são inválidas.", {
-  isTextBox: true, x: X + 0.4, y: 4.82, w: W - 0.8, h: 0.96, margin: 0,
-  fontSize: 14, color: "FFFFFF", lineSpacingMultiple: 1.1, objectName: "quebra-corpo" });
-s.addNotes("Esse achado é metodológico, mas importa: sem ele, o estudo de caso dos estádios reportaria uma queda de quase dois chutes no alvo que seria artefato da planilha.");
+titulo(s, "A solução computacional em camadas");
+s.addText("O TCC 1 era um notebook único. Hoje é um pacote Python de sete módulos, com fronteiras explícitas entre as etapas e 81 testes automatizados.", {
+  isTextBox: true, x: X, y: 1.6, w: W, h: 0.5, margin: 0,
+  fontSize: 15, color: CINZA, objectName: "arq-intro" });
+s.addImage({ path: fig("arquitetura_pipeline.png"), x: X, y: 2.18, w: 3.85, h: 4.1,
+  objectName: "fig-arquitetura" });
+
+const rigor = [
+  ["Manifesto com SHA-256",
+   "Procedência e resumo criptográfico de cada arquivo. Qualquer divergência interrompe a execução."],
+  ["Falha alta, nunca silenciosa",
+   "Erro de coleta interrompe o processamento, em vez de gerar um conjunto parcial sem aviso."],
+  ["Quebra de série detectada sozinha",
+   "Finalizações no alvo caem 37% entre 2012/13 e 2013/14. Não é o jogo que mudou, é o critério do provedor."],
+];
+rigor.forEach(([t, d], i) => {
+  const y = 2.18 + i * 1.42;
+  cartao(s, { x: X + 4.25, y, w: 6.55, h: 1.26, numero: i + 1, titulo: t, corpo: d });
+});
+s.addText("Nenhum número desta apresentação foi copiado à mão: todos saem de tabelas e figuras geradas por código.",
+  { isTextBox: true, x: X, y: 6.4, w: W, h: 0.34, margin: 0,
+    fontSize: 12.5, italic: true, color: SUAVE, objectName: "arq-nota" });
+s.addNotes("Esse slide responde à pergunta do que foi feito de Computação. O diagrama é a Figura 2 da monografia. A quebra de série é achado metodológico: sem ela, o estudo de caso dos estádios reportaria uma queda que seria artefato da planilha.");
+
+// ═══════════════════════ 6b. Verificação ═══════════════════════
+s = pres.addSlide({ masterName: "CONTEUDO", sectionTitle: "Método" });
+titulo(s, "Como o código é verificado");
+s.addShape(pres.ShapeType.roundRect, { x: X, y: 1.6, w: W, h: 1.0, rectRadius: 0.08,
+  fill: { color: NAVY }, line: { color: NAVY }, objectName: "ver-fundo" });
+s.addText("O programa calcula algo que ninguém conhece de antemão. Não existe resposta certa para comparar com a saída.",
+  { isTextBox: true, x: X + 0.4, y: 1.7, w: W - 0.8, h: 0.8, margin: 0,
+    fontSize: 16, bold: true, color: "FFFFFF", valign: "middle", objectName: "ver-texto" });
+cartao(s, { x: X, y: 2.82, w: 5.25, h: 2.2, numero: 1,
+  titulo: "Dados sintéticos",
+  corpo: "Gerar partidas a partir do próprio modelo, com γ conhecido, e exigir que o ajuste o recupere." });
+cartao(s, { x: X + 5.55, y: 2.82, w: 5.25, h: 2.2, numero: 2,
+  titulo: "Teste de propriedade",
+  corpo: "Não afirma o valor certo. Afirma uma relação: alterar o placar de uma partida não pode mudar as variáveis daquela partida." });
+s.addShape(pres.ShapeType.roundRect, { x: X, y: 5.22, w: 7.0, h: 1.1, rectRadius: 0.06,
+  fill: { color: CARTAO }, line: { color: CARTAO }, objectName: "ver-cod-fundo" });
+s.addText([
+  { text: "assert", options: { color: AZUL, bold: true } },
+  { text: " antes[feature] == depois[feature], ", options: { color: TINTA } },
+  { text: '"VAZAMENTO"', options: { color: LARANJA } },
+], { isTextBox: true, x: X + 0.3, y: 5.42, w: 6.4, h: 0.3, margin: 0,
+     fontSize: 13, fontFace: "Courier New", objectName: "ver-codigo" });
+s.addText("tests/test_preditivo.py", {
+  isTextBox: true, x: X + 0.3, y: 5.78, w: 6.4, h: 0.28, margin: 0,
+  fontSize: 11, color: SUAVE, fontFace: "Courier New", objectName: "ver-codigo-fonte" });
+stat(s, { x: X + 7.6, y: 5.08, w: 3.2, numero: "83 → 97,5%",
+  rotulo: "cobertura do intervalo, antes e depois\nde trocar o cálculo do erro padrão",
+  cor: LARANJA, tamanho: 28 });
+s.addNotes("Esta é a contribuição de Computação mais forte do trabalho. A recuperação de parâmetro encontrou um defeito no meu próprio estimador: o intervalo cobria o valor verdadeiro em 83% das réplicas, não em 95%. Troquei o método e passou para 97,5%. Os dois nomes técnicos, problema do oráculo e teste de propriedade, estão na Seção 2.3 da monografia.");
 
 // ═══════════════════════ 7. A vantagem existe ═══════════════════════
 pres.addSection({ title: "Resultados" });
@@ -480,18 +514,17 @@ s.addText("Finalizações, escanteios e faltas só existem depois do apito final
   { isTextBox: true, x: X + 0.4, y: 1.74, w: W - 0.8, h: 0.9, margin: 0,
     fontSize: 16, bold: true, color: "FFFFFF", valign: "middle", lineSpacingMultiple: 1.1,
     objectName: "vaz-texto" });
-cartao(s, { x: X, y: 2.96, w: 3.45, h: 2.1, numero: 1,
+cartao(s, { x: X, y: 2.9, w: 6.1, h: 1.5, numero: 1,
   titulo: "Features pré-jogo",
   corpo: "Rating Elo, forma recente, forma por mando, dias de descanso, rodada e regime de público." });
-cartao(s, { x: X + 3.68, y: 2.96, w: 3.45, h: 2.1, numero: 2,
+cartao(s, { x: X, y: 4.52, w: 6.1, h: 1.5, numero: 2,
   titulo: "Trava experimental",
   corpo: "Altera o placar de uma partida, reconstrói tudo e exige que nenhuma feature daquela partida se mova." });
-cartao(s, { x: X + 7.36, y: 2.96, w: 3.44, h: 2.1, numero: 3,
-  titulo: "Validação temporal",
-  corpo: "Para prever uma temporada, o treino usa apenas partidas anteriores. Todos os modelos reajustam sobre o mesmo histórico." });
+s.addImage({ path: fig("validacao_temporal.png"), x: X + 6.45, y: 2.9, w: 4.35, h: 3.36,
+  objectName: "fig-walkforward" });
 s.addText("Um contra-teste exige que as partidas seguintes mudem, para impedir que o primeiro seja satisfeito trivialmente.",
-  { isTextBox: true, x: X, y: 5.26, w: W, h: 0.4, margin: 0,
-    fontSize: 13, italic: true, color: SUAVE, objectName: "vaz-nota" });
+  { isTextBox: true, x: X, y: 6.15, w: 6.1, h: 0.4, margin: 0,
+    fontSize: 12.5, italic: true, color: SUAVE, objectName: "vaz-nota" });
 s.addNotes("A ausência de vazamento não é declaração: é verificada por teste automatizado.");
 // ═══════════════════════ 16. Preditivo: resultados ═══════════════════════
 s = pres.addSlide({ masterName: "CONTEUDO", sectionTitle: "Modelagem" });
