@@ -27,3 +27,14 @@ node gerar.js
 As figuras vêm de `figuras/`, na raiz do repositório, produzidas por
 `scripts/executar_analise.py` e `scripts/executar_modelagem.py`;
 `fundo.jpg` é o fundo institucional fornecido pela universidade.
+
+## Duas versões do deck
+
+```bash
+node gerar.js                 # TCC2_Defesa.pptx, com a fala nas notas
+SEM_NOTAS=1 node gerar.js     # TCC2_Defesa_sem_notas.pptx, para compartilhar
+```
+
+As notas de apresentador trazem o texto falado de cada slide, escrito em
+primeira pessoa. Ele serve ao modo apresentador do PowerPoint e não faz
+sentido num arquivo enviado a terceiros, daí a segunda versão.
