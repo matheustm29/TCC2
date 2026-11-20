@@ -166,7 +166,7 @@ s.addText([
 s.addText("Campus Cornélio Procópio · 2026", {
   isTextBox: true, x: X, y: 5.74, w: 9.3, h: 0.34, margin: 0,
   fontSize: 13, color: SUAVE, objectName: "capa-local" });
-notas(s, "Bom dia. Eu sou o Matheus, aluno de Engenharia de Computação, e vou apresentar meu trabalho de conclusão, orientado pelo professor Francisco.\n\nO tema é o Fator Casa no futebol: a ideia de que jogar em casa dá vantagem. Eu quis saber se isso ainda aparece nos números, e por quê. Olhei onze temporadas da Premier League, 4.180 jogos.");
+notas(s, "Bom dia. Eu sou o Matheus, de Engenharia de Computação, e vou apresentar meu trabalho de conclusão, orientado pelo professor Francisco.\n\nO tema é o Fator Casa: a ideia de que jogar em casa dá vantagem. Eu quis saber se isso ainda aparece nos números, e por quê. Onze temporadas da Premier League, 4.180 jogos.");
 
 // ═══════════════════════ 2. Roteiro ═══════════════════════
 s = pres.addSlide({ masterName: "CONTEUDO", sectionTitle: "Abertura" });
@@ -191,7 +191,7 @@ roteiro.forEach(([t, d], i) => {
   s.addText(d, { isTextBox: true, x: X + 0.78, y: y + 0.26, w: 7.6, h: 0.3, margin: 0,
     fontSize: 13.5, color: CINZA, valign: "middle", objectName: `rot-d-${i}` });
 });
-notas(s, "São cinco blocos. Contexto e problema, como eu construí o trabalho, os resultados, a modelagem e as conclusões.");
+notas(s, "São cinco blocos: o problema, como eu construí o trabalho, os resultados, a modelagem e as conclusões.");
 
 // ═══════════════════════ 3. O fenômeno ═══════════════════════
 pres.addSection({ title: "Contexto" });
@@ -210,7 +210,7 @@ mec.forEach(([t, d], i) => {
   cartao(s, { x: X + (i % 2) * 5.5, y: 2.4 + Math.floor(i / 2) * 1.85,
               w: 5.25, h: 1.62, titulo: t, corpo: d, numero: i + 1 });
 });
-notas(s, "Que o mandante leva vantagem, todo mundo sabe, e a literatura mede isso desde os anos 90. A pergunta interessante é por quê.\n\nCostuma-se apontar quatro causas. A torcida, que empurra o time da casa e pressiona o visitante. A familiaridade com o campo. O cansaço da viagem de quem joga fora. E o árbitro, que seria influenciado pela pressão da arquibancada.\n\nGuardem essas quatro, porque elas deixam marcas diferentes nos dados. Árbitro aparece em cartão. Familiaridade e viagem aparecem no volume de jogo. É isso que vai permitir separar uma da outra mais para frente.");
+notas(s, "Que o mandante leva vantagem, todo mundo sabe, e a literatura mede isso desde os anos 90. A pergunta interessante é por quê.\n\nCostuma-se apontar quatro causas: a torcida, a familiaridade com o campo, o cansaço da viagem de quem joga fora, e o árbitro, que seria influenciado pela pressão da arquibancada.\n\nGuardem essas quatro, porque elas deixam marcas diferentes nos dados. Árbitro aparece em cartão. Familiaridade e viagem aparecem no volume de jogo. É isso que vai permitir separar uma da outra mais para frente.");
 
 // ═══════════════════════ 4. Problema e objetivos ═══════════════════════
 s = pres.addSlide({ masterName: "CONTEUDO", sectionTitle: "Contexto" });
@@ -230,7 +230,7 @@ lista(s, [
   "Avaliar o papel do público, distinguindo-o de outras mudanças do período",
   "Estimar o mando por modelo que controle a força do adversário e avaliar modelos preditivos",
 ], { x: X, y: 3.66, w: W, h: 2.5, tamanho: 16 });
-notas(s, "A pergunta do trabalho tem duas partes: quanto vale jogar em casa hoje, e qual dessas causas realmente sustenta a vantagem.\n\nDaí saíram cinco objetivos. Medir o tamanho da vantagem. Ver se ela é igual para todos os clubes. Olhar se ela mudou ao longo do tempo. Avaliar o peso da torcida, separando-a das outras coisas que mudaram na pandemia. E o último, que é o que entrou nesta etapa: usar um modelo que desconte a força do adversário, e testar previsões.");
+notas(s, "A pergunta tem duas partes: quanto vale jogar em casa hoje, e qual dessas causas sustenta a vantagem.\n\nDaí saíram cinco objetivos. Medir o tamanho da vantagem. Ver se ela é igual para todos os clubes. Olhar se mudou ao longo do tempo. Avaliar o peso da torcida, separando-a das outras coisas que mudaram na pandemia. E o último, que entrou nesta etapa: usar um modelo que desconte a força do adversário.");
 
 // ═══════════════════════ 5. Método e dados ═══════════════════════
 pres.addSection({ title: "Método" });
@@ -258,7 +258,7 @@ fases.forEach((f, i) => {
 s.addText("As duas últimas fases são a contribuição desta etapa", {
   isTextBox: true, x: X, y: 5.74, w: W, h: 0.3, margin: 0,
   fontSize: 12, italic: true, color: SUAVE, objectName: "fases-nota" });
-notas(s, "Segui o CRISP-DM, que é um roteiro padrão de projetos de dados, e fiz tudo em Python. São 4.180 partidas, onze temporadas, 22 informações por jogo.\n\nNo TCC 1 eu tinha coberto as três primeiras etapas desse roteiro. Modelagem e avaliação são o que entrou agora.\n\nE guardem o número da direita, 81 testes automatizados, porque é o assunto do próximo slide.");
+notas(s, "Segui o CRISP-DM, que é um roteiro padrão de projetos de dados, e fiz tudo em Python. São 4.180 partidas, onze temporadas, 22 informações por jogo.\n\nNo TCC 1 eu tinha coberto as três primeiras etapas. Modelagem e avaliação entraram agora.\n\nE guardem o número da direita, 81 testes, porque é o assunto do próximo slide.");
 // ═══════════════════════ 6. A solução computacional ═══════════════════════
 s = pres.addSlide({ masterName: "CONTEUDO", sectionTitle: "Método" });
 titulo(s, "A solução computacional em camadas");
@@ -283,7 +283,7 @@ rigor.forEach(([t, d], i) => {
 s.addText("Nenhum número desta apresentação foi copiado à mão: todos saem de tabelas e figuras geradas por código.",
   { isTextBox: true, x: X, y: 6.4, w: W, h: 0.34, margin: 0,
     fontSize: 12.5, italic: true, color: SUAVE, objectName: "arq-nota" });
-notas(s, "O TCC 1 era um arquivo só, onde coleta, cálculo e texto se misturavam. Foi isso que permitiu um erro que eu só descobri na apresentação, e que eu mostro daqui a pouco.\n\nHoje é um programa dividido em camadas, como no diagrama. Cada camada entrega para a seguinte por arquivo em disco, e é isso que permite testar cada pedaço separadamente.\n\nÀ direita, três decisões que vieram de problemas reais. A primeira: cada arquivo baixado tem uma assinatura digital guardada. O site muda os arquivos de tempos em tempos, e sem isso duas execuções em dias diferentes dariam números diferentes, sem avisar.\n\nA segunda: se a coleta falha, o programa para. Antes ele seguia com dados pela metade.\n\nA terceira é um achado. Eu tenho uma rotina que procura mudanças estranhas nos dados, e ela encontrou uma: as finalizações no alvo caem 37% de uma temporada para a outra, em 2013, enquanto os gols ficam iguais. Não foi o futebol que mudou, foi o critério de quem anota. Sem perceber isso, uma das minhas análises reportaria uma queda que não existe.\n\nE a frase de baixo: nenhum número desta apresentação foi digitado à mão. Todos vêm de arquivos que o programa gera.");
+notas(s, "O TCC 1 era um arquivo só, onde coleta, cálculo e texto se misturavam. Foi isso que permitiu um erro que eu só descobri na apresentação, e que eu mostro daqui a pouco.\n\nHoje é um programa dividido em camadas, como no diagrama. Cada camada entrega para a seguinte por arquivo em disco, e é isso que permite testar cada pedaço separadamente.\n\nÀ direita, três decisões que vieram de problemas reais. Cada arquivo baixado tem uma assinatura digital guardada, porque o site muda os arquivos de tempos em tempos, e sem isso duas execuções em dias diferentes dariam números diferentes, sem avisar. Se a coleta falha, o programa para. Antes ele seguia com dados pela metade. E a terceira é um achado. Eu tenho uma rotina que procura mudanças estranhas nos dados, e ela encontrou uma: as finalizações no alvo caem 37% de uma temporada para a outra, em 2013, enquanto os gols ficam iguais. Não foi o futebol que mudou, foi o critério de quem anota.\n\nE a frase de baixo: nenhum número desta apresentação foi digitado à mão.");
 
 // ═══════════════════════ 6b. Verificação ═══════════════════════
 s = pres.addSlide({ masterName: "CONTEUDO", sectionTitle: "Método" });
@@ -313,7 +313,7 @@ s.addText("tests/test_preditivo.py", {
 stat(s, { x: X + 7.6, y: 5.08, w: 3.2, numero: "83 → 97,5%",
   rotulo: "cobertura do intervalo, antes e depois\nde trocar o cálculo do erro padrão",
   cor: LARANJA, tamanho: 28 });
-notas(s, "Essa é a parte que eu considero a maior contribuição de Computação do trabalho.\n\nTestar um programa científico tem uma dificuldade própria: ele foi escrito justamente para calcular algo que ninguém sabe de antemão. Não existe gabarito para conferir.\n\nEntão eu usei dois caminhos. O primeiro é inventar dados. Em vez de testar com jogos reais, eu gero jogos falsos a partir do próprio modelo, com um valor de vantagem que eu mesmo escolhi. Depois verifico se o programa consegue encontrar aquele valor de volta.\n\nFoi assim que eu descobri um erro meu. A minha margem de erro acertava o valor verdadeiro em 83% das vezes, quando deveria acertar em 95%. Ou seja, eu estava dizendo ter mais certeza do que de fato tinha. Troquei a forma de calcular e foi para 97,5%.\n\nO segundo caminho é testar uma regra, em vez de um número. Eu não digo qual valor tem que sair. Eu digo o seguinte: se eu mudar o placar de um jogo, nenhuma informação usada para prever aquele mesmo jogo pode mudar. É a linha de código aí embaixo. É assim que eu provo que o modelo não está espiando o resultado.");
+notas(s, "Essa é a parte que eu considero a maior contribuição de Computação do trabalho.\n\nTestar um programa científico tem uma dificuldade própria: ele foi escrito justamente para calcular algo que ninguém sabe de antemão. Não existe gabarito para conferir.\n\nEntão eu usei dois caminhos. O primeiro é inventar dados. Em vez de testar com jogos reais, eu gero jogos falsos a partir do próprio modelo, com um valor de vantagem que eu mesmo escolhi, e verifico se o programa encontra aquele valor de volta. Foi assim que eu descobri um erro meu. A minha margem de erro acertava o valor verdadeiro em 83% das vezes, quando deveria acertar em 95%. Eu estava dizendo ter mais certeza do que de fato tinha. Troquei a forma de calcular e foi para 97,5%.\n\nO segundo caminho é testar uma regra, em vez de um número. Eu digo o seguinte: se eu mudar o placar de um jogo, nenhuma informação usada para prever aquele mesmo jogo pode mudar. É a linha de código aí embaixo. É assim que eu provo que o modelo não está espiando o resultado.");
 
 // ═══════════════════════ 7. A vantagem existe ═══════════════════════
 pres.addSection({ title: "Resultados" });
@@ -330,11 +330,10 @@ s.addText("Significância não é magnitude", {
 s.addText("Com 4.180 partidas, p-valores reduzidos são esperados mesmo para diferenças modestas. O tamanho de efeito classifica o fenômeno como pequeno: consistente e sistemático, porém de magnitude moderada. O TCC 1 descrevia a assimetria como contundente — a correção aqui é de interpretação, não de cálculo.",
   { isTextBox: true, x: X + 0.4, y: 4.7, w: W - 0.8, h: 1.0, margin: 0,
     fontSize: 14, color: CINZA, lineSpacingMultiple: 1.12, objectName: "efeito-corpo" });
-notas(s, "Indo para os resultados. A vantagem existe, com folga.\n\nDos jogos que têm vencedor, 58% terminam com vitória do mandante. Em pontos, são 0,37 ponto a mais por jogo.\n\nMas aqui vem a primeira correção em relação ao TCC 1. O tamanho desse efeito é pequeno. Com 4.180 jogos, qualquer diferencinha fica estatisticamente significativa, e significativo não quer dizer grande. O TCC 1 dizia que a assimetria era contundente, e isso não se sustenta. O fenômeno é constante, mas modesto.\n\nE tem outra coisa: essa vantagem não vem de eficiência. O mandante transforma chute em gol praticamente na mesma taxa do visitante, 32,6 contra 31,8 por cento. O que ele faz é chutar mais. A vantagem é de volume, não de pontaria.");
+notas(s, "Indo para os resultados. A vantagem existe, com folga. Dos jogos que têm vencedor, 58% terminam com vitória do mandante. Em pontos, são 0,37 ponto a mais por jogo.\n\nMas aqui vem a primeira correção em relação ao TCC 1. O tamanho desse efeito é pequeno. Com 4.180 jogos, qualquer diferencinha fica estatisticamente significativa, e significativo não quer dizer grande. O TCC 1 dizia que a assimetria era contundente, e isso não se sustenta. O fenômeno é constante, mas modesto.");
 
 // ═══════════════════════ 8. Volume, não eficiência ═══════════════════════
 s = pres.addSlide({ masterName: "CONTEUDO", sectionTitle: "Resultados" });
-s.hidden = true;  // fora da sequência de 20 min, mantido para perguntas
 titulo(s, "Volume de oportunidades, não eficiência");
 s.addImage({ path: fig("volume_ofensivo.png"), x: X, y: 1.68, w: 7.1, h: 2.67,
   objectName: "fig-volume" });
@@ -344,7 +343,7 @@ s.addText("As taxas de conversão de finalizações no alvo em gols são pratica
   { isTextBox: true, x: X, y: 4.62, w: W, h: 0.9, margin: 0,
     fontSize: 15, color: CINZA, lineSpacingMultiple: 1.12, objectName: "conv-texto" });
 legenda(s, "Fonte: autoria própria (2026).", 5.6);
-notas(s, "SLIDE OCULTO, fora da sequência de 20 minutos.\n\nO conteúdo está resumido no fim da fala do slide anterior. Use este slide se a banca pedir o detalhe por temporada: o mandante produz mais finalizações no alvo e mais escanteios em todas as onze temporadas.");
+notas(s, "E de onde vem essa vantagem? Não de eficiência. O mandante transforma chute em gol praticamente na mesma taxa do visitante, 32,6 contra 31,8 por cento.\n\nO que muda é o volume. São dois painéis: chutes no alvo à esquerda, escanteios à direita. A linha do mandante fica por cima da do visitante nas onze temporadas, sem nenhuma exceção. A vantagem é de volume, não de pontaria.");
 
 // ═══════════════════════ 9. Correção do Big Six ═══════════════════════
 s = pres.addSlide({ masterName: "CONTEUDO", sectionTitle: "Resultados" });
@@ -383,7 +382,7 @@ s.addText("O teste aparentava poder por contar partidas, quando a hipótese era 
 s.addText("Dois indícios estavam na própria saída do TCC 1: o Big Six aparecia com 0,701 ponto fora, quando a tabela por clube registrava Man City com 2,05; e os demais clubes apareciam melhores fora do que em casa.",
   { isTextBox: true, x: X, y: 5.06, w: 7.0, h: 0.86, margin: 0,
     fontSize: 13, italic: true, color: SUAVE, lineSpacingMultiple: 1.1, objectName: "bs-indicios" });
-notas(s, "Esse slide é o que eu mais queria mostrar, porque é a correção de um erro meu.\n\nNo TCC 1 eu comparei os seis grandes com o resto da liga e achei uma diferença enorme. O cálculo somava, para cada jogo, os pontos do mandante de um lado e os do visitante do outro, e separava pelo nome do mandante.\n\nO problema é que o visitante daquele jogo não é o mesmo time. Quando eu olhava a linha dos seis grandes, a coluna de fora de casa não era os seis grandes jogando fora. Eram os adversários deles. Eu estava comparando dois grupos diferentes e chamando de um só.\n\nRefazendo a conta por clube, e não por jogo, a diferença entre os grupos desaparece. O p-valor sai de menos de 0,001 para 0,35.\n\nE havia dois sinais na minha própria saída que eu não enxerguei na época. Os seis grandes apareciam com 0,70 ponto fora de casa, quando a tabela individual mostrava o Manchester City com 2,05. E os times menores apareciam melhores fora do que em casa, o que não existe.\n\nUma das conclusões do TCC 1 cai por aqui.");
+notas(s, "Esse slide é o que eu mais queria mostrar, porque é a correção de um erro meu.\n\nNo TCC 1 eu comparei os seis grandes com o resto da liga e achei uma diferença enorme. O cálculo somava, para cada jogo, os pontos do mandante de um lado e os do visitante do outro, e separava pelo nome do mandante.\n\nO problema é que o visitante daquele jogo não é o mesmo time. Quando eu olhava a linha dos seis grandes, a coluna de fora de casa não era os seis grandes jogando fora. Eram os adversários deles. Eu estava comparando dois grupos diferentes e chamando de um só.\n\nRefazendo a conta por clube, e não por jogo, a diferença entre os grupos desaparece. O p-valor sai de menos de 0,001 para 0,35.\n\nE tinha um sinal na minha própria saída que eu não enxerguei: os times menores apareciam melhores fora do que em casa, o que não existe. Uma das conclusões do TCC 1 cai por aqui.");
 // ═══════════════════════ 10. Por faixa de classificação ═══════════════════════
 s = pres.addSlide({ masterName: "CONTEUDO", sectionTitle: "Resultados" });
 titulo(s, "Times de cima dependem mais do mando, não menos");
@@ -437,11 +436,10 @@ lista(s, [
   "A escala é multiplicativa, portanto comparável entre clubes de patamares distintos",
   "Validado por recuperação de parâmetro: 40 simulações com γ conhecido, cobertura de 97,5%",
 ], { x: X, y: 4.44, w: W, h: 1.8, tamanho: 15, espaco: 16 });
-notas(s, "Até aqui eu usei média de pontos, e ela tem dois limites. Pontos param em três por jogo, então o teto atrapalha justamente os times fortes. E a média não diz nada sobre quem o time enfrentou.\n\nPor isso eu usei o modelo de Dixon e Coles, de 1997. Ele estima o ataque e a defesa de cada clube e, junto com isso, um número que representa o mando de campo. Como esse número é calculado junto com a força de todo mundo, ele já sai descontado da qualidade do adversário.\n\nO resultado: jogar em casa vale 21,7% a mais de gols esperados. Eu programei esse modelo do zero, e foi nele que apliquei o teste de dados inventados que mostrei.\n\nSeparando por temporada, duas aparecem sem vantagem nenhuma: 2020/21, que todo mundo espera, e 2024/25, que eu não consigo explicar e deixei como trabalho futuro. Mas o importante é o que não dá para afirmar: não existe queda contínua. As temporadas oscilam em torno do mesmo patamar.");
+notas(s, "Até aqui eu usei média de pontos, e ela tem dois limites. Pontos param em três por jogo, então o teto atrapalha justamente os times fortes. E a média não diz nada sobre quem o time enfrentou.\n\nPor isso eu usei o modelo de Dixon e Coles, de 1997. Ele estima o ataque e a defesa de cada clube e, junto com isso, um número que representa o mando de campo. Como esse número sai calculado junto com a força de todo mundo, ele já vem descontado da qualidade do adversário.\n\nO resultado: jogar em casa vale 21,7% a mais de gols esperados. Eu programei esse modelo do zero, e foi nele que apliquei o teste de dados inventados.");
 
 // ═══════════════════════ 12. γ por temporada ═══════════════════════
 s = pres.addSlide({ masterName: "CONTEUDO", sectionTitle: "Modelagem" });
-s.hidden = true;  // fora da sequência de 20 min, mantido para perguntas
 titulo(s, "O fator casa ajustado, temporada a temporada");
 s.addImage({ path: fig("mando_ajustado_por_temporada.png"), x: X, y: 1.66, w: 7.3, h: 4.11,
   objectName: "fig-gamma" });
@@ -450,7 +448,7 @@ cartao(s, { x: X + 7.7, y: 1.66, w: 3.1, h: 2.0,
 cartao(s, { x: X + 7.7, y: 3.77, w: 3.1, h: 2.0,
   titulo: "2024/25", corpo: "γ = 0,063\nIC [−0,055; 0,180]\n\nSem relação com a pandemia.\nQuestão em aberto." });
 legenda(s, "Os intervalos da maioria das temporadas se sobrepõem: o padrão é variabilidade alta em torno de um nível estável, com dois vales — não uma tendência monotônica de queda.", 5.9);
-notas(s, "SLIDE OCULTO, fora da sequência de 20 minutos.\n\nO conteúdo está resumido no fim da fala do slide anterior. Use este slide se a banca perguntar sobre a tendência temporal: aqui aparecem os intervalos de cada temporada, a sobreposição entre elas e os dois vales, em 2020/21 e 2024/25.");
+notas(s, "Rodando o modelo temporada a temporada, dá para olhar a evolução. Cada ponto é uma temporada, e a barra é a margem de erro.\n\nDuas temporadas encostam no zero, ou seja, sem vantagem nenhuma: 2020/21, que todo mundo espera, e 2024/25, que eu não consigo explicar e deixei como trabalho futuro.\n\nMas o mais importante aqui é o que não dá para afirmar. Repare que quase todas as barras se cruzam, e que 2022/23 está na mesma altura de 2016/17. Não existe queda contínua. É oscilação em torno do mesmo patamar.");
 // ═══════════════════════ 13. O público ═══════════════════════
 s = pres.addSlide({ masterName: "CONTEUDO", sectionTitle: "Modelagem" });
 titulo(s, "O público explica a queda de 2020/21?");
@@ -533,7 +531,7 @@ s.addImage({ path: fig("validacao_temporal.png"), x: X + 6.45, y: 2.9, w: 4.35, 
 s.addText("Um contra-teste exige que as partidas seguintes mudem, para impedir que o primeiro seja satisfeito trivialmente.",
   { isTextBox: true, x: X, y: 6.15, w: 6.1, h: 0.4, margin: 0,
     fontSize: 12.5, italic: true, color: SUAVE, objectName: "vaz-nota" });
-notas(s, "A última parte é prever resultados, e ela começa com um cuidado.\n\nChute, escanteio e falta só existem depois que o jogo acaba. Se eu usar isso para prever o jogo, eu acerto muito e o trabalho está errado. É o erro mais comum nesse tipo de estudo.\n\nEntão eu só uso informação que existe antes do apito: a força de cada time, o desempenho nos últimos cinco jogos, dias de descanso, rodada e se tinha público. E isso não é promessa minha, é o teste que eu mostrei.\n\nDo lado direito está o desenho da validação. Para prever uma temporada, o modelo só enxerga temporadas anteriores. Dentro da temporada, ele vai aprendendo a cada dez jogos, e todos os modelos aprendem no mesmo ritmo. Senão eu estaria comparando o método de treino, em vez dos modelos.");
+notas(s, "A última parte é prever resultados, e ela começa com um cuidado.\n\nChute, escanteio e falta só existem depois que o jogo acaba. Se eu usar isso para prever o jogo, eu acerto muito e o trabalho está errado. É o erro mais comum nesse tipo de estudo.\n\nEntão eu só uso informação que existe antes do apito: a força de cada time, o desempenho nos últimos cinco jogos, dias de descanso, rodada e se tinha público.\n\nDo lado direito está o desenho da validação. Para prever uma temporada, o modelo só enxerga temporadas anteriores. Dentro da temporada, ele vai aprendendo a cada dez jogos, e todos os modelos aprendem no mesmo ritmo.");
 // ═══════════════════════ 16. Preditivo: resultados ═══════════════════════
 s = pres.addSlide({ masterName: "CONTEUDO", sectionTitle: "Modelagem" });
 titulo(s, "O modelo estatístico superou os de aprendizado de máquina");
@@ -574,7 +572,7 @@ s.addText("O gradient boosting tem acurácia melhor que a frequência base e log
 s.addText("Fonte: autoria própria (2026).", {
   isTextBox: true, x: X + 6.75, y: 5.46, w: 4.05, h: 0.28, margin: 0,
   fontSize: 11, italic: true, color: SUAVE, objectName: "legenda" });
-notas(s, "E o resultado foi esse. O modelo estatístico ganhou dos modelos de aprendizado de máquina.\n\nO caso mais interessante é o último da tabela. Ele acerta mais jogos que o palpite mais simples e, ainda assim, fica em último lugar na métrica principal.\n\nO gráfico explica. Quando ele diz que o mandante tem 94% de chance, o mandante ganha 81% das vezes. Ele exagera na confiança. Para acertar quem ganha, isso até ajuda, porque basta apontar o favorito. Mas se você leva a sério a probabilidade que ele deu, ele erra feio.\n\nPor isso eu não avaliei por acerto, e sim por uma métrica que olha a probabilidade. Acertar o vencedor e saber o quanto se tem de certeza são duas coisas diferentes.");
+notas(s, "E o resultado foi esse. O modelo estatístico ganhou dos modelos de aprendizado de máquina.\n\nO caso mais interessante é o último da tabela. Ele acerta mais jogos que o palpite mais simples e, ainda assim, fica em último lugar na métrica principal.\n\nO gráfico explica. Quando ele diz que o mandante tem 94% de chance, o mandante ganha 81% das vezes. Ele exagera na confiança. Para acertar quem ganha, isso até ajuda, porque basta apontar o favorito. Mas se você leva a sério a probabilidade que ele deu, ele erra feio.\n\nPor isso eu não avaliei por acerto, e sim por uma métrica que olha a probabilidade.");
 
 // ═══════════════════════ 17. Conclusões ═══════════════════════
 pres.addSection({ title: "Fechamento" });
@@ -600,7 +598,7 @@ s.addText("Achado novo", { isTextBox: true, x: X + 0.4, y: 4.28, w: W - 0.8, h: 
 s.addText("O viés de arbitragem e a vantagem em resultados se dissociam: o primeiro desaparece sem público já em 2019/20, enquanto o segundo permanece. A torcida influencia a arbitragem, mas esse não é o mecanismo central do Fator Casa.",
   { isTextBox: true, x: X + 0.4, y: 4.64, w: W - 0.8, h: 0.82, margin: 0,
     fontSize: 15, color: "FFFFFF", lineSpacingMultiple: 1.12, objectName: "achado-corpo" });
-notas(s, "Fechando.\n\nO que se mantém: jogar em casa dá vantagem, 21,7% a mais de gols já descontado o adversário, e ela vem de criar mais oportunidades, não de aproveitá-las melhor.\n\nO que mudou em relação ao TCC 1: os seis grandes não dependem menos do mando; na verdade são os times de cima que dependem mais; e a torcida não explica a queda de 2020/21 quando a comparação é feita direito.\n\nE o achado novo, em destaque: o favorecimento do árbitro e a vantagem no placar se separam. O primeiro some sem torcida, o segundo continua. A torcida mexe com a arbitragem, mas não é esse o motor do Fator Casa.");
+notas(s, "Fechando.\n\nO que se mantém: jogar em casa dá vantagem, 21,7% a mais de gols já descontado o adversário, e ela vem de criar mais oportunidades, não de aproveitá-las melhor.\n\nO que mudou em relação ao TCC 1: os seis grandes não dependem menos do mando, na verdade são os times de cima que dependem mais, e a torcida não explica a queda de 2020/21 quando a comparação é feita direito.\n\nE o achado novo, em destaque: o favorecimento do árbitro e a vantagem no placar se separam. O primeiro some sem torcida, o segundo continua. A torcida mexe com a arbitragem, mas não é esse o motor do Fator Casa.");
 
 // ═══════════════════════ 18. Limitações e futuros ═══════════════════════
 s = pres.addSlide({ masterName: "CONTEUDO", sectionTitle: "Fechamento" });
@@ -622,7 +620,7 @@ lista(s, [
   "Estender a outras ligas europeias",
   "Investigar a temporada 2024/25, cujo parâmetro próximo de zero não tem explicação evidente",
 ], { x: X + 5.6, y: 2.12, w: 5.2, h: 3.5, tamanho: 15, espaco: 16 });
-notas(s, "As limitações.\n\nO modelo usa um único valor de mando para a liga inteira, então eu não sei dizer se um clube específico depende mais do que outro. Faltam dados de contexto: distância de viagem, horário do jogo, quanto o estádio encheu. E não deu para fazer a comparação limpa dentro de 2020/21, porque nenhum jogo daquele ano teve público.\n\nFicou de fora também a comparação com as cotações das casas de apostas, que seria a referência mais dura. O código está pronto, mas os dados de cotação não vieram na base. É a continuação mais imediata.");
+notas(s, "As limitações. O modelo usa um único valor de mando para a liga inteira, então eu não sei dizer se um clube específico depende mais do que outro. Faltam dados de contexto: distância de viagem, horário do jogo, quanto o estádio encheu. E não deu para fazer a comparação limpa dentro de 2020/21, porque nenhum jogo daquele ano teve público.\n\nFicou de fora a comparação com as cotações das casas de apostas, que seria a referência mais dura. O código está pronto, mas os dados de cotação não vieram na base. É a continuação mais imediata.");
 
 // ═══════════════════════ 19. Encerramento ═══════════════════════
 s = pres.addSlide({ masterName: "SECAO", sectionTitle: "Fechamento" });

@@ -1,9 +1,10 @@
 # Roteiro da defesa
 
-**18 slides apresentados · 18 min 25 s estimados.**
+**20 slides · 17 min 52 s estimados.**
 
-Dois slides ficaram ocultos no arquivo. Eles não aparecem no modo
-apresentação, mas continuam lá se a banca pedir o detalhe.
+Todos os slides entram na sequência, gráficos incluídos. Os dois slides de
+gráfico têm fala curta de propósito: a figura faz o trabalho, você só aponta
+o que ela mostra.
 
 O mesmo texto está nas notas do `.pptx`, visível no modo apresentador.
 
@@ -13,27 +14,27 @@ O mesmo texto está nas notas do `.pptx`, visível no modo apresentador.
 
 *30s*
 
-Bom dia. Eu sou o Matheus, aluno de Engenharia de Computação, e vou apresentar meu trabalho de conclusão, orientado pelo professor Francisco.
+Bom dia. Eu sou o Matheus, de Engenharia de Computação, e vou apresentar meu trabalho de conclusão, orientado pelo professor Francisco.
 
-O tema é o Fator Casa no futebol: a ideia de que jogar em casa dá vantagem. Eu quis saber se isso ainda aparece nos números, e por quê. Olhei onze temporadas da Premier League, 4.180 jogos.
+O tema é o Fator Casa: a ideia de que jogar em casa dá vantagem. Eu quis saber se isso ainda aparece nos números, e por quê. Onze temporadas da Premier League, 4.180 jogos.
 
 ---
 
 ## 2. Roteiro
 
-*20s*
+*9s*
 
-São cinco blocos. Contexto e problema, como eu construí o trabalho, os resultados, a modelagem e as conclusões.
+São cinco blocos: o problema, como eu construí o trabalho, os resultados, a modelagem e as conclusões.
 
 ---
 
 ## 3. O Fator Casa e seus mecanismos
 
-*55s*
+*46s*
 
 Que o mandante leva vantagem, todo mundo sabe, e a literatura mede isso desde os anos 90. A pergunta interessante é por quê.
 
-Costuma-se apontar quatro causas. A torcida, que empurra o time da casa e pressiona o visitante. A familiaridade com o campo. O cansaço da viagem de quem joga fora. E o árbitro, que seria influenciado pela pressão da arquibancada.
+Costuma-se apontar quatro causas: a torcida, a familiaridade com o campo, o cansaço da viagem de quem joga fora, e o árbitro, que seria influenciado pela pressão da arquibancada.
 
 Guardem essas quatro, porque elas deixam marcas diferentes nos dados. Árbitro aparece em cartão. Familiaridade e viagem aparecem no volume de jogo. É isso que vai permitir separar uma da outra mais para frente.
 
@@ -41,87 +42,77 @@ Guardem essas quatro, porque elas deixam marcas diferentes nos dados. Árbitro a
 
 ## 4. Problema de pesquisa e objetivos
 
-*50s*
+*39s*
 
-A pergunta do trabalho tem duas partes: quanto vale jogar em casa hoje, e qual dessas causas realmente sustenta a vantagem.
+A pergunta tem duas partes: quanto vale jogar em casa hoje, e qual dessas causas sustenta a vantagem.
 
-Daí saíram cinco objetivos. Medir o tamanho da vantagem. Ver se ela é igual para todos os clubes. Olhar se ela mudou ao longo do tempo. Avaliar o peso da torcida, separando-a das outras coisas que mudaram na pandemia. E o último, que é o que entrou nesta etapa: usar um modelo que desconte a força do adversário, e testar previsões.
+Daí saíram cinco objetivos. Medir o tamanho da vantagem. Ver se ela é igual para todos os clubes. Olhar se mudou ao longo do tempo. Avaliar o peso da torcida, separando-a das outras coisas que mudaram na pandemia. E o último, que entrou nesta etapa: usar um modelo que desconte a força do adversário.
 
 ---
 
 ## 5. Método e dados
 
-*50s*
+*30s*
 
 Segui o CRISP-DM, que é um roteiro padrão de projetos de dados, e fiz tudo em Python. São 4.180 partidas, onze temporadas, 22 informações por jogo.
 
-No TCC 1 eu tinha coberto as três primeiras etapas desse roteiro. Modelagem e avaliação são o que entrou agora.
+No TCC 1 eu tinha coberto as três primeiras etapas. Modelagem e avaliação entraram agora.
 
-E guardem o número da direita, 81 testes automatizados, porque é o assunto do próximo slide.
+E guardem o número da direita, 81 testes, porque é o assunto do próximo slide.
 
 ---
 
 ## 6. A solução computacional em camadas
 
-*80s*
+*97s*
 
 O TCC 1 era um arquivo só, onde coleta, cálculo e texto se misturavam. Foi isso que permitiu um erro que eu só descobri na apresentação, e que eu mostro daqui a pouco.
 
 Hoje é um programa dividido em camadas, como no diagrama. Cada camada entrega para a seguinte por arquivo em disco, e é isso que permite testar cada pedaço separadamente.
 
-À direita, três decisões que vieram de problemas reais. A primeira: cada arquivo baixado tem uma assinatura digital guardada. O site muda os arquivos de tempos em tempos, e sem isso duas execuções em dias diferentes dariam números diferentes, sem avisar.
+À direita, três decisões que vieram de problemas reais. Cada arquivo baixado tem uma assinatura digital guardada, porque o site muda os arquivos de tempos em tempos, e sem isso duas execuções em dias diferentes dariam números diferentes, sem avisar. Se a coleta falha, o programa para. Antes ele seguia com dados pela metade. E a terceira é um achado. Eu tenho uma rotina que procura mudanças estranhas nos dados, e ela encontrou uma: as finalizações no alvo caem 37% de uma temporada para a outra, em 2013, enquanto os gols ficam iguais. Não foi o futebol que mudou, foi o critério de quem anota.
 
-A segunda: se a coleta falha, o programa para. Antes ele seguia com dados pela metade.
-
-A terceira é um achado. Eu tenho uma rotina que procura mudanças estranhas nos dados, e ela encontrou uma: as finalizações no alvo caem 37% de uma temporada para a outra, em 2013, enquanto os gols ficam iguais. Não foi o futebol que mudou, foi o critério de quem anota. Sem perceber isso, uma das minhas análises reportaria uma queda que não existe.
-
-E a frase de baixo: nenhum número desta apresentação foi digitado à mão. Todos vêm de arquivos que o programa gera.
+E a frase de baixo: nenhum número desta apresentação foi digitado à mão.
 
 ---
 
 ## 7. Como o código é verificado
 
-*85s*
+*99s*
 
 Essa é a parte que eu considero a maior contribuição de Computação do trabalho.
 
 Testar um programa científico tem uma dificuldade própria: ele foi escrito justamente para calcular algo que ninguém sabe de antemão. Não existe gabarito para conferir.
 
-Então eu usei dois caminhos. O primeiro é inventar dados. Em vez de testar com jogos reais, eu gero jogos falsos a partir do próprio modelo, com um valor de vantagem que eu mesmo escolhi. Depois verifico se o programa consegue encontrar aquele valor de volta.
+Então eu usei dois caminhos. O primeiro é inventar dados. Em vez de testar com jogos reais, eu gero jogos falsos a partir do próprio modelo, com um valor de vantagem que eu mesmo escolhi, e verifico se o programa encontra aquele valor de volta. Foi assim que eu descobri um erro meu. A minha margem de erro acertava o valor verdadeiro em 83% das vezes, quando deveria acertar em 95%. Eu estava dizendo ter mais certeza do que de fato tinha. Troquei a forma de calcular e foi para 97,5%.
 
-Foi assim que eu descobri um erro meu. A minha margem de erro acertava o valor verdadeiro em 83% das vezes, quando deveria acertar em 95%. Ou seja, eu estava dizendo ter mais certeza do que de fato tinha. Troquei a forma de calcular e foi para 97,5%.
-
-O segundo caminho é testar uma regra, em vez de um número. Eu não digo qual valor tem que sair. Eu digo o seguinte: se eu mudar o placar de um jogo, nenhuma informação usada para prever aquele mesmo jogo pode mudar. É a linha de código aí embaixo. É assim que eu provo que o modelo não está espiando o resultado.
+O segundo caminho é testar uma regra, em vez de um número. Eu digo o seguinte: se eu mudar o placar de um jogo, nenhuma informação usada para prever aquele mesmo jogo pode mudar. É a linha de código aí embaixo. É assim que eu provo que o modelo não está espiando o resultado.
 
 ---
 
-## 8. A vantagem existe
+## 8. A vantagem existe — e é menor do que se supõe
 
-*65s*
+*43s*
 
-Indo para os resultados. A vantagem existe, com folga.
-
-Dos jogos que têm vencedor, 58% terminam com vitória do mandante. Em pontos, são 0,37 ponto a mais por jogo.
+Indo para os resultados. A vantagem existe, com folga. Dos jogos que têm vencedor, 58% terminam com vitória do mandante. Em pontos, são 0,37 ponto a mais por jogo.
 
 Mas aqui vem a primeira correção em relação ao TCC 1. O tamanho desse efeito é pequeno. Com 4.180 jogos, qualquer diferencinha fica estatisticamente significativa, e significativo não quer dizer grande. O TCC 1 dizia que a assimetria era contundente, e isso não se sustenta. O fenômeno é constante, mas modesto.
 
-E tem outra coisa: essa vantagem não vem de eficiência. O mandante transforma chute em gol praticamente na mesma taxa do visitante, 32,6 contra 31,8 por cento. O que ele faz é chutar mais. A vantagem é de volume, não de pontaria.
+---
+
+## 9. Volume de oportunidades, não eficiência
+
+*36s*
+
+E de onde vem essa vantagem? Não de eficiência. O mandante transforma chute em gol praticamente na mesma taxa do visitante, 32,6 contra 31,8 por cento.
+
+O que muda é o volume. São dois painéis: chutes no alvo à esquerda, escanteios à direita. A linha do mandante fica por cima da do visitante nas onze temporadas, sem nenhuma exceção. A vantagem é de volume, não de pontaria.
 
 ---
 
-## ~~[OCULTO] Volume de oportunidades~~
+## 10. Correção: a comparação entre Big Six e demais clubes
 
-*oculto*
-
-SLIDE OCULTO, fora da sequência de 20 minutos.
-
-O conteúdo está resumido no fim da fala do slide anterior. Use este slide se a banca pedir o detalhe por temporada: o mandante produz mais finalizações no alvo e mais escanteios em todas as onze temporadas.
-
----
-
-## 9. Correção: Big Six
-
-*95s*
+*91s*
 
 Esse slide é o que eu mais queria mostrar, porque é a correção de um erro meu.
 
@@ -131,15 +122,13 @@ O problema é que o visitante daquele jogo não é o mesmo time. Quando eu olhav
 
 Refazendo a conta por clube, e não por jogo, a diferença entre os grupos desaparece. O p-valor sai de menos de 0,001 para 0,35.
 
-E havia dois sinais na minha própria saída que eu não enxerguei na época. Os seis grandes apareciam com 0,70 ponto fora de casa, quando a tabela individual mostrava o Manchester City com 2,05. E os times menores apareciam melhores fora do que em casa, o que não existe.
-
-Uma das conclusões do TCC 1 cai por aqui.
+E tinha um sinal na minha própria saída que eu não enxerguei: os times menores apareciam melhores fora do que em casa, o que não existe. Uma das conclusões do TCC 1 cai por aqui.
 
 ---
 
-## 10. Times de cima dependem mais
+## 11. Times de cima dependem mais do mando, não menos
 
-*65s*
+*58s*
 
 Refeita a pergunta do jeito certo, aparece um resultado que contraria a intuição.
 
@@ -151,33 +140,33 @@ Tem um detalhe que reforça. Os times de cima já fazem 1,73 ponto por jogo fora
 
 ---
 
-## 11. Por que um modelo
+## 12. Por que um modelo, e não mais uma média
 
-*70s*
+*64s*
 
 Até aqui eu usei média de pontos, e ela tem dois limites. Pontos param em três por jogo, então o teto atrapalha justamente os times fortes. E a média não diz nada sobre quem o time enfrentou.
 
-Por isso eu usei o modelo de Dixon e Coles, de 1997. Ele estima o ataque e a defesa de cada clube e, junto com isso, um número que representa o mando de campo. Como esse número é calculado junto com a força de todo mundo, ele já sai descontado da qualidade do adversário.
+Por isso eu usei o modelo de Dixon e Coles, de 1997. Ele estima o ataque e a defesa de cada clube e, junto com isso, um número que representa o mando de campo. Como esse número sai calculado junto com a força de todo mundo, ele já vem descontado da qualidade do adversário.
 
-O resultado: jogar em casa vale 21,7% a mais de gols esperados. Eu programei esse modelo do zero, e foi nele que apliquei o teste de dados inventados que mostrei.
-
-Separando por temporada, duas aparecem sem vantagem nenhuma: 2020/21, que todo mundo espera, e 2024/25, que eu não consigo explicar e deixei como trabalho futuro. Mas o importante é o que não dá para afirmar: não existe queda contínua. As temporadas oscilam em torno do mesmo patamar.
+O resultado: jogar em casa vale 21,7% a mais de gols esperados. Eu programei esse modelo do zero, e foi nele que apliquei o teste de dados inventados.
 
 ---
 
-## ~~[OCULTO] Gama por temporada~~
+## 13. O fator casa ajustado, temporada a temporada
 
-*oculto*
+*49s*
 
-SLIDE OCULTO, fora da sequência de 20 minutos.
+Rodando o modelo temporada a temporada, dá para olhar a evolução. Cada ponto é uma temporada, e a barra é a margem de erro.
 
-O conteúdo está resumido no fim da fala do slide anterior. Use este slide se a banca perguntar sobre a tendência temporal: aqui aparecem os intervalos de cada temporada, a sobreposição entre elas e os dois vales, em 2020/21 e 2024/25.
+Duas temporadas encostam no zero, ou seja, sem vantagem nenhuma: 2020/21, que todo mundo espera, e 2024/25, que eu não consigo explicar e deixei como trabalho futuro.
+
+Mas o mais importante aqui é o que não dá para afirmar. Repare que quase todas as barras se cruzam, e que 2022/23 está na mesma altura de 2016/17. Não existe queda contínua. É oscilação em torno do mesmo patamar.
 
 ---
 
-## 12. O público explica a queda?
+## 14. O público explica a queda de 2020/21?
 
-*85s*
+*77s*
 
 Agora a torcida. A literatura trata os jogos de portão fechado como um experimento natural, e o TCC 1 seguiu essa linha. Só que tem um problema.
 
@@ -191,9 +180,9 @@ Uma ressalva que eu faço questão de dizer: isso não prova que a torcida não 
 
 ---
 
-## 13. Arbitragem e resultado se dissociam
+## 15. Achado: arbitragem e resultado se dissociam
 
-*85s*
+*70s*
 
 E aqui está o achado mais original do trabalho. Ele aparece quando se olha cartão amarelo junto com ponto.
 
@@ -207,23 +196,23 @@ Os dois não andam juntos. A torcida mexe com o árbitro, mas não é por aí qu
 
 ---
 
-## 14. Modelagem preditiva: desenho
+## 16. Modelagem preditiva: o risco antes do resultado
 
-*65s*
+*61s*
 
 A última parte é prever resultados, e ela começa com um cuidado.
 
 Chute, escanteio e falta só existem depois que o jogo acaba. Se eu usar isso para prever o jogo, eu acerto muito e o trabalho está errado. É o erro mais comum nesse tipo de estudo.
 
-Então eu só uso informação que existe antes do apito: a força de cada time, o desempenho nos últimos cinco jogos, dias de descanso, rodada e se tinha público. E isso não é promessa minha, é o teste que eu mostrei.
+Então eu só uso informação que existe antes do apito: a força de cada time, o desempenho nos últimos cinco jogos, dias de descanso, rodada e se tinha público.
 
-Do lado direito está o desenho da validação. Para prever uma temporada, o modelo só enxerga temporadas anteriores. Dentro da temporada, ele vai aprendendo a cada dez jogos, e todos os modelos aprendem no mesmo ritmo. Senão eu estaria comparando o método de treino, em vez dos modelos.
+Do lado direito está o desenho da validação. Para prever uma temporada, o modelo só enxerga temporadas anteriores. Dentro da temporada, ele vai aprendendo a cada dez jogos, e todos os modelos aprendem no mesmo ritmo.
 
 ---
 
-## 15. O modelo estatístico superou
+## 17. O modelo estatístico superou os de aprendizado de máquina
 
-*70s*
+*58s*
 
 E o resultado foi esse. O modelo estatístico ganhou dos modelos de aprendizado de máquina.
 
@@ -231,40 +220,68 @@ O caso mais interessante é o último da tabela. Ele acerta mais jogos que o pal
 
 O gráfico explica. Quando ele diz que o mandante tem 94% de chance, o mandante ganha 81% das vezes. Ele exagera na confiança. Para acertar quem ganha, isso até ajuda, porque basta apontar o favorito. Mas se você leva a sério a probabilidade que ele deu, ele erra feio.
 
-Por isso eu não avaliei por acerto, e sim por uma métrica que olha a probabilidade. Acertar o vencedor e saber o quanto se tem de certeza são duas coisas diferentes.
+Por isso eu não avaliei por acerto, e sim por uma métrica que olha a probabilidade.
 
 ---
 
-## 16. Conclusões
+## 18. Conclusões
 
-*70s*
+*60s*
 
 Fechando.
 
 O que se mantém: jogar em casa dá vantagem, 21,7% a mais de gols já descontado o adversário, e ela vem de criar mais oportunidades, não de aproveitá-las melhor.
 
-O que mudou em relação ao TCC 1: os seis grandes não dependem menos do mando; na verdade são os times de cima que dependem mais; e a torcida não explica a queda de 2020/21 quando a comparação é feita direito.
+O que mudou em relação ao TCC 1: os seis grandes não dependem menos do mando, na verdade são os times de cima que dependem mais, e a torcida não explica a queda de 2020/21 quando a comparação é feita direito.
 
 E o achado novo, em destaque: o favorecimento do árbitro e a vantagem no placar se separam. O primeiro some sem torcida, o segundo continua. A torcida mexe com a arbitragem, mas não é esse o motor do Fator Casa.
 
 ---
 
-## 17. Limitações e trabalhos futuros
+## 19. Limitações e trabalhos futuros
 
-*50s*
+*52s*
 
-As limitações.
+As limitações. O modelo usa um único valor de mando para a liga inteira, então eu não sei dizer se um clube específico depende mais do que outro. Faltam dados de contexto: distância de viagem, horário do jogo, quanto o estádio encheu. E não deu para fazer a comparação limpa dentro de 2020/21, porque nenhum jogo daquele ano teve público.
 
-O modelo usa um único valor de mando para a liga inteira, então eu não sei dizer se um clube específico depende mais do que outro. Faltam dados de contexto: distância de viagem, horário do jogo, quanto o estádio encheu. E não deu para fazer a comparação limpa dentro de 2020/21, porque nenhum jogo daquele ano teve público.
-
-Ficou de fora também a comparação com as cotações das casas de apostas, que seria a referência mais dura. O código está pronto, mas os dados de cotação não vieram na base. É a continuação mais imediata.
+Ficou de fora a comparação com as cotações das casas de apostas, que seria a referência mais dura. O código está pronto, mas os dados de cotação não vieram na base. É a continuação mais imediata.
 
 ---
 
-## 18. Encerramento
+## 20. Obrigado
 
-*15s*
+*4s*
 
 É isso. Obrigado, e fico à disposição.
 
 ---
+
+## Controle de tempo
+
+| Slide | Tema | Acumulado |
+| --- | --- | --- |
+| 1 | Capa | 0:29 |
+| 2 | Roteiro | 0:38 |
+| 3 | O Fator Casa e seus mecanismos | 1:25 |
+| 4 | Problema de pesquisa e objetivos | 2:03 |
+| 5 | Método e dados | 2:34 |
+| 6 | A solução computacional em camadas | 4:11 |
+| 7 | Como o código é verificado | 5:50 |
+| 8 | A vantagem existe — e é menor do que se supõe | 6:33 |
+| 9 | Volume de oportunidades, não eficiência | 7:09 |
+| 10 | Correção: a comparação entre Big Six e demais clubes | 8:39 |
+| 11 | Times de cima dependem mais do mando, não menos | 9:38 |
+| 12 | Por que um modelo, e não mais uma média | 10:42 |
+| 13 | O fator casa ajustado, temporada a temporada | 11:31 |
+| 14 | O público explica a queda de 2020/21? | 12:48 |
+| 15 | Achado: arbitragem e resultado se dissociam | 13:57 |
+| 16 | Modelagem preditiva: o risco antes do resultado | 14:58 |
+| 17 | O modelo estatístico superou os de aprendizado de máquina | 15:56 |
+| 18 | Conclusões | 16:56 |
+| 19 | Limitações e trabalhos futuros | 17:48 |
+| 20 | Obrigado | 17:52 |
+
+Os marcos para olhar no relógio: **slide 8 em 6:30** (começo dos resultados),
+**slide 14 em 11:30** (torcida) e **slide 17 em 15:00**. Se estiver atrasado,
+os lugares para encurtar sem perder conteúdo são o slide 6 e o slide 10, que
+são os dois mais longos.
